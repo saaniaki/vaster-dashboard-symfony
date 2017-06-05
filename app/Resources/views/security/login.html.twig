@@ -1,24 +1,49 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}VDP {{ version }}{% endblock %}
+
 {% block body %}
     <div class="container" style="max-width: 700px; margin-top: 50px;">
-        <div class="row">
-            <div class="col-xs-12">
-                <h1>Login!</h1>
-                {% if error %}
-                    <div class="alert alert-danger">
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
-                    </div>
-                {% endif %}
 
-                {{ form_start(form) }}
-                    {{ form_row(form._username) }}
-                    {{ form_row(form._password) }}
 
-                    <button type="submit" class="btn btn-primary">Login <span class="fa fa-lock"></span></button>
-                {{ form_end(form) }}
-
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                Welcome! Please login to the VDP{{ version }}!
+            </div>
+        {% endif %}
+
+
+        {{ form_start(form, {
+            'attr': {'style': 'max-width: 500px;', 'class': 'container'}
+        }) }}
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+            {{ form_widget(form._username, {
+                'attr': {'placeholder': 'Email'}
+            }) }}
         </div>
+        <br>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></span>
+            {{ form_widget(form._password, {
+                'attr': {'placeholder': 'Password'}
+            }) }}
+        </div>
+        <br>
+
+        <div class="btn-group btn-group-lg" role="group" aria-label="..." style="float: right">
+            <button type="submit" name="submit" class="btn btn-default">Login</button>
+        </div>
+
+        <a href="{{ path('user_register') }}">Register</a>
+
+        {{ form_end(form) }}
+
+
     </div>
 {% endblock %}

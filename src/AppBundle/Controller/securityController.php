@@ -19,6 +19,13 @@ class securityController extends Controller
      * @Route("/login", name="security_login")
      */
     public function loginAction(){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('dashboard');
+        }
+
+
+        $version = $this->getParameter('version');
+
         $authenticationUtils = $this->get('security.authentication_utils');
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -29,12 +36,18 @@ class securityController extends Controller
             "_username" => $lastUsername
         ]);
 
-        return $this->render(
-            'security/login.html.twig',
-            array(
-                "form" => $form->createView(),
-                'error'         => $error,
-            )
-        );
+        return $this->render('security/login.html.twig',[
+            "form" => $form->createView(),
+            "error" => $error,
+            "version" => $version
+        ]);
     }
+
+    /**
+     * @Route("/logout", name="security_logout")
+     */
+    public function logoutAction(){
+        throw new \Exception('this should not be reached!');
+    }
+
 }

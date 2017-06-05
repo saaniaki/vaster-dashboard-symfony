@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome back {{ username }}!{% endblock %}
+{% block title %}VDP{{ version }} Dashboard{% endblock %}
 
 {% block navBar %}
 
@@ -23,7 +23,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class=""><a href="#">Dashboard <span class="sr-only">(current)</span></a></li>
+                    <li {% if app.request.get('_route') == 'dashboard' %} class="active" {% endif %} ><a href="#">Dashboard <span class="sr-only">(current)</span></a></li>
                     <li class="" ><a href="#">Settings</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shortcuts <span class="caret"></span></a>
@@ -48,10 +48,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">VDP{{ version }}</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ username }}<span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.email }}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Edit</a></li>
-                            <!--<li><a href="modules/user/logout.php">Logout</a></li>-->
+                            {% if is_granted('ROLE_USER') %}
+                                <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                            {% endif %}
+
                         </ul>
                     </li>
                 </ul>
@@ -65,7 +68,7 @@
 {% block body %}
 
     <div class="container-fluid" style="margin-top: 50px;">
-        <h1>Welcome back {{ username }}</h1>
+        <h1>Welcome back {{ app.user.email }}</h1>
     </div>
 
 {% endblock %}

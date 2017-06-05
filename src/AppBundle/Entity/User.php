@@ -29,6 +29,20 @@ class User implements UserInterface
      */
     private $email;
 
+    /**
+     * The encoded password
+     *
+     * @ORM\Column(type="string")
+     */
+    private $password;
+
+    private $plainPassword;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $roles = [];
+
     public function getUsername()
     {
         return $this->email;
@@ -36,11 +50,17 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $roles = $this->roles;
+        // give everyone ROLE_USER!
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+        return $roles;
     }
 
     public function getPassword()
     {
+        return $this->password;
     }
 
     public function getSalt()
@@ -49,6 +69,31 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+        $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -57,6 +102,36 @@ class User implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+        $this->password = null;
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
     }
 
 

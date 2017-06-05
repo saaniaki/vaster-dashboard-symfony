@@ -15,13 +15,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class indexController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="homepage")
      */
     public function showAction(){
-        $version = $this->getParameter('version');
-
-        return $this->render("index.html.twig", [
-            "version" => $version
-        ]);
+        //add branding
+        //add success logout
+        return $this->redirectToRoute('security_login');
     }
 }
