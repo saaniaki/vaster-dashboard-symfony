@@ -28,7 +28,7 @@ class userController extends Controller
 
 
         $form->handleRequest($request);
-        if($form->isValid()){
+        if($form->isSubmitted() && $form->isValid()){
             /** @var $user User*/
             $user = $form->getData();
 
@@ -37,7 +37,19 @@ class userController extends Controller
             $em->flush();
 
             $this->addFlash("success", "Welcome " . $user->getEmail());
+
+            /*
+            return $this->get('security.authentication.guard_handler')
+                ->authenticateUserAndHandleSuccess(
+                    $user,
+                    $request,
+                    $this->get('app.security.login_form_authenticator'),
+                    'main'
+                );
+            */
+
             return $this->redirectToRoute('security_login');
+
         }
 
         return $this->render('user/register.html.twig', [

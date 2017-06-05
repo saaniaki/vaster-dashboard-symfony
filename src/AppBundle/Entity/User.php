@@ -9,33 +9,41 @@
 namespace AppBundle\Entity;
 
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @UniqueEntity(fields={"email"}, message="This user has been registered before!")
  */
 class User implements UserInterface
 {
     /**
+     * @Assert\NotBlank()
      * @ORM\Id
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
      */
     private $email;
 
     /**
      * The encoded password
-     *
      * @ORM\Column(type="string")
      */
     private $password;
 
+    /**
+     * @Assert\NotBlank(groups={"Registration"})
+     */
     private $plainPassword;
 
     /**
