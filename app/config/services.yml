@@ -1,5 +1,8 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/service_container.html
+imports:
+    - { resource: legacy_aliases.yml }
+
 parameters:
     #parameter_name: value
 
@@ -36,10 +39,17 @@ services:
 
     app.security.login_form_authenticator:
             class: AppBundle\Security\LoginFormAuthenticator
-            autowire: true
+            arguments:
+                $formFactory: '@form.factory'
+                $em: '@doctrine.orm.default_entity_manager'
+                $router: '@router'
+                $passwordEncoder: '@security.user_password_encoder.generic'
 
-    app.doctrine.hash_password_listener:
-            class: AppBundle\Doctrine\HashPasswordListener
-            autowire: true
+    AppBundle\Doctrine\HashPasswordListener:
             tags:
                 - { name: doctrine.event_subscriber }
+
+
+    app.logout:
+            class: AppBundle\Security\LogOutHandler
+            autowire: true

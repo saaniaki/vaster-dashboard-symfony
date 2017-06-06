@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,21 +17,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user")
+ * @ORM\Table(name="users") //I just chaged this
  * @UniqueEntity(fields={"email"}, message="This user has been registered before!")
  */
 class User implements UserInterface
 {
     /**
-     * @Assert\NotBlank()
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint", nullable=false)
      */
     private $id;
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(message = "Oops! Email is required!")
+     * @Assert\Email(message = "Oops! {{ value }} is not a valid email.")
      * @ORM\Column(type="string", unique=true)
      */
     private $email;
@@ -42,7 +42,13 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @Assert\NotBlank(groups={"Registration"})
+     * @Assert\NotBlank(groups={"Registration"}, message = "Come on! Password is required!")
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 12,
+     *      minMessage = "Your password must be at least {{ limit }} characters long!",
+     *      maxMessage = "Your password cannot be longer than {{ limit }} characters!"
+     * )
      */
     private $plainPassword;
 
@@ -50,6 +56,44 @@ class User implements UserInterface
      * @ORM\Column(type="json_array")
      */
     private $roles = [];
+
+    /**
+     * @Assert\Length(
+     *      min = 11,
+     *      max = 11,
+     *      exactMessage = "Phone number must contain {{ limit }} digits!"
+     * )
+     */
+    private $phone;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Page", mappedBy="user")
+     * @ORM\OrderBy({"rank"="DESC"})
+     */
+    private $pages;
+
+
+    function __construct()
+    {
+        $this->pages = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
 
     public function getUsername()
     {
@@ -141,6 +185,15 @@ class User implements UserInterface
     {
         $this->roles = $roles;
     }
+
+    /**
+     * @return ArrayCollection|Page[]
+     */
+    public function getPages()
+    {
+        return $this->pages;
+    }
+
 
 
 }

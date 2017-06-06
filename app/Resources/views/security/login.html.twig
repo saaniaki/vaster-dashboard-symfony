@@ -1,21 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}VDP {{ version }}{% endblock %}
+{% block title %}VDP {{ version }} - Login{% endblock %}
 
 {% block body %}
     <div class="container" style="max-width: 700px; margin-top: 50px;">
 
+        {% set foo = null %}
+
+        {% for message in app.flashes('success_logout') %}
+                {% set foo = message %}
+        {% endfor %}
 
         {% if error %}
             <div class="alert alert-danger" role="alert">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
+                <b>Error!</b> {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% elseif foo is defined and foo is not null %}
+            <div class="alert alert-success" role="alert">
+                <b>Perfect!</b> {{ foo }}
             </div>
         {% else %}
             <div class="alert alert-info" role="alert">
-                Welcome! Please login to the VDP{{ version }}!
+                <b>Welcome!</b> Please login to the VDP{{ version }}! Need to <b><a href="{{ path('user_register') }}">register</a></b>?
             </div>
         {% endif %}
-
 
         {{ form_start(form, {
             'attr': {'style': 'max-width: 500px;', 'class': 'container'}
@@ -39,8 +47,6 @@
         <div class="btn-group btn-group-lg" role="group" aria-label="..." style="float: right">
             <button type="submit" name="submit" class="btn btn-default">Login</button>
         </div>
-
-        <a href="{{ path('user_register') }}">Register</a>
 
         {{ form_end(form) }}
 

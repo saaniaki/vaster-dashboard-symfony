@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Form\LoginForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class securityController extends Controller
@@ -22,6 +23,8 @@ class securityController extends Controller
         if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('dashboard');
         }
+
+
 
 
         $version = $this->getParameter('version');

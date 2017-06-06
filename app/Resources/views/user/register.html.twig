@@ -1,21 +1,88 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}VDP {{ version }} - Register{% endblock %}
+
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <h1>Register!</h1>
-                {{ form_start(form) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.id) }}
-                {{ form_row(form.plainPassword.first, {
-                    "label": "Password"
-                }) }}
-                {{ form_row(form.plainPassword.second, {
-                    "label": "Repeat Password"
-                }) }}
-                <button type="submit" class="btn btn-primary" formnovalidate>Register</button>
-                {{ form_end(form) }}
+    <div style="margin-top: 50px;">
+
+
+
+
+
+        {{ form_start(form, {
+            'attr': {'style': 'max-width: 700px;', 'class': 'container'}
+        }) }}
+
+
+        {% set foo = null %}
+
+        {% for message in app.flashes('register_error') %}
+            {%  set foo = message %}
+        {% endfor %}
+
+        {% if foo is defined and foo is not null %}
+            <div class="alert alert-danger" role="alert">
+                <b>Error!</b> {{ foo }}
             </div>
+        {% elseif form_errors(form.email) != "" %}
+            <div class="alert alert-danger" role="alert">
+                {{ form_errors(form.email) }}
+            </div>
+        {% elseif form_errors(form.phone) != "" %}
+            <div class="alert alert-danger" role="alert">
+                {{ form_errors(form.phone) }}
+            </div>
+        {% elseif form_errors(form.plainPassword.second) != "" %}
+            <div class="alert alert-danger" role="alert">
+                {{ form_errors(form.plainPassword.second) }}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                <b>Register!</b> This is the place where your adventure begins! Or maybe you want to <b><a href="{{ path('security_login') }}">login</a></b>!
+            </div>
+        {% endif %}
+
+
+
+<div class="container" style="max-width: 500px;">
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+            {{ form_widget(form.email, {
+                'attr': {'placeholder': 'Email'}
+            }) }}
         </div>
+        <br>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span></span>
+            {{ form_widget(form.phone, {
+                'attr': {'placeholder': 'Phone (only fill out if your email is not unique)'}
+            }) }}
+        </div>
+        <br>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></span>
+            {{ form_widget(form.plainPassword.first, {
+                'attr': {'placeholder': 'Password'}
+            }) }}
+        </div>
+        <br>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></span>
+            {{ form_widget(form.plainPassword.second, {
+                'attr': {'placeholder': 'Repeat Password'}
+            }) }}
+        </div>
+        <br>
+        <div class="btn-group btn-group-lg" role="group" aria-label="..." style="float: right">
+            <button type="submit" class="btn btn-default" formnovalidate>Register</button>
+        </div>
+
+        {{ form_end(form) }}
+</div>
+
+
+
+
     </div>
 {% endblock %}
+

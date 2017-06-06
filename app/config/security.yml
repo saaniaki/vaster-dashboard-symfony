@@ -24,6 +24,7 @@ security:
                       - app.security.login_form_authenticator
             logout:
                   path: /logout
+                  handlers: [app.logout]
             # activate different ways to authenticate
 
             # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
