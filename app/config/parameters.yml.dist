@@ -2,6 +2,7 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
+    version: 0.4
     database_host: 127.0.0.1
     database_port: ~
     database_name: symfony
@@ -17,3 +18,9 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+    
+    database_host2: 127.0.0.1
+    database_port2: ~
+    database_name2: symfony
+    database_user2: root
+    database_password2: ~
