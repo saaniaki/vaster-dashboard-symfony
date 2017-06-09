@@ -38,13 +38,6 @@ class dashboardController extends Controller
         return $this->renderDashboard(null);
     }
 
-    /**
-     * @Route("/dashboard/switch/{name}/", name="switch_to_dashboard")
-     */
-    public function switchToPageAction(Page $page){
-        return $this->renderDashboard($page);
-    }
-
     public function renderDashboard($curPage){
         $version = $this->getParameter('version');
         /** @var $appUser AppUser */
@@ -295,9 +288,16 @@ class dashboardController extends Controller
 
 
     /**
-     * @Route("/dashboard/{name}", name="show_page")
+     * @Route("/dashboard/{name}", name="dashboard_alter")
      */
     public function showPageAction(Page $page){
+        return $this->renderDashboard($page);
+    }
+
+    /**
+     * @Route("/dashboard/render/{name}", name="render_page")
+     */
+    public function showPageActiontemp(Page $page){
         $version = $this->getParameter('version');
         /** @var $appUser AppUser */
         $appUser = $this->getUser();

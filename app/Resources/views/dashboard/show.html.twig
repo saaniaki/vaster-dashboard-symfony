@@ -42,7 +42,11 @@
 
     </div>
 <script>
-    var path = '{{ path('dashboard') }}/';
+
+    function getRenderPath(name) {
+        var path = '{{ path("render_page", {'name': 'page_name'}) }}';
+        return path.replace("page_name", name);
+    }
 </script>
 {% endblock %}
 
@@ -58,7 +62,7 @@
 
     function render(name) {
         $.ajax({
-            url: path + name,
+            url: getRenderPath(name),
             success: function (data) {
                 $("#renderPage").html(data);
             }
