@@ -68,7 +68,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Page", mappedBy="user")
-     * @ORM\OrderBy({"rank"="DESC"})
+     * @ORM\OrderBy({"rank"="ASC"})
      */
     private $pages;
 

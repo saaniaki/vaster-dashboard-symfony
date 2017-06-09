@@ -45,7 +45,7 @@ class Page
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Module", mappedBy="page")
-     * @ORM\OrderBy({"rank"="DESC"})
+     * @ORM\OrderBy({"rank"="ASC"})
      */
     private $modules;
 
