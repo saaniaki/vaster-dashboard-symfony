@@ -11,7 +11,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\AppBundle;
 use AppBundle\Entity\Module;
+use AppBundle\Entity\ModuleInfo;
 use AppBundle\Entity\Page;
+use AppBundle\Form\NewModule;
 use AppBundle\Form\NewPage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -33,6 +35,17 @@ class dashboardController extends Controller
      * @Route("/dashboard", name="dashboard")
      */
     public function showAction(){
+        return $this->renderDashboard(null);
+    }
+
+    /**
+     * @Route("/dashboard/switch/{name}/", name="switch_to_dashboard")
+     */
+    public function switchToPageAction(Page $page){
+        return $this->renderDashboard($page);
+    }
+
+    public function renderDashboard($curPage){
         $version = $this->getParameter('version');
         /** @var $appUser AppUser */
         $appUser = $this->getUser();
@@ -42,18 +55,22 @@ class dashboardController extends Controller
             ->findOneBy([ 'email' => $appUser->getEmail()]);
 
         $noPage = false;
-        $page = $appUser->getPages()->first();
-        if($page == null){
+        $pages = $appUser->getPages()->toArray();
+        if($pages == null){
             $noPage = true;
         }
 
+        if( $curPage == null )
+            $curPage = $pages[0];
 
-        dump($noPage);
+
+        dump($curPage);
 
         return $this->render('dashboard/show.html.twig', [
             "vasterUser" => $vasterUser,
             "version" => $version,
-            'page' => $appUser->getPages()->first(),
+            'pages' => $pages,
+            'currentPage' => $curPage,
             'noPage' => $noPage
         ]);
     }
@@ -71,38 +88,14 @@ class dashboardController extends Controller
         $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
             ->findOneBy([ 'email' => $appUser->getEmail()]);
 
-
         $pages = [];
-        $lastPage = new Page();
         foreach ($appUser->getPages() as $page) {
             $pages[] = [
                 'id' => $page->getID(),
                 'name' => $page->getName(),
                 'rank' => $page->getRank()
             ];
-            $lastPage = $page;
         }
-
-
-        /*$form = $this->createForm(NewPage::class);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            /** @var $newPage Page*
-            $newPage = $form->getData();
-
-            if( $newPage->getRank() == null ){
-                $newPage->setRank($lastPage->getRank() + 50);
-            }
-
-            $newPage->setUser($appUser);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newPage);
-            $em->flush();
-
-            dump($newPage);
-        }*/
 
         return $this->render('dashboard/pages.html.twig', [
             "vasterUser" => $vasterUser,
@@ -110,71 +103,6 @@ class dashboardController extends Controller
             'version' => $version,
             'pages' => $pages
         ]);
-    }
-
-
-    /**
-     * @Route("/dashboard/api/pages", name="api_pages")
-     * @Method("GET")
-     */
-    public function getNotesAction()//change name
-    {
-        /** @var $appUser AppUser */
-        $appUser = $this->getUser();
-        $pages = [];
-        //$lastPage = new Page();
-        foreach ($appUser->getPages() as $page) {
-            $pages[] = [
-                'id' => $page->getID(),
-                'name' => $page->getName(),
-                'rank' => $page->getRank()
-            ];
-            //$lastPage = $page;
-        }
-
-        $data = [
-            'pages' => $pages
-        ];
-        return new JsonResponse($data);
-    }
-
-    /**
-     * @Route("/dashboard/{id}/edit", name="edit_page")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editPage(Request $request, Page $page){
-        $form = $this->createForm(NewPage::class, $page);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            /** @var $newPage Page*/
-            $edittedPage = $form->getData();
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($edittedPage);
-            $em->flush();
-        }
-
-        return $this->render('dashboard/edit.html.twig', [
-            'form' => $form->createView(),
-            'page' => $page
-        ]);
-    }
-
-    /**
-     * @Route("/dashboard/{id}/remove", name="remove_page")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function removePage(Page $page){
-
-        // must check if the record belongs to this user
-
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($page);
-            $em->flush();
-
-        return new Response("Page has been removed!");
     }
 
     /**
@@ -213,5 +141,190 @@ class dashboardController extends Controller
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/dashboard/api/pages", name="api_pages")
+     * @Method("GET")
+     */
+    public function getNotesAction()//change name
+    {
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+        $pages = [];
+        //$lastPage = new Page();
+        foreach ($appUser->getPages() as $page) {
+            $pages[] = [
+                'id' => $page->getID(),
+                'name' => $page->getName(),
+                'rank' => $page->getRank()
+            ];
+            //$lastPage = $page;
+        }
+
+        $data = [
+            'pages' => $pages
+        ];
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/dashboard/{id}/edit", name="edit_page")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editPage(Request $request, Page $page){
+        $form = $this->createForm(NewPage::class, $page);
+        $form->handleRequest($request);
+
+
+        $modules = $page->getModules();
+        if($modules->count() == 0)
+            $modules = null;
+
+
+
+        if($form->isSubmitted() && $form->isValid()){
+            /** @var $newPage Page*/
+            $edittedPage = $form->getData();
+
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($edittedPage);
+            $em->flush();
+        }
+
+        return $this->render('dashboard/edit.html.twig', [
+            'form' => $form->createView(),
+            'page' => $page,
+
+            'modules' => $modules
+        ]);
+    }
+
+    /**
+     * @Route("/dashboard/{id}/remove", name="remove_page")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function removePage(Page $page){
+
+
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+
+        $userPages = $appUser->getPages();
+
+        // must check if the record belongs to this user
+        // in future permissions should play role here
+        if( $userPages->count() == 1 ){
+            return new Response("This page can not be removed!");
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $page->getModules();
+        foreach ( $page->getModules() as $module ){
+            $em->remove($module);
+        }
+
+        $em->remove($page);
+        $em->flush();
+
+        return new Response("Page has been removed!");
+    }
+
+    /**
+     * @Route("/dashboard/{id}/remove-module", name="remove_module")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function removeModule(Module $module){
+
+        // must check if the record belongs to this user
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($module);
+        $em->flush();
+
+        return new Response("Module has been removed!");
+    }
+
+    /**
+     * @Route("/dashboard/{id}/new-module", name="new_module")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function newModule(Request $request, Page $page){
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(NewModule::class, null,  array(
+            'entity_manager' => $em
+            //'page' => $page
+        ));
+
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            /** @var $newPage Module*/
+            $moduleToBeAdded = $form->getData();
+
+
+            $lastModule = $page->getModules()->last();
+
+            if( $moduleToBeAdded->getRank() === null ){
+                if($lastModule != null)
+                    $moduleToBeAdded->setRank($lastModule->getRank() + 100);
+                else
+                    $moduleToBeAdded->setRank(100);
+            }
+
+            $moduleToBeAdded->setPage($page);
+
+
+            //$moduleToBeAdded->setModuleInfo($allInfo[0]);
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($moduleToBeAdded);
+            $em->flush();
+        }
+
+        return $this->render('dashboard/module/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/dashboard/{name}", name="show_page")
+     */
+    public function showPageAction(Page $page){
+        $version = $this->getParameter('version');
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+
+        /** @var $vasterUser VasterUser */
+        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
+            ->findOneBy([ 'email' => $appUser->getEmail()]);
+
+        $noPage = false;
+        $pages = $appUser->getPages()->toArray();
+        if($pages == null){
+            $noPage = true;
+        }
+
+        $curPage = $page;
+
+        return $this->render('dashboard/showPage.html.twig', [
+            "vasterUser" => $vasterUser,
+            "version" => $version,
+            'pages' => $pages,
+            'currentPage' => $curPage,
+            'noPage' => $noPage
+        ]);
+    }
+
+
+
+
 
 }

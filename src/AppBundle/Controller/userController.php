@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Page;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserRegistrationForm;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -65,6 +66,15 @@ class userController extends Controller
                 }
             }
 
+
+            $newPage = new Page();
+            $newPage->setRank(100);
+            $newPage->setName("Default Page");
+            $newPage->setUser($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newPage);
+            $em->flush();
 
             /*
             return $this->get('security.authentication.guard_handler')

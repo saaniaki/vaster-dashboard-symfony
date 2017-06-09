@@ -24,18 +24,18 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li {% if app.request.get('_route') == 'dashboard' %} class="active" {% endif %} ><a href="{{ path('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a></li>
-                    <li class="" ><a href="#">Settings</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shortcuts <span class="caret"></span></a>
+                    <!--<li class="" ><a href="#">Settings</a></li>-->
+                    <li class {% if app.request.get('_route') == 'manage_pages' %} ="active" {% else %} ="dropdown" {% endif %}>
+                        <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Link1</a></li>
-                            <li><a href="#">Link2</a></li>
+                            {% for page in pages %}
+                                <li><a href="{% if app.request.get('_route') != 'dashboard' and app.request.get('_route') != 'switch_to_dashboard' %}switch/{{ page.name }}{% else %}#{% endif %}" class="js_page_render">{{ page.name }}</a></li>
+                            {% endfor %}
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">Manage Shortcuts</a></li>
+                            <li><a href="{{ path('manage_pages') }}">Manage Pages</a></li>
                         </ul>
                     </li>
+                    <li class="" ><a href="#">Administration</a></li>
                 </ul>
                 <!-- search form
                 <form class="navbar-form navbar-left">

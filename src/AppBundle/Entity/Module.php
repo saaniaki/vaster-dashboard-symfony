@@ -39,9 +39,26 @@ class Module
     private $rank;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ModuleInfo")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $name;
+    private $moduleInfo;
+
+    /**
+     * @return ModuleInfo
+     */
+    public function getModuleInfo()
+    {
+        return $this->moduleInfo;
+    }
+
+    /**
+     * @param mixed $moduleInfo
+     */
+    public function setModuleInfo($moduleInfo)
+    {
+        $this->moduleInfo = $moduleInfo;
+    }
 
     /**
      * @return Page
@@ -82,23 +99,5 @@ class Module
     {
         $this->rank = $rank;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-
 
 }

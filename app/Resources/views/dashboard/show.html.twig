@@ -6,15 +6,78 @@
 
     <div class="container-fluid" style="margin-top: 50px;">
 
-        <h1>Welcome back {{ vasterUser.firstname }}</h1>
+
+        <!--<div class="container" style="max-width: 700px;">
+            <nav aria-label="Page navigation" style=" text-align: center ;">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>-->
 
 
-        {% if noPage == true %}
+
+
+        {# {% if noPage == true %}
             You have not added any pages yet! :(
         {% else %}
-            {{ page.name }}
-        {% endif %}
-    </div>
+            {{  currentPage.name }}
+        {% endif %} #}
 
+        <div id="renderPage" style="margin-top: 10px;"></div>
+
+    </div>
+<script>
+    var path = '{{ path('dashboard') }}/';
+</script>
 {% endblock %}
 
+
+{% block javascripts %}
+    {{ parent() }}
+<script>
+
+
+
+    //setInterval(loadTable, 2000);
+
+
+    function render(name) {
+        $.ajax({
+            url: path + name,
+            success: function (data) {
+                $("#renderPage").html(data);
+            }
+        });
+    }
+
+    $('.js_page_render').click(function() {
+        render($(this).text());
+    });
+
+    $( document ).ready(function() {
+
+        //if page exists
+        render('{{ currentPage.name }}');
+
+
+    });
+
+</script>
+
+
+{% endblock %}
