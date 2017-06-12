@@ -43,7 +43,7 @@
     </div>
 <script>
 
-    function getRenderPath(name) {
+    function getPageRenderPath(name) {
         var path = '{{ path("render_page", {'name': 'page_name'}) }}';
         return path.replace("page_name", name);
     }
@@ -60,9 +60,9 @@
     //setInterval(loadTable, 2000);
 
 
-    function render(name) {
+    function renderPage(name) {
         $.ajax({
-            url: getRenderPath(name),
+            url: getPageRenderPath(name),
             success: function (data) {
                 $("#renderPage").html(data);
             }
@@ -70,13 +70,13 @@
     }
 
     $('.js_page_render').click(function() {
-        render($(this).text());
+        renderPage($(this).text());
     });
 
     $( document ).ready(function() {
 
         //if page exists
-        render('{{ currentPage.name }}');
+        renderPage('{{ currentPage.name }}');
 
 
     });

@@ -35,10 +35,14 @@ class dashboardController extends Controller
      * @Route("/dashboard", name="dashboard")
      */
     public function showAction(){
-        return $this->renderDashboard(null);
+        return $this->renderDashboard();
     }
 
-    public function renderDashboard($curPage){
+    /**
+     * @param $curPage Page
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function renderDashboard(Page $curPage = null){
         $version = $this->getParameter('version');
         /** @var $appUser AppUser */
         $appUser = $this->getUser();
@@ -47,24 +51,22 @@ class dashboardController extends Controller
         $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
             ->findOneBy([ 'email' => $appUser->getEmail()]);
 
-        $noPage = false;
+
         $pages = $appUser->getPages()->toArray();
         if($pages == null){
-            $noPage = true;
+            $this->get('session')->getFlashBag()->add("render_error", "You have no page to render, please add a page.");
+            return $this->redirectToRoute('manage_pages');
         }
 
         if( $curPage == null )
             $curPage = $pages[0];
 
 
-        dump($curPage);
-
         return $this->render('dashboard/show.html.twig', [
             "vasterUser" => $vasterUser,
             "version" => $version,
             'pages' => $pages,
-            'currentPage' => $curPage,
-            'noPage' => $noPage
+            'currentPage' => $curPage
         ]);
     }
 
@@ -297,7 +299,7 @@ class dashboardController extends Controller
     /**
      * @Route("/dashboard/render/{name}", name="render_page")
      */
-    public function showPageActiontemp(Page $page){
+    public function renderPageAction(Page $page){
         $version = $this->getParameter('version');
         /** @var $appUser AppUser */
         $appUser = $this->getUser();
@@ -306,20 +308,18 @@ class dashboardController extends Controller
         $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
             ->findOneBy([ 'email' => $appUser->getEmail()]);
 
-        $noPage = false;
-        $pages = $appUser->getPages()->toArray();
-        if($pages == null){
-            $noPage = true;
+
+        $modules = [];
+        foreach ($page->getModules() as $module) {
+            array_push($modules, $module->getId());
         }
 
-        $curPage = $page;
 
         return $this->render('dashboard/showPage.html.twig', [
             "vasterUser" => $vasterUser,
             "version" => $version,
-            'pages' => $pages,
-            'currentPage' => $curPage,
-            'noPage' => $noPage
+            'page' => $page,
+            'modules' => $modules
         ]);
     }
 

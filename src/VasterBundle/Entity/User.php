@@ -35,8 +35,28 @@ class User
     /**
      * @ORM\Column(type="string")
      */
-
     private $firstname;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdtime;
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedtime()
+    {
+        return $this->createdtime;
+    }
+
+    /**
+     * @param mixed $createdtime
+     */
+    public function setCreatedtime($createdtime)
+    {
+        $this->createdtime = $createdtime;
+    }
 
     /**
      * @return mixed

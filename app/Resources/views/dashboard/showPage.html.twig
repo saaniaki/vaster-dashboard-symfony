@@ -1,1 +1,36 @@
-{{ currentPage.name }}
+{{ page.name }}
+<br>
+
+<script>
+    //setInterval(loadTable, 2000);
+
+    function getRenderPath(parameter) {
+        var path = '{{ path('render_module', {'id': 'replace_parameter'}) }}';
+        return path.replace("replace_parameter", parameter);
+    }
+
+    function renderModule(id) {
+        $.ajax({
+            url: getRenderPath(id),
+            success: function (data) {
+                $("#renderModule-" + id).html(data);
+            }
+        });
+    }
+
+    $( document ).ready(function() {
+        //show loadind
+    });
+
+</script>
+
+
+{% for module_id in modules %}
+    <div id="renderModule-{{ module_id }}"></div>
+    <script>
+        renderModule('{{ module_id }}');
+    </script>
+{% endfor %}
+
+
+

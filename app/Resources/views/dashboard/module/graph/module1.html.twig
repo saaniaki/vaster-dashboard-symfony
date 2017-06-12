@@ -1,0 +1,57 @@
+{   dump(result) }}
+
+<div id="container" style="width:50%; height:400px;"></div>
+
+<script>
+    var data1 = [];
+    var i = 0;
+    {% for value in result.data1 %}
+
+    data1[i] = {
+            x: {{ value.x }},
+            y: {{ value.y }},
+            name: '{{ value.name }}'
+        };
+        i++;
+    {% endfor %}
+
+    var module1 = Highcharts.chart('container', {
+        chart: {
+            type: '{{ result.type }}'
+            /*,events: {
+                load: function () {
+                    var series = this.series[0];
+                    setInterval(function () {
+                        series.setData(data1);
+                    }, 1000);
+                }
+            }*/
+        },
+        title: {
+            text: '{{ result.title }}'
+        },
+        xAxis: {
+            title: {
+                text: '{{ result.xTitle }}'
+            }
+            /*,type: 'datetime',
+            dateTimeLabelFormats: {
+                day: '%e of %b'
+            }*/
+        },
+        yAxis: {
+            title: {
+                text: '{{ result.yTitle }}'
+            }
+        },
+        series: [{
+            name: '{{ result.data1_name }}',
+            data: data1
+            //,pointStart: Date.UTC(2010, 0, 1),
+            //pointInterval: { result.interval }}
+        }]
+    });
+
+
+
+</script>

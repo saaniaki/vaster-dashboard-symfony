@@ -4,7 +4,9 @@
 
 {% block body %}
 
+
     <div class="container" style="margin-top: 50px;">
+
         <div class="page-header">
             <h1>{{ vasterUser.firstname }}, Manage Your Pages <small>customizing is power!</small></h1>
         </div>
@@ -13,6 +15,12 @@
 
             <div class="col-md-6">
 
+                <!--error handling needs improvement-->
+                {% for message in app.flashes('render_error') %}
+                    <div class="alert alert-danger" role="alert">
+                        <b>Error!</b> {{ message }}
+                    </div>
+                {% endfor %}
 
                 <div class="panel panel-default">
                     <div class="panel-heading" style="height: 37px; padding-right: 15%;">

@@ -1,3 +1,4 @@
 services:
     app.security.login_form_authenticator: '@AppBundle\Security\LoginFormAuthenticator'
-    app.doctrine.hash_password_listener: '@AppBundle\Doctrine\HashPasswordListener'
+    app.logout: '@AppBundle\Security\LogOutHandler'
+    app.module: '@AppBundle\Service\vdpModule'
