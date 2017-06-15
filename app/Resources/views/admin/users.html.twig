@@ -1,0 +1,585 @@
+{% extends 'dashboard/dashboard.html.twig' %}
+
+{% block title %}VDP{{ version }} Admin{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid" style="margin-top: 60px; margin-bottom: 20px;">
+
+        <div id="loading">
+            <div class="sk-folding-cube">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+
+        </div>
+
+
+        <div class="panel-body">
+            <div id="header-fixed">
+                <table class="table" style="margin-bottom: 0;"></table>
+            </div>
+            <table class="table table-striped table-hover" id="usersTable" style=" table-layout:fixed;">
+                <thead>
+                <tr>
+                    <th id="First-Name"><a href="#">First Name<span></span></a></th>
+                    <th id="Last-Name"><a href="#">Last Name<span></span></a></th>
+                    <th id="Phone"><a href="#">Phone<span></span></a></th>
+                    <th id="Email"><a href="#">Email<span></span></a></th>
+                    <th id="Created-Date"><a href="#">Created Date<span class="caret"></span></a></th>
+                    <th id="Type"><a href="#">Type<span></span></a></th>
+                    <th id="Orange-Hat"><a href="#">Orange Hat<span></span></a></th>
+                    <th id="OS"><a href="#">OS<span></span></a></th>
+                    <th id="Last-Seen"><a href="#">Last Seen<span></span></a></th>
+                    <th>Location</th>
+                </tr>
+                </thead>
+                <tbody id="ajaxTbody">
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+
+    <style>
+        .up{
+            content: "";
+            border-top: 0;
+            border-bottom: 4px dashed;
+            border-bottom: 4px solid\9;
+        }
+        .id, #loading{
+            display: none;
+        }
+        #loading{
+            display: none;
+            position: fixed;
+            top: 40px;
+            width: 100%;
+            padding-right: 60px;
+            background-color: rgba(255, 255, 255, 0.62);
+            z-index: 10;
+        }
+        #header-fixed {
+            position: fixed;
+            top: 50px;
+            display:none;
+            background-color:white;
+            width: 100%; padding-right: 60px;
+         }
+        th, td{
+            width: 100px;
+        }
+        .sk-folding-cube {
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            -webkit-transform: rotateZ(45deg);
+            transform: rotateZ(45deg);
+        }
+
+        .sk-folding-cube .sk-cube {
+            float: left;
+            width: 50%;
+            height: 50%;
+            position: relative;
+            -webkit-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            transform: scale(1.1);
+        }
+        .sk-folding-cube .sk-cube:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #333;
+            -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+            animation: sk-foldCubeAngle 2.4s infinite linear both;
+            -webkit-transform-origin: 100% 100%;
+            -ms-transform-origin: 100% 100%;
+            transform-origin: 100% 100%;
+        }
+        .sk-folding-cube .sk-cube2 {
+            -webkit-transform: scale(1.1) rotateZ(90deg);
+            transform: scale(1.1) rotateZ(90deg);
+        }
+        .sk-folding-cube .sk-cube3 {
+            -webkit-transform: scale(1.1) rotateZ(180deg);
+            transform: scale(1.1) rotateZ(180deg);
+        }
+        .sk-folding-cube .sk-cube4 {
+            -webkit-transform: scale(1.1) rotateZ(270deg);
+            transform: scale(1.1) rotateZ(270deg);
+        }
+        .sk-folding-cube .sk-cube2:before {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s;
+        }
+        .sk-folding-cube .sk-cube3:before {
+            -webkit-animation-delay: 0.6s;
+            animation-delay: 0.6s;
+        }
+        .sk-folding-cube .sk-cube4:before {
+            -webkit-animation-delay: 0.9s;
+            animation-delay: 0.9s;
+        }
+        @-webkit-keyframes sk-foldCubeAngle {
+            0%, 10% {
+                -webkit-transform: perspective(140px) rotateX(-180deg);
+                transform: perspective(140px) rotateX(-180deg);
+                opacity: 0;
+            } 25%, 75% {
+                  -webkit-transform: perspective(140px) rotateX(0deg);
+                  transform: perspective(140px) rotateX(0deg);
+                  opacity: 1;
+              } 90%, 100% {
+                    -webkit-transform: perspective(140px) rotateY(180deg);
+                    transform: perspective(140px) rotateY(180deg);
+                    opacity: 0;
+                }
+        }
+
+        @keyframes sk-foldCubeAngle {
+            0%, 10% {
+                -webkit-transform: perspective(140px) rotateX(-180deg);
+                transform: perspective(140px) rotateX(-180deg);
+                opacity: 0;
+            } 25%, 75% {
+                  -webkit-transform: perspective(140px) rotateX(0deg);
+                  transform: perspective(140px) rotateX(0deg);
+                  opacity: 1;
+              } 90%, 100% {
+                    -webkit-transform: perspective(140px) rotateY(180deg);
+                    transform: perspective(140px) rotateY(180deg);
+                    opacity: 0;
+                }
+        }
+
+    </style>
+{% endblock %}
+
+{% block bot_navBar %}
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+
+        <div class="dropup" id="limit-dropup" style=" float: left; margin: 7px 0 0 7px;">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <strong id="limit-text">25</strong>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li class="limitNumber disabled"><a href="#">25</a></li>
+                <li class="limitNumber"><a href="#">50</a></li>
+                <li class="limitNumber"><a href="#">100</a></li>
+                <li class="limitNumber"><a href="#">200</a></li>
+            </ul>
+        </div>
+
+
+
+        <div class="dropup" style=" float: right; margin: 7px 50px 0 0;">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <strong id="limit-text">Useful Stat</strong>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2" style=" padding: 0;">
+                <li id="totalUsers" style=" padding: 0 8px;" class="label-success">0</li>
+                <li id="totalORG" style=" padding: 0 8px;" class="label-warning">0</li>
+                <li id="totalInternal" style=" padding: 0 8px;" class="label-info">0</li>
+                <li id="android" style=" padding: 0 8px;" class="label-primary">0</li>
+                <li id="ios" style=" padding: 0 8px;" class="label-danger">0</li>
+            </ul>
+        </div>
+
+        <div class="toggle toggle-light" style="float: right; margin: 16px 8px 16px 8px;"></div>
+
+        <div class="input-group" style=" float: left; width: 185px; margin: 8px;">
+            <input id="keyword" title="search" type="text" class="form-control" aria-label="search" style=" height: 33px;">
+            <div class="input-group-btn dropup">
+                <button id="search" type="button" class="btn btn-default" style=" height: 33px;"><span class="glyphicon glyphicon-search"></span></button>
+                <button type="button" class="btn btn-default dropup dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" height: 33px;">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" id="searchType">
+                    <li class="active" data-search="contains"><a href="#">Contains</a></li>
+                    <li><a href="#" data-search="starts">Starts With</a></li>
+                    <li><a href="#" data-search="ends">Ends With</a></li>
+                    <li><a href="#" data-search="exact">Exactly</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="container" style="text-align: center;">
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination" id="pagination" style=" margin-top: 7px; margin-bottom: 3px;">
+                    <li id="prev">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li id="next">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+
+
+    </nav>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var mapLink = "http://maps.google.com/maps?z=12&t=m&q=loc:";
+
+        var total = 0;
+        var totalInter = 0;
+        var totalORG = 0;
+        var android = 0;
+        var ios = 0;
+
+        var limit = 25;
+        var offset = 0;
+        var sort = 'user.createdtime';
+        var order = 'DESC';
+        var internal = 1;
+        var keyword = null;
+
+        var path = 'api/user/page';
+        var pages = 0;
+
+        function createPager(){
+
+            pages = Math.ceil(total/limit);
+            $('#totalUsers').text(total + " Users");
+            $('#totalORG').text(totalORG + " Orange Hats");
+            $('#android').text(android + " Android Devices");
+            $('#ios').text(ios + " IOS Devices");
+
+            if(internal){
+                $('#totalInternal').text(totalInter + " Internal Users").show();
+            }else{
+                $('#totalInternal').hide();
+            }
+
+            $('.pageNumber').remove();
+            for(var i = pages; i > 0; i--){
+                $('#prev').after("<li class='pageNumber'><a href='#'>" + i + "</a></li>");
+            }
+
+            var at = pages - Math.ceil((total - offset)/limit) + 1 ;
+
+            $('.pagination').children('*').filter(function() {
+                return $(this).text() === at.toString();
+            }).addClass('active');
+
+            if(at === 1){
+                $('#prev').addClass('disabled');
+            }else if ($('#prev').hasClass('disabled')){
+                $('#prev').removeClass('disabled');
+            }
+
+            if(at === pages){
+                $('#next').addClass('disabled');
+            }else if ($('#next').hasClass('disabled')){
+                $('#next').removeClass('disabled');
+            }
+
+
+
+
+            return pages;
+        }
+
+        function next(){
+            if( offset + limit < total ) {
+                offset += limit;
+                loadTable(keyword);
+            }
+        }
+
+        function prev(){
+            if( offset - limit >= 0 ) {
+                offset -= limit;
+                loadTable(keyword);
+            }
+        }
+
+        function goTo(index) {
+            if (index > 0 && index <= pages) {
+                offset = limit * (index-1);
+                loadTable(keyword);
+            }
+        }
+
+        function setLimit(lim){
+            limit = lim;
+            offset = Math.floor((offset/limit)) * limit;
+            loadTable(keyword);
+        }
+
+
+        function renderTable(ajaxPath){
+            $.ajax({
+                url: ajaxPath,
+                dataType:"JSON",
+                success: function (data) {
+                    $("#ajaxTbody").html("");
+                    createPager(limit, offset);
+                    $('#loading').hide();
+
+                    if(data.users.length === 0)
+                        alert('No result founed');
+
+                    $.each( data.users, function( key, user ) {
+                        user.createdTime.date = user.createdTime.date.substring(0, 16);
+                        locationLink = "<strong class='label label-danger'>no data</strong>";
+
+                        if( user.location !== null ) locationLink = "<a style='margin-left: 7px;' target='_blank' class='label label-success' href='" + mapLink + user.location.latitude + "," + user.location.longitude + "'>map</a>";
+                        if(user.lastName === null) user.lastName = '';
+                        if(user.email === null) user.email = '';
+                        if(user.type === null) user.type = '';
+                        else if (user.type === 'Internal') user.type = "<span class='label label-info'>Internal</span>";
+                        if(user.available === true) user.available = "<img src='{{ asset('images/orange-hat.png') }}' style='width: 24px; margin-left: 30px;' />";
+                        else user.available = '';
+
+                        $("#ajaxTbody").append(
+                            "<tr class='user'>" +
+                            "<td><span class='id'>" + user.id + "</span>" + user.firstName + "</td>" +
+                            "<td>" + user.lastName + "</td>" +
+                            "<td>" + user.phone + "</td>" +
+                            "<td>" + user.email + "</td>" +
+                            "<td>" + user.createdTime.date + "</td>" +
+                            "<td>" + user.type + "</td>" +
+                            "<td>" + user.available + "</td>" +
+                            "<td>" + user.device + "</td>" +
+                            "<td>" + user.lastSeen + "</td>" +
+                            "<td>" + locationLink + "</td>" +
+                            "</tr>"
+                        )
+                    });
+                }
+            });
+        }
+
+
+
+        function count(type, searchedWord) {
+            if( searchedWord === undefined ){
+                return $.ajax({
+                    url: 'api/user/count/' + type,
+                    dataType: "JSON"
+                });
+            }
+            return $.ajax({
+                url: 'api/user/count/' + type + '/' + searchedWord,
+                dataType: "JSON"
+            });
+        }
+
+        function adjust(a1, ajaxPath){
+            total = a1[0].count[0].total;
+            totalInter = a1[0].count[0].totalInter;
+            totalORG = a1[0].count[0].totalORG;
+            android = a1[0].count[0].android;
+            ios = a1[0].count[0].ios;
+            renderTable(ajaxPath);
+        }
+
+        function loadTable(searchedWord) {
+            $('.sk-folding-cube').css('margin', ($(window).height()/2)-60 + 'px auto');
+            $('#loading').show();
+
+            var ajaxPath = '';
+            if( searchedWord === undefined || searchedWord === null) {
+                ajaxPath = path + '/' + limit + '/' + offset + '/' + sort + '/' + order + '/' + internal;
+
+                if( internal ){
+                    $.when(count('all'), count('internal')).done(function(a1, a2){
+                        adjust(a1, ajaxPath);
+                    });
+                } else {
+                    $.when(count('standard'), count('internal')).done(function(a1, a2){
+                        adjust(a1, ajaxPath);
+                    });
+                }
+
+
+            } else {
+                keyword = searchedWord;
+                ajaxPath = path + '/' + limit + '/' + offset + '/' + sort + '/' + order + '/' + internal + '/' + keyword;
+                if( internal ){
+                    $.when(count('all', keyword), count('internal', keyword)).done(function(a1, a2){
+                        adjust(a1, ajaxPath);
+                    });
+                } else {
+                    $.when(count('standard', keyword), count('internal', keyword)).done(function(a1, a2){
+                        adjust(a1, ajaxPath);
+                    });
+                }
+
+            }
+
+
+        }
+
+        function makeSortable(id, fieldName) {
+            $( "#usersTable" ).on( "click", "#" + id, function() {
+                if( sort === fieldName ){
+                    if( order === 'DESC' ){
+                        order = 'ASC';
+                        $(this).find("span").addClass('up');
+                    }else{
+                        order = 'DESC';
+                        $(this).find("span").removeClass('up');
+                    }
+                }else{
+                    $( "#usersTable" ).find('th span').removeClass('caret');
+                    order = 'DESC';
+                    $(this).find("span").addClass('caret');
+                }
+                sort = fieldName;
+                loadTable(keyword);
+            });
+        }
+
+        $( document ).ready(function() {
+            loadTable();
+
+            $( "#prev" ).click(function() {
+                prev();
+            });
+
+
+            $( "#pagination" ).on( "click", ".pageNumber", function() {
+                goTo(parseInt($(this).text()));
+            });
+
+            $( "#next" ).click(function() {
+                next();
+            });
+
+            $( ".limitNumber" ).click(function() {
+                $('.limitNumber').removeClass('disabled');
+                setLimit(parseInt($(this).text()));
+                $(this).addClass('disabled');
+                $('#limit-text').text($(this).text());
+            });
+
+
+            var tableOffset = $("#usersTable").offset().top;
+            var $header = $("#usersTable > thead").clone();
+            $("#header-fixed > table").append($header);
+            var $fixedHeader = $("#header-fixed");
+
+            $(window).on("scroll", function() {
+                var offset = $(this).scrollTop();
+
+                if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
+                    $fixedHeader.show();
+                    $('.navbar-fixed-top').css('box-shadow', 'none');
+                }
+                else if (offset < tableOffset) {
+                    $fixedHeader.hide();
+                    $('.navbar-fixed-top').css('box-shadow', '0 0 25px -10px rgb(255, 162, 5)');
+                }
+            });
+
+            //sorting
+            var sortable = {
+                'First-Name' : 'user.firstname',
+                'Last-Name' : 'user.lastname',
+                'Phone' : 'user.phone',
+                'Email' : 'user.email',
+                'Created-Date' : 'user.createdtime',
+                'Type' : 'user.accounttype',
+                'Orange-Hat' : 'profession.available',
+                'OS' : 'account.devicetype',
+                'Last-Seen' : 'lastseen.seconds'
+            };
+
+            for (var k in sortable) {
+                makeSortable(k, sortable[k]);
+            }
+
+
+            $('.toggle').toggles({
+                drag: true, // allow dragging the toggle between positions
+                click: true, // allow clicking on the toggle
+                text: {
+                    on: 'All', // text for the ON position
+                    off: 'External' // and off
+                },
+                on: true, // is the toggle ON on init
+                animate: 250, // animation time (ms)
+                easing: 'swing', // animation transition easing function
+                checkbox: null, // the checkbox to toggle (for use in forms)
+                clicker: null, // element that can be clicked on to toggle. removes binding from the toggle itself (use nesting)
+                width: 67, // width used if not set in css
+                height: 18, // height if not set in css
+                type: 'compact' // if this is set to 'select' then the select style toggle will be used
+            }).on('toggle', function(e, active) {
+                if (active) {
+                    $('.toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
+                    internal = 1;
+                    loadTable(keyword);
+                } else {
+                    $('.toggle-slide').css('box-shadow', '0 0 0px 0px rgba(0, 0, 0, 1)');
+                    internal = 0;
+                    loadTable(keyword);
+                }
+            });
+
+            $('.toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
+
+
+            $('#searchType li').each(function() {
+                $( this ).click(function() {
+                    $('#searchType li').each(function() {
+                        $(this).removeClass('active');
+                    });
+                    $(this).addClass('active');
+                });
+            });
+
+            //load original (cancel search)
+            $( '#search' ).click(function() {
+                //if input is not empty
+                var option = $('#searchType .active a').attr('data-search');
+                keyword = $('#keyword').val();
+                if( option === 'contains' )
+                    keyword = '%25' + keyword + '%25';
+                else if ( option === 'starts' )
+                    keyword = keyword + '%25';
+                else if ( option === 'ends' )
+                    keyword = '%25' + keyword;
+
+                loadTable(keyword);
+            });
+
+
+
+        });
+
+    </script>
+
+
+{% endblock %}

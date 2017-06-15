@@ -53,6 +53,7 @@ class dashboardController extends Controller
 
 
         $pages = $appUser->getPages()->toArray();
+        //dump($appUser->getPages());die();
         if($pages == null){
             $this->get('session')->getFlashBag()->add("render_error", "You have no page to render, please add a page.");
             return $this->redirectToRoute('manage_pages');
@@ -60,7 +61,7 @@ class dashboardController extends Controller
 
         if( $curPage == null )
             $curPage = $pages[0];
-
+        //dump($curPage);die();
 
         return $this->render('dashboard/show.html.twig', [
             "vasterUser" => $vasterUser,

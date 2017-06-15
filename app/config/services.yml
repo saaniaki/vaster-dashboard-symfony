@@ -42,7 +42,11 @@ services:
                 $formFactory: '@form.factory'
                 $em: '@doctrine.orm.default_entity_manager'
                 $router: '@router'
-                $passwordEncoder: '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoder'
+                $passwordEncoder: '@security.user_password_encoder.generic'
+
+    AppBundle\Doctrine\HashPasswordListener:
+                tags:
+                    - { name: doctrine.event_subscriber }
 
     Symfony\Component\Security\Core\Encoder\UserPasswordEncoder: ~
 
