@@ -63,7 +63,7 @@ class adminController extends Controller
         $totalInter = $userRep->count('Internal', $keyword);
         $totalORG= $userRep->countProfession($type, $keyword);
         $android = $userRep->countAccount($type, 'Android', $keyword);
-        $ios = $userRep->countAccount($type, 'iPhone', $keyword);
+        $ios = $userRep->countAccount($type, 'iPhone', $keyword) + $userRep->countAccount($type, 'iPad', $keyword);
 
         $result[] = [
             'total' => $total,
@@ -87,24 +87,23 @@ class adminController extends Controller
      */
     public function userPageAction($limit, $offset, $sort, $order, bool $internal, $keyword = null){
 
+        $userRep = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster");
+        $locRep = $this->getDoctrine()->getRepository("VasterBundle:Location", "vaster");
+
+
         if($internal){
             if( $keyword != null){
-                $users = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-                    ->showPageSearch($limit, $offset, $sort, $order, 'all',$keyword);
+                $users = $userRep->showPageSearch($limit, $offset, $sort, $order, 'all',$keyword);
             }else{
-                $users = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-                    ->showPage($limit, $offset, $sort, $order);
+                $users = $userRep->showPage($limit, $offset, $sort, $order);
             }
         } else {
             if( $keyword != null){
-                $users = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-                    ->showPageSearchExclude($limit, $offset, $sort, $order, 'internal',$keyword); // external
+                $users = $userRep->showPageSearchExclude($limit, $offset, $sort, $order, 'internal',$keyword); // external
             }else{
-                $users = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-                    ->showPageExclude($limit, $offset, $sort, $order, 'internal');
+                $users = $userRep->showPageExclude($limit, $offset, $sort, $order, 'internal');
             }
         }
-
 
 
         $result = [];
@@ -117,14 +116,9 @@ class adminController extends Controller
             if($account != null){
                 $device = $account->getDeviceType();
             }
-            /** @var $location Location */
-            $location = $user->getLocation()->first();
-            if($location != null){
-                $location = [
-                    'latitude' => $location->getLatitude(),
-                    'longitude' => $location->getLongitude()
-                ];
-            }
+
+            $location = $locRep->findValidLocation($user);
+
             /** @var $lastSeen LastSeen */
             $lastSeen = $user->getLastseen();
             if($lastSeen != null)

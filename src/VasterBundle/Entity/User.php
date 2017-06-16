@@ -81,7 +81,7 @@ class User
     }
 
     /**
-     * @return ArrayCollection|Account[]
+     * @return Account
      */
     public function getAccount()
     {
@@ -90,13 +90,11 @@ class User
 
     function __construct()
     {
-        $this->profession = new ArrayCollection();
-        $this->account = new ArrayCollection();
         $this->location = new ArrayCollection();
     }
 
     /**
-     * @return ArrayCollection|Profession[]
+     * @return Profession
      */
     public function getProfession()
     {

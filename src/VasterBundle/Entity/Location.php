@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="VasterBundle\Repository\VasterLocationRepository")
  * @ORM\Table(name="locations")
  */
 class Location
@@ -48,7 +48,7 @@ class Location
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getUser()
     {
@@ -56,7 +56,7 @@ class Location
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
      */
     public function setUser($user)
     {
