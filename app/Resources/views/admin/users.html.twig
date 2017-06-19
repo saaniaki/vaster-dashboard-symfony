@@ -279,7 +279,7 @@
         var android = 0;
         var ios = 0;
 
-        var limit = 25;
+        var limit = 2;//25
         var offset = 0;
         var sort = 'user.createdtime';
         var order = 'DESC';
@@ -288,6 +288,8 @@
 
         var path = 'api/user/page';
         var pages = 0;
+
+        var users = [];
 
         function createPager(){
 
@@ -388,30 +390,53 @@
                         if(user.email === null) user.email = '';
                         if(user.type === null) user.type = '';
                         else if (user.type === 'Internal') user.type = "<span class='label label-info'>Internal</span>";
-                        if(user.available === true) user.available = "<img src='{{ asset('images/orange-hat.png') }}' style='width: 24px; margin-left: 30px;' />";
-                        else user.available = '';
+                        console.log(user.profession.available);
+                        if(user.profession.available === true) user.profession.available = "<img src='{{ asset('images/orange-hat.png') }}' style='width: 24px;' />";
+                        else user.profession.available = '';
 
                         $("#ajaxTbody").append(
-                            "<tr class='user'>" +
-                            "<td class='fnameColumn'><span class='id'>" + user.id + "</span>" + user.firstName + "</td>" +
+                            "<tr data-userid='" + user.id + "' class='user'>" +
+                            //"<td data-userid='"+user.id+"' class='fnameColumn'><span class='id'>" + user.id + "</span>" + user.firstName + "</td>" +
+                            "<td class='fnameColumn'>" + user.firstName + "</td>" +
                             "<td class='lnameColumn'>" + user.lastName + "</td>" +
                             "<td class='phoneColumn'>" + user.phone + "</td>" +
                             "<td class='emailColumn'>" + user.email + "</td>" +
                             "<td class='createdColumn'>" + user.createdTime.date + "</td>" +
                             "<td class='typeColumn'>" + user.type + "</td>" +
-                            "<td class='orgColumn'>" + user.available + "</td>" +
+                            "<td class='orgColumn' style='text-align: center;'>" + user.profession.available + "</td>" +
                             "<td class='osColumn'>" + user.device + "</td>" +
                             "<td class='lastSeenColumn'>" + user.lastSeen + "</td>" +
                             "<td>" + locationLink + "</td>" +
                             "</tr>"//$
-                        )
+                        );
+
+
+                        users.push({
+                            'id' : user.id,
+                            'firstName' : user.firstName,
+                            'lastName' : user.lastName,
+                            'phone' : user.phone,
+                            'email' : user.email,
+                            'device' : user.device,
+                            'balance' : user.balance,
+                            'profile' : user.profile,
+                            'cover' : user.cover,
+                            'createdTime' : user.createdTime,
+                            'type' : user.type,
+                            'profession' : user.profession,
+                            'lastSeen' : user.lastSeen,
+                            'location' : user.location
+                        });
+
                     });
                     $( "#ajaxTbody" ).trigger( "renderCompleted");
                 }
             });
         }
 
-
+        function getUser(id) {
+            return $.grep(users, function(e){ return e.id === id; })[0];
+        }
 
         function count(type, searchedWord) {
             if( searchedWord === undefined ){
@@ -639,9 +664,183 @@
                 $('#cancelSearch').remove();
             });
 
+
+
+            $( "#ajaxTbody" ).on( "click", ".user", function() {
+                var user = getUser($(this).attr('data-userid'));
+                console.log(user);
+                $('#modal-title').text(user.firstName + " " + user.lastName);
+
+
+                $('#modal-profile').attr('src', user.profile);
+                $('#modal-cover').attr('src', user.cover);
+
+
+                if( user.first === "" )
+                    $('#modal-first-name').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no first name</span>");
+                else
+                    $('#modal-first-name').text(user.firstName);
+
+
+                if( user.lastName === "" )
+                    $('#modal-last-name').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no last name</span>");
+                else
+                    $('#modal-last-name').text(user.lastName);
+
+
+                if( user.email === "" )
+                    $('#modal-email').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no email</span>");
+                else
+                    $('#modal-email').text(user.email);
+
+                $('#modal-phone').text(user.phone);
+                $('#modal-user-id').text(user.id);
+                $('#modal-created-time').text(user.createdTime.date);
+                $('#modal-device').text(user.device);
+                //$('#modal-last-seen').text(user.lastSeen);
+
+
+                if( user.type === "" )
+                    $('#modal-type').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>user type not set yet</span>");
+                else
+                    $('#modal-type').text(user.type);
+
+                $('#modal-balance').text(user.balance);
+
+                if( user.profession.available === "" )
+                    $('#modal-available').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>not available as Orange Hat</span>");
+                else {
+                    $('#modal-available').html("<span style='color: #f6541c; font-weight: normal;'>Available as Orange Hat</span>");
+                    $('.glyphicon-check').css('color', '#f6541c');
+                }
+
+
+
+                $('#modal-profession-name').text(user.profession.name);
+                $('#modal-user-title').text(user.profession.title);
+                $('#modal-expertise').text(user.profession.expertise);
+                $('#modal-rate').text(user.profession.rate);
+                $('#modal-about').text(user.profession.about);
+
+
+
+
+
+                $('#userModal').modal();
+
+            });
+
         });
 
     </script>
 
+
+{% endblock %}
+
+{% block modals %}
+
+    <div class="modal fade" tabindex="-1" id="userModal" role="dialog" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <span id="modal-title"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style=" margin-bottom: 15px;">
+
+                        <div style="float: left;" class="col-md-3">
+                            <img id="modal-profile" src="" style=" height: 150px; float: left; box-shadow: 0 0 25px -10px black;" />
+                        </div>
+
+                        <div style="float: left;" class="col-md-3">
+                            <div>
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                <strong id="modal-first-name"></strong> <strong id="modal-last-name"></strong>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                                <span id="modal-email"></span>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                                +<span id="modal-phone"></span>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                                <span id="modal-balance"></span>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                                <span id="modal-available"></span>
+                            </div>
+                        </div>
+
+                        <div style="float: left;" class="col-md-3">
+                            <div>
+                                <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+                                <strong id="modal-user-id"></strong>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                <strong>Since</strong> <span id="modal-created-time"></span>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                <strong>Using</strong> <span id="modal-device"></span>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-pawn" aria-hidden="true"></span>
+                                <span id="modal-type"></span>
+                            </div>
+                        </div>
+
+                        <div style="float: left;" class="col-md-3">
+                            <img id="modal-cover" src="" style=" height: 150px; float: right; box-shadow: 0 0 25px -10px black;" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs">
+                                <li role="presentation" class="active"><a href="#">Orange Hat</a></li>
+                                <li role="presentation"><a href="#">Locations</a></li>
+                                <li role="presentation"><a href="#">Searches</a></li>
+                                <li role="presentation"><a href="#">Transactions</a></li>
+                                <li role="presentation"><a href="#">Stats</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row" style=" margin-top: 5px;">
+                        <div style="float: left;" class="col-md-4">
+                            <div>
+                                <strong>Profession Name:</strong> <span id="modal-profession-name"></span>
+                            </div>
+                            <div>
+                                <strong>Title:</strong> <span id="modal-user-title"></span>
+                            </div>
+                            <div>
+                                <strong>Expertise:</strong> <span id="modal-expertise"></span>
+                            </div>
+                            <div>
+                                <strong>Service Rate:</strong> <span id="modal-servicerate"></span>
+                            </div>
+                            <div>
+                                <strong>About:</strong> <span id="modal-about"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 {% endblock %}

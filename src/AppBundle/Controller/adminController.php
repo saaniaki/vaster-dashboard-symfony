@@ -7,7 +7,7 @@
  */
 
 namespace AppBundle\Controller;
-
+use Doctrine\DBAL\Types\Type;
 use AppBundle\AppBundle;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\ModuleInfo;
@@ -28,6 +28,7 @@ use VasterBundle\Entity\Profession;
 use VasterBundle\VasterBundle;
 use AppBundle\Entity\User as AppUser;
 use VasterBundle\Entity\User as VasterUser;
+
 
 class adminController extends Controller
 {
@@ -126,15 +127,26 @@ class adminController extends Controller
             else
                 $lastSeen = '';
 
-            $result[] = [
+            $result[] = [ //just send the user!
                 'id' => $user->getUserId(),
                 'firstName' => $user->getFirstname(),
                 'lastName' => $user->getLastname(),
                 'phone' => $user->getPhone(),
                 'email' => $user->getEmail(),
+                'balance' => $user->getBalance(),
+                'profile' => $user->getUrlprofile(),
+                'cover' => $user->getUrlcover(),
                 'type' => $user->getAccounttype(),
                 'createdTime' => $user->getCreatedtime(),
-                'available' => $profession->getAvailable(),
+                'profession' => [
+                    'available' => $profession->getAvailable(),
+                    'name' => $profession->getProfessionname(),
+                    'title' => $profession->getTitle(),
+                    'rate' => $profession->getServiceRate(),
+                    'about' => $profession->getAbout(),
+                    'expertise' => $profession->getExpertise()
+                    //'homeLocation' => $profession->getHomelocation()
+                ],
                 'device' => $device,
                 'location' => $location,
                 'lastSeen' => $lastSeen
@@ -145,6 +157,7 @@ class adminController extends Controller
             'users' => $result
         ];
         return new JsonResponse($data);
+        //return new Response('' . print_r($data));
     }
 
 }

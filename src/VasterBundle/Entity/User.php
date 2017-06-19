@@ -44,6 +44,69 @@ class User
     private $createdtime;
 
     /**
+     * @ORM\Column(type="float")
+     */
+    private $balance;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $urlprofile;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $urlcover;
+
+    /**
+     * @return mixed
+     */
+    public function getUrlcover()
+    {
+        return $this->urlcover;
+    }
+
+    /**
+     * @param mixed $urlcover
+     */
+    public function setUrlcover($urlcover)
+    {
+        $this->urlcover = $urlcover;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlprofile()
+    {
+        return $this->urlprofile;
+    }
+
+    /**
+     * @param mixed $urlprofile
+     */
+    public function setUrlprofile($urlprofile)
+    {
+        $this->urlprofile = $urlprofile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param mixed $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+    }
+
+    /**
      * @ORM\OneToOne(targetEntity="VasterBundle\Entity\Profession", mappedBy="user")
      */
     private $profession;
