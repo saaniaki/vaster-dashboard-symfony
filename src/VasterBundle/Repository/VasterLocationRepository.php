@@ -32,4 +32,16 @@ class VasterLocationRepository extends EntityRepository
         }
         return $result;
     }
+
+    function findHistory(User $user){
+        return $this->createQueryBuilder('location')
+            ->leftJoin('location.user', 'user')
+            ->andWhere('user.userid = :id')
+            ->setParameter('id', $user->getUserId())
+            ->orderBy('location.createdtime', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getArrayResult();
+
+    }
 }

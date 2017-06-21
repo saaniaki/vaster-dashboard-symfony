@@ -90,6 +90,7 @@ class adminController extends Controller
 
         $userRep = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster");
         $locRep = $this->getDoctrine()->getRepository("VasterBundle:Location", "vaster");
+        $searchRep = $this->getDoctrine()->getRepository("VasterBundle:Search", "vaster");
 
 
         if($internal){
@@ -119,6 +120,7 @@ class adminController extends Controller
             }
 
             $location = $locRep->findValidLocation($user);
+            $locHistory = $locRep->findHistory($user);
 
             /** @var $lastSeen LastSeen */
             $lastSeen = $user->getLastseen();
@@ -126,6 +128,38 @@ class adminController extends Controller
                 $lastSeen = $lastSeen->getSeconds();
             else
                 $lastSeen = '';
+
+
+
+            $languages = $user->getLanguages();
+            if( $languages!= null ){
+                $languages = [
+                    'first' => $languages->getFirstLanguage(),
+                    'second' => $languages->getSecondLanguage(),
+                    'other' => $languages->getOtherLanguage()
+                ];
+            }
+
+            $socialNetworks = [];
+            foreach ( $user->getSocialNetwork() as $sn ){
+                $socialNetworks[] = [
+                    'type' => $sn->getType(),
+                    'url' => $sn->getUrl(),
+                    'name' => $sn->getName()
+                ];
+            }
+
+            $serviceTimes = [];
+            foreach ( $user->getServiceTime() as $st ){
+                $serviceTimes[] = [
+                    'day' => $st->getWeekdays(),
+                    'start' => $st->getStarttime(),
+                    'end' => $st->getEndtime(),
+                    'availability' => $st->getAvailability()
+                ];
+            }
+
+            $searches = $searchRep->findHistory($user);
 
             $result[] = [ //just send the user!
                 'id' => $user->getUserId(),
@@ -144,15 +178,30 @@ class adminController extends Controller
                     'title' => $profession->getTitle(),
                     'rate' => $profession->getServiceRate(),
                     'about' => $profession->getAbout(),
-                    'expertise' => $profession->getExpertise()
-                    //'homeLocation' => $profession->getHomelocation()
+                    'expertise' => $profession->getExpertise(),
+                    'commission' => $profession->getCommission(),
+                    'gender' => $profession->getGender(),
+                    'ranking' => $profession->getRanking(),
+                    'votes' => $profession->getVotes(),
+                    'address' => $profession->getAddress(),
+                    'website' => $profession->getWebsite(),
+                    'city' => $profession->getCity(),
+                    'region' => $profession->getRegion(),
+                    'postalCode' => $profession->getPostalCode(),
+                    'country' => $profession->getCountry(),
+                    'homeLocation' => $profession->getHomelocation()
                 ],
+                'socialNetworks' => $socialNetworks,
+                'serviceTime' => $serviceTimes,
+                'languages' => $languages,
                 'device' => $device,
                 'location' => $location,
-                'lastSeen' => $lastSeen
+                'locHistory' => $locHistory,
+                'lastSeen' => $lastSeen,
+                'searches' => $searches
             ];
         }
-        //dump($users);die();
+        //dump($result);die();
         $data = [
             'users' => $result
         ];

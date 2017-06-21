@@ -123,6 +123,92 @@ class User
     private $location;
 
     /**
+     * @ORM\OneToOne(targetEntity="VasterBundle\Entity\Language", mappedBy="user")
+     */
+    private $languages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="VasterBundle\Entity\SocialNetwork", mappedBy="user")
+     */
+    private $socialNetwork;
+
+    /**
+     * @ORM\OneToMany(targetEntity="VasterBundle\Entity\ServiceTime", mappedBy="user")
+     * @ORM\OrderBy({"servicetimeid"="ASC"})
+     */
+    private $serviceTime;
+
+    /**
+     * @ORM\OneToMany(targetEntity="VasterBundle\Entity\Search", mappedBy="user")
+     * @ORM\OrderBy({"servicetimeid"="ASC"})
+     */
+    private $searches;
+
+    /**
+     * @return mixed
+     */
+    public function getSearches()
+    {
+        return $this->searches;
+    }
+
+    /**
+     * @param mixed $searches
+     */
+    public function setSearches($searches)
+    {
+        $this->searches = $searches;
+    }
+
+    /**
+     * @return ArrayCollection|ServiceTime[]
+     */
+    public function getServiceTime()
+    {
+        return $this->serviceTime;
+    }
+
+    /**
+     * @param mixed $serviceTime
+     */
+    public function setServiceTime($serviceTime)
+    {
+        $this->serviceTime = $serviceTime;
+    }
+
+    /**
+     * @return ArrayCollection|SocialNetwork[]
+     */
+    public function getSocialNetwork()
+    {
+        return $this->socialNetwork;
+    }
+
+    /**
+     * @param mixed $socialNetwork
+     */
+    public function setSocialNetwork($socialNetwork)
+    {
+        $this->socialNetwork = $socialNetwork;
+    }
+
+    /**
+     * @return Language
+     */
+    public function getLanguages()
+    {
+        return $this->languages;
+    }
+
+    /**
+     * @param mixed $languages
+     */
+    public function setLanguages($languages)
+    {
+        $this->languages = $languages;
+    }
+
+    /**
      * @ORM\OneToOne(targetEntity="VasterBundle\Entity\LastSeen", mappedBy="user")
      */
     private $lastseen;
@@ -154,6 +240,8 @@ class User
     function __construct()
     {
         $this->location = new ArrayCollection();
+        $this->socialNetwork = new ArrayCollection();
+        $this->serviceTime = new ArrayCollection();
     }
 
     /**

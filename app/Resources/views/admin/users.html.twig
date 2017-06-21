@@ -19,9 +19,9 @@
 
         <div class="panel-body">
             <div id="header-fixed">
-                <table class="table" style="margin-bottom: 0; box-shadow: 0 -12px 35px 5px black;"></table>
+                <table class="table sortableTable" style="margin-bottom: 0; box-shadow: 0 -12px 35px 5px black;"></table>
             </div>
-            <table class="table table-striped table-hover" id="usersTable" style=" table-layout:fixed;">
+            <table class="table table-striped table-hover sortableTable" id="usersTable" style=" table-layout:fixed;">
                 <thead>
                 <tr>
                     <th class="First-Name fnameColumn">
@@ -180,6 +180,52 @@
                 }
         }
 
+
+        .search-result-box{
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            border: 1px solid #e8e8e8;
+            border-radius: 3px;
+        }
+
+        .search-result-box hr{
+            margin: 5px 0;
+            border-color: #c9c9c9;
+        }
+
+        .search-result-box .title{
+            font-weight: bold;
+            font-size: 16px;
+            color: #3479b7;
+        }
+        #item-fixed {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display:none;
+            background-color:white;
+            width: 100%; padding-right: 60px;
+        }
+
+        .modal-dialog {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modal-content {
+            height: auto;
+            border-radius: 0;
+        }
+
+        #userModal {
+            padding: 20px !important;
+        }
+
+        #usersTable tbody tr, #modal-searches-table tbody tr{
+            cursor: pointer;
+        }
+
     </style>
 {% endblock %}
 
@@ -216,7 +262,7 @@
             </ul>
         </div>
 
-        <div class="toggle toggle-light" style="float: right; margin: 16px 8px 16px 8px;"></div>
+        <div id="internalToggle" class="toggle toggle-light" style="float: right; margin: 16px 8px 16px 8px;"></div>
 
         <div class="input-group" style=" float: left; width: 185px; margin: 8px;" id="searchBar">
 <!-- here -->
@@ -279,7 +325,7 @@
         var android = 0;
         var ios = 0;
 
-        var limit = 2;//25
+        var limit = 25;//25
         var offset = 0;
         var sort = 'user.createdtime';
         var order = 'DESC';
@@ -290,6 +336,22 @@
         var pages = 0;
 
         var users = [];
+
+
+        function msToTime(duration) {
+            var milliseconds = parseInt((duration%1000)/100)
+                , seconds = parseInt((duration/1000)%60)
+                , minutes = parseInt((duration/(1000*60))%60)
+                , hours = parseInt((duration/(1000*60*60))%24);
+
+            hours = (hours < 10) ? "0" + hours : hours;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            //return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            return hours + ":" + minutes;
+        }
+
 
         function createPager(){
 
@@ -390,7 +452,7 @@
                         if(user.email === null) user.email = '';
                         if(user.type === null) user.type = '';
                         else if (user.type === 'Internal') user.type = "<span class='label label-info'>Internal</span>";
-                        console.log(user.profession.available);
+                        //console.log(user.profession.available);
                         if(user.profession.available === true) user.profession.available = "<img src='{{ asset('images/orange-hat.png') }}' style='width: 24px;' />";
                         else user.profession.available = '';
 
@@ -424,8 +486,13 @@
                             'createdTime' : user.createdTime,
                             'type' : user.type,
                             'profession' : user.profession,
+                            'socialNetworks' : user.socialNetworks,
+                            'serviceTime' : user.serviceTime,
+                            'languages' : user.languages,
                             'lastSeen' : user.lastSeen,
-                            'location' : user.location
+                            'location' : user.location,
+                            'locHistory' : user.locHistory,
+                            'searches' : user.searches
                         });
 
                     });
@@ -499,7 +566,7 @@
 
         //$('.createdColumn').css('background-color', 'rgba(189, 208, 221, 0.29)');
         function makeSortable(id, fieldName) {
-            var $table = 'table';
+            var $table = '.sortableTable';
             var $item = "." + id;
             $( $table ).on( "click", $item, function() {
                 if( sort === fieldName ){
@@ -538,6 +605,9 @@
             $(columnToSelector[sort]).css('background-color', 'rgba(189, 208, 221, 0.29)');
             $('[data-toggle="tooltip"]').tooltip();
         });
+
+
+
 
         $( document ).ready(function() {
             loadTable();
@@ -582,6 +652,25 @@
                 }
             });
 
+
+            $('#search-result-section').on("scroll", function() {
+                var selector = $('div[aria-expanded="true"]');
+                if(selector.length !== 0){
+                    var itemOffset = selector.prev().position().top;
+                    if (itemOffset < 0)
+                        $('#item-fixed').show().css('top', $(this).scrollTop());
+                    else
+                        $('#item-fixed').hide().css('top', $(this).scrollTop());
+                }
+            });
+
+
+
+            $( "#modal-searches-result" ).on( "click", "div[id^='heading-']", function() {
+                var itemHeader = $(this).clone(true, true);
+                $("#item-fixed").html("").append(itemHeader);
+            });
+
             //sorting
             var sortable = {
                 'First-Name' : 'user.firstname',
@@ -600,7 +689,7 @@
             }
 
 
-            $('.toggle').toggles({
+            $('#internalToggle').toggles({
                 drag: true, // allow dragging the toggle between positions
                 click: true, // allow clicking on the toggle
                 text: {
@@ -617,15 +706,33 @@
                 type: 'compact' // if this is set to 'select' then the select style toggle will be used
             }).on('toggle', function(e, active) {
                 if (active) {
-                    $('.toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
+                    $('#internalToggle .toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
                     internal = 1;
                     loadTable(keyword);
                 } else {
-                    $('.toggle-slide').css('box-shadow', '0 0 0px 0px rgba(0, 0, 0, 1)');
+                    $('#internalToggle .toggle-slide').css('box-shadow', '0 0 0px 0px rgba(0, 0, 0, 1)');
                     internal = 0;
                     loadTable(keyword);
                 }
             });
+
+
+            $('#invalidToggle').toggles({
+                drag: true, // allow dragging the toggle between positions
+                click: true, // allow clicking on the toggle
+                text: {
+                    on: 'All', // text for the ON position
+                    off: 'Valid' // and off
+                },
+                on: true, // is the toggle ON on init
+                animate: 250, // animation time (ms)
+                easing: 'swing', // animation transition easing function
+                checkbox: null, // the checkbox to toggle (for use in forms)
+                clicker: null, // element that can be clicked on to toggle. removes binding from the toggle itself (use nesting)
+                width: 67, // width used if not set in css
+                height: 18, // height if not set in css
+                type: 'compact' // if this is set to 'select' then the select style toggle will be used
+            })
 
             $('.toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
 
@@ -665,6 +772,72 @@
             });
 
 
+            function printField(field, selector, msg){
+                if( field === "" || field === null )
+                    $(selector).html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>" + msg + "</span>");
+                else
+                    $(selector).text(field);
+            }
+
+
+            function printSearchField(title, field){
+                return "<div><strong>" + title +": </strong><span>" + field + "</span></div>";
+            }
+
+
+            function printServiceTable(obj) {
+                var numToDay = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                var rows = '';
+
+
+                for(var i in obj){
+                    statusWord = "not available";
+                    if( obj[i].status )
+                        statusWord = "available";
+
+                    rows += "<tr>" +
+                        "<td>" + numToDay[obj[i].day] + "</td>" +
+                        "<td>" + msToTime(obj[i].from) + "</td>" +
+                        "<td>" + msToTime(obj[i].to) + "</td>" +
+                        "<td>" + statusWord + "</td>" +
+                        "</tr>";
+                }
+
+                return "<table id='modal-service-time-table' class='table table-striped table-hover' style=' margin-top: 15px;'>" +
+                    "<thead>" +
+                    "<tr>" +
+                    "<th><span>Day</span></th>" +
+                    "<th><span>Start</span></th>" +
+                    "<th><span>End</span></th>" +
+                    "<th><span>Availability</span></th>" +
+                    "</tr>" +
+                    "</thead>" +
+                    "<tbody id='service-time'>" +
+                    rows +
+                    "</tbody>" +
+                    "</table>"
+            }
+
+            $( "#tab-buttons li" ).each(function( ) {
+                $( this ).click(function() {
+                    $('#tab-buttons li').each(function() {
+                        $(this).removeClass('active');
+                        $( '#' + this.id.replace('-button', '') ).hide();
+                    });
+                    $( this ).addClass('active');
+                    $( '#' + this.id.replace('-button', '') ).show( "blind", {direction: 'up'} , 500 );
+
+
+                    if(this.id === 'tab-locations-button'){
+                        $('#tab-locations-info').show();
+                    }else{
+                        $('#tab-locations-info').hide();
+                    }
+
+
+                });
+            });
+
 
             $( "#ajaxTbody" ).on( "click", ".user", function() {
                 var user = getUser($(this).attr('data-userid'));
@@ -676,59 +849,315 @@
                 $('#modal-cover').attr('src', user.cover);
 
 
-                if( user.first === "" )
-                    $('#modal-first-name').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no first name</span>");
-                else
-                    $('#modal-first-name').text(user.firstName);
+                printField(user.firstName, '#modal-first-name', 'no first name');
+                printField(user.lastName, '#modal-last-name', 'no last name');
+                printField(user.email, '#modal-email', 'no email');
 
+                printField(user.phone, '#modal-phone', 'no phone number');
 
-                if( user.lastName === "" )
-                    $('#modal-last-name').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no last name</span>");
-                else
-                    $('#modal-last-name').text(user.lastName);
-
-
-                if( user.email === "" )
-                    $('#modal-email').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no email</span>");
-                else
-                    $('#modal-email').text(user.email);
-
-                $('#modal-phone').text(user.phone);
                 $('#modal-user-id').text(user.id);
                 $('#modal-created-time').text(user.createdTime.date);
-                $('#modal-device').text(user.device);
-                //$('#modal-last-seen').text(user.lastSeen);
+                $('#modal-last-seen').text(user.lastSeen);
 
+                printField(user.device, '#modal-device', 'no device info');
 
-                if( user.type === "" )
-                    $('#modal-type').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>user type not set yet</span>");
-                else
-                    $('#modal-type').text(user.type);
+                printField(user.type, '#modal-type', 'user type not set yet');
 
                 $('#modal-balance').text(user.balance);
 
-                if( user.profession.available === "" )
+                if( user.profession.available === "" ) {
                     $('#modal-available').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>not available as Orange Hat</span>");
-                else {
+                    $('.glyphicon-check').css('color', '#333');
+                } else {
                     $('#modal-available').html("<span style='color: #f6541c; font-weight: normal;'>Available as Orange Hat</span>");
                     $('.glyphicon-check').css('color', '#f6541c');
                 }
 
 
 
-                $('#modal-profession-name').text(user.profession.name);
-                $('#modal-user-title').text(user.profession.title);
-                $('#modal-expertise').text(user.profession.expertise);
-                $('#modal-rate').text(user.profession.rate);
-                $('#modal-about').text(user.profession.about);
+                printField(user.profession.name, '#modal-profession-name', 'no profession name');
+                printField(user.profession.title, '#modal-user-title', 'no title');
+                printField(user.profession.expertise, '#modal-expertise', 'no expertise');
+                printField(user.profession.rate, '#modal-rate', 'rate not set yet');
+                printField(user.profession.about, '#modal-about', 'about is not written yet');
+                printField(user.profession.commission, '#modal-commission', 'no profession name');
+                printField(user.profession.gender, '#modal-gender', 'no value');
+                printField(user.profession.ranking, '#modal-ranking', 'no value');
+                printField(user.profession.votes, '#modal-votes', 'no value');
+                printField(user.profession.address, '#modal-address', 'no value');
+
+
+                printField(user.profession.website, '#modal-website', 'no value');
+
+
+                if( user.profession.website === "" || user.profession.website === null )
+                    $('#modal-website').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>no value</span>");
+                else
+                    $('#modal-website').html("<a href='http://" + user.profession.website +"'>" + user.profession.website + "</a>"); //check for http
+
+
+                printField(user.profession.city, '#modal-city', 'no value');
+                printField(user.profession.region, '#modal-region', 'no value');
+                printField(user.profession.postalCode, '#modal-postal-code', 'no value');
+                printField(user.profession.country, '#modal-country', 'no value');
+
+
+                if(user.languages !== null){
+                    printField(user.languages.first, '#modal-lang1', 'no value');
+                    printField(user.languages.second, '#modal-lang2', 'no value');
+                    printField(user.languages.other, '#modal-lang-other', 'no value');
+                }else{
+                    console.log('user.languages is null');
+                }
 
 
 
+
+                printField(user.profession.homeLocation.latitude, '#modal-home', 'no value');
+                printField(user.profession.homeLocation.longitude, '#modal-home', 'no value');
+
+                latitude = user.profession.homeLocation.latitude;
+                longitude = user.profession.homeLocation.longitude;
+                if( latitude !== null && longitude !== null && latitude !== 0 && longitude !== 0) {
+                    locationLink = "<a data-toggle='tooltip' data-placement='bottom' title='" +
+                        locationTime + "' style='margin-left: 7px;' target='_blank' class='label label-success' href='" +
+                        mapLink + user.profession.homeLocation.latitude + "," + user.profession.homeLocation.longitude + "'>map</a>";
+
+                    $('#modal-home').html(locationLink);
+                } else {
+                    $('#modal-home').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>not available</span>");
+                }
+
+
+                if( user.socialNetworks.length !== 0 ) {
+                    var networks = user.socialNetworks;
+                    for (var k in user.socialNetworks) {
+                        $('#modal-network').html("<span><a href='" + networks[k].url + "'>" + networks[k].name +
+                            " (" + networks[k].type + ")" + "</a></span>");
+                    }
+                } else {
+                    $('#modal-network').html("<span style='color: rgb(165, 165, 165); font-weight: normal;'>not available</span>");
+                }
+
+                if( user.serviceTime.length !== 0 ) {
+                    $('#service-time').html("");
+                    row = user.serviceTime;
+                    for (var i in row) {
+                        $('#service-time').append(
+                            "<tr>" +
+                            "<td>" + row[i].day + "</td>" +
+                            "<td>" + row[i].start.substring(0,5) + "</td>" +
+                            "<td>" + row[i].end.substring(0,5) + "</td>" +
+                            "<td>" + row[i].availability + "</td>" +
+                            "</tr>"
+                        );
+                    }
+                    $('#modal-service-time-table').show();
+                    $('#modal-service-time-span').hide();
+                } else {
+                    $('#modal-service-time-table').hide();
+                    $('#modal-service-time-span').show();
+                }
+
+
+
+
+                //loation tab
+                $('#modal-location').html("");
+
+                var invalidCount = 0;
+                var invalidRows = [];
+
+                if( user.locHistory.length !== 0 ) {
+                    row = user.locHistory;
+                    for (index in row) {
+
+                        row[index].createdtime.date = row[index].createdtime.date.substring(0, 16);
+
+                        locationLink = "<a target='_blank' class='label label-success' href='" +
+                            mapLink + row[index].latitude + "," + row[index].longitude + "'>map</a>";
+
+                        rowHTML = "<tr id='locationNumber-" + index + "' >" +
+                            "<td>" + row[index].createdtime.date + "</td>" +
+                            "<td>" + row[index].latitude + "</td>" +
+                            "<td>" + row[index].longitude + "</td>" +
+                            "<td>" + locationLink + "</td>" +
+                            "</tr>";
+
+                        if( (row[index].latitude === 0 && row[index].longitude === 0) || (row[index].latitude === -180 && row[index].longitude === -180) ){
+                            invalidRows.push("#locationNumber-" + index);
+                            invalidCount++;
+                        }
+
+                        $('#modal-location').append(rowHTML);
+                    }
+                    $('#modal-location-table').show();
+                    $('#modal-location-span').hide();
+                } else {
+                    $('#modal-location-table').show();
+                    $('#modal-location-span').hide();
+                }
+
+                $('#tab-locations-info span').text(invalidCount + " invalid out of " + user.locHistory.length);
+                $('#invalidToggle').toggles({on:true});
+                $('#invalidToggle .toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
+                $('#invalidToggle').on('toggle', function(e, active) {
+                    if (active) {
+                        $('#invalidToggle .toggle-slide').css('box-shadow', '0 0 10px -2px rgba(12, 255, 5, 1)');
+                        for( id in invalidRows ){
+                            $(invalidRows[id]).show();
+                        }
+                    } else {
+                        $('#invalidToggle .toggle-slide').css('box-shadow', '0 0 0px 0px rgba(0, 0, 0, 1)');
+                        for( id in invalidRows ){
+                            $(invalidRows[id]).hide();
+                        }
+                    }
+                });
+
+
+
+                //search tab
+                $('#modal-searches').html("");
+                $('#modal-searches-result').html("Select a search :|");
+                var searches = [];
+                if( user.searches.length !== 0 ) {
+                    row = user.searches;
+                    for (var index in row) {
+                        row[index].createdtime.date = row[index].createdtime.date.substring(0, 16);
+
+                        locationLink = "<a target='_blank' class='label label-success' href='" +
+                            mapLink + row[index].latitude + "," + row[index].longitude + "'>map</a>";
+
+                        $('#modal-searches').append(
+                            "<tr id='searchNumber-" + index +"'>" +
+                            "<td>" + row[index].createdtime.date + "</td>" +
+                            "<td>" + row[index].searchquery + "</td>" +
+                            "<td>" + locationLink + "</td>" +
+                            "</tr>"
+                        );
+
+                        results = JSON.parse(row[index].searchresult);
+
+                        var items = [];
+
+
+                        for (j in results) {
+                            element = results[j];
+
+                            locationLink = "<a target='_blank' class='label label-success' href='" +
+                                mapLink + element.location.lat + "," + element.location.lon + "'>map</a>";
+
+
+                            metaData = '';
+                            if(element.hasOwnProperty('resultMetaData')){
+                                metaData = "<div class='search-result-box'><span class='title'>Meta Data</span><hr>" +
+                                    printSearchField('Category', element.resultMetaData.category) +
+                                    printSearchField('CloudSearchScore', element.resultMetaData.cloudSearchScore) +
+                                    printSearchField('VasterSearchScore', element.resultMetaData.vasterSearchScore) +
+                                    "</div>";
+                            }else{
+                                console.log("[" + index + "] [" + j + "] " + row[index].searchquery + " " + element.name + " no meta data");
+                            }
+
+                            bilAdd = '';
+                            if(element.hasOwnProperty('resultMetaData')){
+                                bilAdd = "<div class='search-result-box'><span class='title'>Address</span><hr>" +
+                                    printSearchField('Address', element.billingAddress.address) +
+                                    printSearchField('City', element.billingAddress.city) +
+                                    printSearchField('Country', element.billingAddress.country) +
+                                    printSearchField('PostalCode', element.billingAddress.postalCode) +
+                                    printSearchField('Region', element.billingAddress.region) +
+                                    "</div>";
+                            }else{
+                                console.log("[" + index + "] [" + j + "] " + row[index].searchquery + " " + element.name + " no billing addresss");
+                            }
+
+                            compInfo = '';
+                            if(element.hasOwnProperty('resultMetaData')){
+                                compInfo = "<div class='search-result-box'><span class='title'>Company Info</span><hr>" +
+                                    printSearchField('Name', element.companyInfo.name) +
+                                    printSearchField('Website', element.companyInfo.website) +
+                                    "</div>";
+                            }else{
+                                console.log("[" + index + "] [" + j + "] " + row[index].searchquery + " " + element.name + " no company info");
+                            }
+
+                            items[j] = "<div class='panel panel-default'>" +
+                                "<div class='panel-heading' role='tab' id='heading-" + element.vid + "'>" +
+                                "<h4 class='panel-title'>" +
+                                "<a class='collapsed' role='button' data-toggle='collapse' data-parent='#modal-searches-result' href='#collapse-" + results[j].vid + "' aria-expanded='false' aria-controls='collapse-" + results[j].vid + "'>" +
+                                element.name +
+                                "</a>" +
+                                "</h4>" +
+                                "</div>" +
+                                "<div id='collapse-" + element.vid +"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading-" + results[j].vid + "'>" +
+                                "<div class='panel-body' style='padding: 8px;'>" +
+
+                                metaData +
+
+                                "<div class='search-result-box'><span class='title'>General</span><hr>" +
+                                    printSearchField('Title', element.title) +
+                                    printSearchField('Expertise', element.expertise) +
+                                    printSearchField('Gender', element.gender) +
+                                    printSearchField('Ranking', element.ranking.ranking) +
+                                    printSearchField('Votes', element.ranking.votes) +
+                                    printSearchField('About', element.about) +
+                                    printSearchField('Location', locationLink) +
+                                "</div>" +
+
+                                compInfo + bilAdd +
+
+                                "<div class='search-result-box'><span class='title'>Service</span><hr>" +
+                                    printSearchField('Service Rate', element.serviceRate) +
+                                    printServiceTable(element.serviceTimes) +
+
+                                "</div>" +
+
+                                "</div></div></div>";
+
+                        }
+
+                        searches[index] = items;
+
+                        $( "#searchNumber-" + index ).click(function() {
+
+                            $( "tr[id^='searchNumber-']" ).css('background-color', '');
+                            $( "div[id='searchNumber-']" );
+
+                            $(this).css('background-color', 'rgba(81, 168, 255, 0.2)');
+                            p = parseInt(this.id.replace('searchNumber-', ''));
+                            $('#modal-searches-result').html("");
+                            // init result section
+                            $("#item-fixed").html("").hide();
+                            $('#search-result-section').scrollTop(0);
+
+                            for (i in searches[p]) {
+                                $('#modal-searches-result').append(searches[p][i]);
+                            }
+                        });
+
+
+
+                        //console.log(results);
+                    }
+                    $('#modal-searches-table').show();
+                    $('#modal-searches-span').hide();
+                } else {
+                    $('#modal-searches-table').show();
+                    $('#modal-searches-span').hide();
+                }
+
+                // init result section
+                $("#item-fixed").html("").hide();
+                $('#search-result-section').scrollTop(0);
 
 
                 $('#userModal').modal();
-
+                $('#tab-searches .col-md-6').css('max-height', parseInt($('#userModal').css('height')) * 0.5);
             });
+
+
 
         });
 
@@ -749,11 +1178,11 @@
                 <div class="modal-body">
                     <div class="row" style=" margin-bottom: 15px;">
 
-                        <div style="float: left;" class="col-md-3">
+                        <div class="col-md-3">
                             <img id="modal-profile" src="" style=" height: 150px; float: left; box-shadow: 0 0 25px -10px black;" />
                         </div>
 
-                        <div style="float: left;" class="col-md-3">
+                        <div class="col-md-3">
                             <div>
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 <strong id="modal-first-name"></strong> <strong id="modal-last-name"></strong>
@@ -767,23 +1196,19 @@
                                 +<span id="modal-phone"></span>
                             </div>
                             <div>
-                                <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
-                                <span id="modal-balance"></span>
-                            </div>
-                            <div>
-                                <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
-                                <span id="modal-available"></span>
-                            </div>
-                        </div>
-
-                        <div style="float: left;" class="col-md-3">
-                            <div>
-                                <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
-                                <strong id="modal-user-id"></strong>
+                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                <strong>Created</strong> <span id="modal-created-time"></span>
                             </div>
                             <div>
                                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                                <strong>Since</strong> <span id="modal-created-time"></span>
+                                <strong>Last</strong> <span id="modal-last-seen"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div>
+                                <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+                                <strong id="modal-user-id"></strong>
                             </div>
                             <div>
                                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -793,49 +1218,151 @@
                                 <span class="glyphicon glyphicon-pawn" aria-hidden="true"></span>
                                 <span id="modal-type"></span>
                             </div>
+                            <div>
+                                <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                                <span id="modal-balance"></span>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                                <span id="modal-available"></span>
+                            </div>
                         </div>
 
-                        <div style="float: left;" class="col-md-3">
+                        <div class="col-md-3">
                             <img id="modal-cover" src="" style=" height: 150px; float: right; box-shadow: 0 0 25px -10px black;" />
                         </div>
 
                     </div>
 
-                    <div class="row">
+                    <div class="row" style=" margin-bottom: 15px;">
                         <div class="col-md-12">
-                            <ul class="nav nav-tabs">
-                                <li role="presentation" class="active"><a href="#">Orange Hat</a></li>
-                                <li role="presentation"><a href="#">Locations</a></li>
-                                <li role="presentation"><a href="#">Searches</a></li>
-                                <li role="presentation"><a href="#">Transactions</a></li>
-                                <li role="presentation"><a href="#">Stats</a></li>
+                            <ul class="nav nav-tabs" id="tab-buttons">
+                                <li id="tab-orange-hat-button" role="presentation" class="active"><a href="#">Orange Hat</a></li>
+                                <li id="tab-locations-button" role="presentation"><a href="#">Locations</a></li>
+                                <li id="tab-searches-button" role="presentation"><a href="#">Searches</a></li>
+                                <li id="tab-transactions-button" role="presentation"><a href="#">Transactions</a></li>
+                                <li id="tab-stats-button" role="presentation"><a href="#">Stats</a></li>
                             </ul>
                         </div>
                     </div>
 
-                    <div class="row" style=" margin-top: 5px;">
-                        <div style="float: left;" class="col-md-4">
-                            <div>
-                                <strong>Profession Name:</strong> <span id="modal-profession-name"></span>
+                    <div class="row" id="tab-orange-hat">
+                        <div class="col-md-6">
+
+                            <div class="well" style=" margin-bottom: 5px; padding: 5px 10px;">
+                                <div><strong>Profession Name:</strong> <span id="modal-profession-name"></span></div>
+                                <div><strong>Title:</strong> <span id="modal-user-title"></span></div>
+                                <div><strong>Expertise:</strong> <span id="modal-expertise"></span></div>
+                                <div><strong>Gender:</strong> <span id="modal-gender"></span> </div>
+                                <div><strong>About:</strong> <span id="modal-about"></span></div>
                             </div>
-                            <div>
-                                <strong>Title:</strong> <span id="modal-user-title"></span>
+
+                            <div class="well" style=" margin-bottom: 5px; padding: 5px 10px;">
+                                <div><strong>Address:</strong> <span id="modal-address"></span></div>
+                                <div><strong>City:</strong> <span id="modal-city"></span></div>
+                                <div><strong>Region:</strong> <span id="modal-region"></span></div>
+                                <div><strong>Country:</strong> <span id="modal-country"></span></div>
+                                <div><strong>Postal Code:</strong> <span id="modal-postal-code"></span></div>
                             </div>
-                            <div>
-                                <strong>Expertise:</strong> <span id="modal-expertise"></span>
+
+                            <div class="well" style=" margin-bottom: 5px; padding: 5px 10px;">
+                                <div><strong>First Language:</strong> <span id="modal-lang1"></span></div>
+                                <div><strong>Second Language:</strong> <span id="modal-lang2"></span></div>
+                                <div><strong>Other Languages:</strong> <span id="modal-lang-other"></span></div>
                             </div>
-                            <div>
-                                <strong>Service Rate:</strong> <span id="modal-servicerate"></span>
+
+                            <div class="well" style=" margin-bottom: 5px; padding: 5px 10px;">
+                                <div><strong>Website:</strong> <span id="modal-website"></span></div>
+                                <div><strong>Social Networks:</strong> <span id="modal-network"></span></div>
                             </div>
-                            <div>
-                                <strong>About:</strong> <span id="modal-about"></span>
+
+                            <div><strong>Ranking:</strong> <span id="modal-ranking"></span></div>
+                            <div><strong>Votes:</strong> <span id="modal-votes"></span></div>
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="well" style=" margin-bottom: 5px; padding: 5px 10px;">
+                                <div><strong>Commission:</strong> <span id="modal-commission"></span></div>
+                                <div><strong>Service Rate:</strong> <span id="modal-rate"></span></div>
                             </div>
+
+                            <div>
+                                <span id="modal-service-time-span" style="color: rgb(165, 165, 165); font-weight: normal;">no data for service time</span>
+                                <table id="modal-service-time-table" class="table table-striped table-hover" style=" margin-top: 15px;" >
+                                    <thead>
+                                    <tr>
+                                        <th><span>Day</span></th>
+                                        <th><span>Start Time</span></th>
+                                        <th><span>End Time</span></th>
+                                        <th><span>Availability</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="service-time"></tbody>
+                                </table>
+                            </div>
+                            <div><strong>Home Location:</strong> <span id="modal-home"></span></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row" id="tab-locations" style="display: none;">
+                        <div class="col-md-12" style=" overflow-y: scroll; max-height: 350px;">
+
+                            <div>
+                                <span id="modal-location-span" style="color: rgb(165, 165, 165); font-weight: normal;">no data</span>
+                                <table id="modal-location-table" class="table table-striped table-hover" style=" margin-top: 15px;" >
+                                    <thead>
+                                    <tr>
+                                        <th><span>Time</span></th>
+                                        <!--<th><span>Reason</span></th>-->
+                                        <th><span>Latitude</span></th>
+                                        <th><span>Longitude</span></th>
+                                        <th><span>Map</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="modal-location"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row" id="tab-searches" style="display: none;">
+                        <div class="col-md-6" style=" overflow-y: scroll; max-height: 350px;">
+
+                            <div>
+                                <span id="modal-searches-span" style="color: rgb(165, 165, 165); font-weight: normal;">no data</span>
+                                <table id="modal-searches-table" class="table table-striped table-hover" style=" margin-top: 15px;" >
+                                    <thead>
+                                    <tr>
+                                        <th><span>Time</span></th>
+                                        <th><span>Query</span></th>
+                                        <th><span>Map</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="modal-searches"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6" style=" overflow-y: scroll; max-height: 350px;" id="search-result-section">
+                            <div class="panel-group" style='margin: 0;'></div>
+                            <div class="panel-group" id="modal-searches-result" role="tablist" aria-multiselectable="true"></div>
                         </div>
                     </div>
 
 
                 </div>
                 <div class="modal-footer">
+                    <div id="modal-info">
+                        <div id="tab-locations-info" style="display: none; float: left; padding: 7px;">
+                            <div id='invalidToggle' class='toggle toggle-light' style='float: left; margin-top: 1px;'></div>
+                            <span style='float: left; margin-left: 10px;'></span>
+                        </div>
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
                 </div>

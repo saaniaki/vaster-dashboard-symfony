@@ -8,7 +8,7 @@
 
 namespace VasterBundle\Entity;
 
-use VasterBundle\Entity\customTypes\ValueObject\Point;
+
 
 use Doctrine\ORM\Mapping as ORM;
 /**
@@ -33,7 +33,6 @@ class Profession
      * @ORM\Column(type="string")
      */
     private $professionname;
-
 
     /**
      * @ORM\Column(type="string")
@@ -71,7 +70,7 @@ class Profession
     private $ranking;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      */
     private $votes;
 
@@ -105,10 +104,27 @@ class Profession
      */
     private $postalcode;
 
-    /*
-     * @ORM\@Column(type="string")
-     *
-    private $homelocation;*/
+    /**
+     * @ORM\Column(type="point")
+     */
+    private $homelocation;
+
+    /**
+     * @return mixed
+     */
+    public function getHomelocation()
+    {
+        return $this->homelocation;
+    }
+
+    /**
+     * @param mixed $homelocation
+     */
+    public function setHomelocation($homelocation)
+    {
+        $this->homelocation = $homelocation;
+    }
+
 
     /**
      * @return mixed

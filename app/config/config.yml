@@ -61,8 +61,8 @@ doctrine:
                 user:     '%database_user2%'
                 password: '%database_password2%'
                 charset:  UTF8
-        #types:
-        #    point:      VasterBundle\Entity\customTypes\Types\PointType
+        types:
+            point:      'VasterBundle\Entity\Geo\Types\PointType'
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
