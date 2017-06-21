@@ -2,22 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26aa9230-b2af-468c-8846-06de33591995" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/Geo/Types/PointType.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/Geo/ValueObject/Point.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/Language.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/Search.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/ServiceTime.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/SocialNetwork.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterSearchRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/config.yml" afterPath="$PROJECT_DIR$/app/config/config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/services.yml" afterPath="$PROJECT_DIR$/app/config/services.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/adminController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/adminController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/VasterBundle/Entity/Profession.php" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/Profession.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/VasterBundle/Entity/User.php" afterPath="$PROJECT_DIR$/src/VasterBundle/Entity/User.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterLocationRepository.php" afterPath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterLocationRepository.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,10 +24,10 @@
       <file leaf-file-name="adminController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/adminController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2670">
+            <state relative-caret-position="639">
               <caret line="203" column="10" lean-forward="false" selection-start-line="203" selection-start-column="10" selection-end-line="203" selection-end-column="10" />
               <folding>
-                <element signature="e#6#93#0#PHP" expanded="false" />
+                <element signature="e#127#156#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,28 +36,38 @@
       <file leaf-file-name="users.html.twig" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Resources/views/admin/users.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="956" column="24" lean-forward="true" selection-start-line="956" selection-start-column="24" selection-end-line="956" selection-end-column="24" />
+            <state relative-caret-position="296">
+              <caret line="1021" column="50" lean-forward="false" selection-start-line="1021" selection-start-column="50" selection-end-line="1021" selection-end-column="50" />
               <folding>
                 <element signature="e#9309#9357#0#HTML" expanded="true" />
-                <element signature="e#59452#59470#0#HTML" expanded="true" />
-                <element signature="e#59829#59878#0#HTML" expanded="true" />
-                <element signature="e#59960#59997#0#HTML" expanded="true" />
-                <element signature="e#60039#60078#0#HTML" expanded="true" />
-                <marker date="1498074340000" expanded="true" signature="11512:11552" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="15318:15338" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="15828:15845" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="17488:17507" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="29731:29778" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="30865:30883" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="33298:33345" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="33535:33571" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="34808:34855" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="36352:36369" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="36698:36745" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="37256:37303" ph="..." />
-                <marker date="1498074340000" expanded="true" signature="45658:45671" ph="..." />
+                <element signature="e#59762#59780#0#HTML" expanded="true" />
+                <element signature="e#60139#60188#0#HTML" expanded="true" />
+                <element signature="e#60270#60307#0#HTML" expanded="true" />
+                <element signature="e#60349#60388#0#HTML" expanded="true" />
+                <marker date="1498078173000" expanded="true" signature="11512:11552" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="15318:15338" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="15828:15845" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="17488:17507" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="29731:29778" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="30865:30883" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="33298:33345" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="33535:33571" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="34808:34855" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="36352:36369" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="36698:36745" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="37256:37303" ph="..." />
+                <marker date="1498078173000" expanded="true" signature="45968:45981" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="parameters.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="40" lean-forward="false" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -80,10 +75,10 @@
       <file leaf-file-name="VasterLocationRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/VasterBundle/Repository/VasterLocationRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
+            <state relative-caret-position="180">
               <caret line="17" column="56" lean-forward="false" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="56" />
               <folding>
-                <element signature="e#6#92#0#PHP" expanded="false" />
+                <element signature="e#130#178#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -160,7 +155,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fnameColumn</find>
       <find>First-Name</find>
       <find>prox</find>
       <find>data-</find>
@@ -190,6 +184,7 @@
       <find>obj[i].status</find>
       <find>on:t</find>
       <find>row[i].availability</find>
+      <find>select a</find>
     </findStrings>
     <replaceStrings>
       <replace>-&gt;andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')</replace>
@@ -229,7 +224,6 @@
         <option value="$PROJECT_DIR$/src/VasterBundle/Repository/VasterProfessionRepository.php" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Entity/Location.php" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" />
-        <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Entity/customTypes/Point.php" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Entity/customTypes/PointType.php" />
@@ -252,6 +246,7 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/adminController.php" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Repository/tst" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Repository/temp.html" />
+        <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" />
       </list>
     </option>
@@ -682,12 +677,12 @@
       <workItem from="1497545900817" duration="18721000" />
       <workItem from="1497622123268" duration="20676000" />
       <workItem from="1497880629031" duration="55607000" />
-      <workItem from="1498058151955" duration="9033000" />
+      <workItem from="1498058151955" duration="10382000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="296770000" />
+    <option name="totallyTimeSpent" value="298119000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="967" extended-state="6" />
@@ -730,6 +725,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="689">
           <caret line="355" column="39" lean-forward="true" selection-start-line="355" selection-start-column="39" selection-end-line="355" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -907,13 +903,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -1036,16 +1025,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/VasterBundle/Repository/VasterLocationRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="17" column="56" lean-forward="false" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="56" />
-          <folding>
-            <element signature="e#6#92#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/VasterBundle/Entity/Profession.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -1086,16 +1065,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/adminController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2670">
-          <caret line="203" column="10" lean-forward="false" selection-start-line="203" selection-start-column="10" selection-end-line="203" selection-end-column="10" />
-          <folding>
-            <element signature="e#6#93#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/VasterBundle/Repository/temp.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1112,29 +1081,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="40" lean-forward="false" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/adminController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="639">
+          <caret line="203" column="10" lean-forward="false" selection-start-line="203" selection-start-column="10" selection-end-line="203" selection-end-column="10" />
+          <folding>
+            <element signature="e#127#156#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/VasterBundle/Repository/VasterLocationRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="17" column="56" lean-forward="false" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="56" />
+          <folding>
+            <element signature="e#130#178#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Resources/views/admin/users.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="956" column="24" lean-forward="true" selection-start-line="956" selection-start-column="24" selection-end-line="956" selection-end-column="24" />
+        <state relative-caret-position="296">
+          <caret line="1021" column="50" lean-forward="false" selection-start-line="1021" selection-start-column="50" selection-end-line="1021" selection-end-column="50" />
           <folding>
             <element signature="e#9309#9357#0#HTML" expanded="true" />
-            <element signature="e#59452#59470#0#HTML" expanded="true" />
-            <element signature="e#59829#59878#0#HTML" expanded="true" />
-            <element signature="e#59960#59997#0#HTML" expanded="true" />
-            <element signature="e#60039#60078#0#HTML" expanded="true" />
-            <marker date="1498074340000" expanded="true" signature="11512:11552" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="15318:15338" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="15828:15845" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="17488:17507" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="29731:29778" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="30865:30883" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="33298:33345" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="33535:33571" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="34808:34855" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="36352:36369" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="36698:36745" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="37256:37303" ph="..." />
-            <marker date="1498074340000" expanded="true" signature="45658:45671" ph="..." />
+            <element signature="e#59762#59780#0#HTML" expanded="true" />
+            <element signature="e#60139#60188#0#HTML" expanded="true" />
+            <element signature="e#60270#60307#0#HTML" expanded="true" />
+            <element signature="e#60349#60388#0#HTML" expanded="true" />
+            <marker date="1498078173000" expanded="true" signature="11512:11552" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="15318:15338" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="15828:15845" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="17488:17507" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="29731:29778" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="30865:30883" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="33298:33345" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="33535:33571" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="34808:34855" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="36352:36369" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="36698:36745" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="37256:37303" ph="..." />
+            <marker date="1498078173000" expanded="true" signature="45968:45981" ph="..." />
           </folding>
         </state>
       </provider>

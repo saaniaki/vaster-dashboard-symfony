@@ -1019,7 +1019,7 @@
 
                 //search tab
                 $('#modal-searches').html("");
-                $('#modal-searches-result').html("Select a search :|");
+                $('#modal-searches-result').html("");
                 var searches = [];
                 if( user.searches.length !== 0 ) {
                     row = user.searches;
@@ -1045,8 +1045,13 @@
                         for (j in results) {
                             element = results[j];
 
-                            locationLink = "<a target='_blank' class='label label-success' href='" +
-                                mapLink + element.location.lat + "," + element.location.lon + "'>map</a>";
+                            locationLink = '';
+                            if(element.hasOwnProperty('location')){
+                                locationLink = "<a target='_blank' class='label label-success' href='" +
+                                    mapLink + element.location.lat + "," + element.location.lon + "'>map</a>";
+                            }else{
+                                console.log("[" + index + "] [" + j + "] " + row[index].searchquery + " " + element.name + " no location");
+                            }
 
 
                             metaData = '';
