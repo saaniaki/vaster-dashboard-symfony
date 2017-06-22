@@ -140,7 +140,7 @@ class User
 
     /**
      * @ORM\OneToMany(targetEntity="VasterBundle\Entity\Search", mappedBy="user")
-     * @ORM\OrderBy({"servicetimeid"="ASC"})
+     * @ORM\OrderBy({"createdtime"="ASC"})
      */
     private $searches;
 
@@ -292,6 +292,14 @@ class User
      * @ORM\Column(type="string")
      */
     private $accounttype;
+
+    /**
+     * @param mixed $accounttype
+     */
+    public function setAccounttype($accounttype)
+    {
+        $this->accounttype = $accounttype;
+    }
 
     /**
      * @return mixed

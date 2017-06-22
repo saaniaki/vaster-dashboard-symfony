@@ -25,6 +25,8 @@ use VasterBundle\Entity\Account;
 use VasterBundle\Entity\LastSeen;
 use VasterBundle\Entity\Location;
 use VasterBundle\Entity\Profession;
+use VasterBundle\Entity\User;
+use VasterBundle\Form\UserUpdate;
 use VasterBundle\VasterBundle;
 use AppBundle\Entity\User as AppUser;
 use VasterBundle\Entity\User as VasterUser;
@@ -207,6 +209,27 @@ class adminController extends Controller
         ];
         return new JsonResponse($data);
         //return new Response('' . print_r($data));
+    }
+
+    /**
+     * @Route("/admin/users/update/{id}", name="user_update")
+     */
+    public function userUpdateAction(Request $request, User $user){
+        $form = $this->createForm(UserUpdate::class, $user);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            /** @var $user User*/
+            $user = $form->getData();
+
+            $em = $this->getDoctrine()->getManager("vaster");
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->render('admin/update.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
 }
