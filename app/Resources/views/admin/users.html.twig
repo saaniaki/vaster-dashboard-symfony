@@ -674,9 +674,8 @@
             var value = $("input[name='user-type']:checked").val();
             $("#modal-type").text(value).css('color', 'rgb(243, 0, 255)').closest(".editable").css('color', 'rgb(243, 0, 255)');
 
-            //set it in user
+            //set it in user as well
             $('#' + $("#modal-type").attr('data-connetToForm')).val(value);
-
             $('#edit-selectable-modal').modal('hide');
         });
 
@@ -686,6 +685,7 @@
             if( originalUser.type === null )
                 $("#modal-type").css('color', 'rgb(165, 165, 165)');
             $("#modal-type").text($("#modal-type").attr('data-original'));
+            $('#' + $("#modal-type").attr('data-connetToForm')).val(originalUser.type);
             $('#edit-selectable-modal').modal('hide');
         });
 
