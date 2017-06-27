@@ -162,24 +162,18 @@ class VasterUserRepository extends EntityRepository
             }
         }else if($type == 'all'){
             return $this->createQueryBuilder('user')
-                ->leftJoin('user.account', 'account')
-                ->leftJoin('user.profession', 'profession')
-                ->leftJoin('user.lastseen', 'lastseen')
                 ->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
                 ->setParameter('keyword', $keyword)
-                ->select('COUNT(account.devicetype)') //waht?!
+                ->select('COUNT(user)')
                 ->getQuery()
                 ->getSingleScalarResult();
         }else{
             return $this->createQueryBuilder('user')
-                ->leftJoin('user.account', 'account')
-                ->leftJoin('user.profession', 'profession')
-                ->leftJoin('user.lastseen', 'lastseen')
                 ->andWhere('user.accounttype = :type')
                 ->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
                 ->setParameter('type', $type)
                 ->setParameter('keyword', $keyword)
-                ->select('COUNT(account.devicetype)') //what?!
+                ->select('COUNT(user)')
                 ->getQuery()
                 ->getSingleScalarResult();
         }
@@ -277,6 +271,111 @@ class VasterUserRepository extends EntityRepository
                 ->getQuery()
                 ->getSingleScalarResult();
         }
+    }
+
+
+    /**
+     * @return integer
+     */
+    public function countProfessionAccount($type, $device, $keyword = null){
+        if($keyword == null) {
+            if($type == 'all'){
+                return $this->createQueryBuilder('user')
+                    ->leftJoin('user.profession', 'profession')
+                    ->leftJoin('user.account', 'account')
+                    ->andWhere('profession.available = 1')
+                    ->andwhere('account.devicetype = :device')
+                    ->setParameter('device', $device)
+                    ->select('COUNT(profession.available)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+            }else{
+                return $this->createQueryBuilder('user')
+                    ->leftJoin('user.profession', 'profession')
+                    ->leftJoin('user.account', 'account')
+                    ->andWhere('user.accounttype = :type')
+                    ->andwhere('account.devicetype = :device')
+                    ->setParameter('type', $type)
+                    ->setParameter('device', $device)
+                    ->andWhere('profession.available = 1')
+                    ->select('COUNT(profession.available)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+            }
+        }else if($type == 'all'){
+            return $this->createQueryBuilder('user')
+                ->leftJoin('user.profession', 'profession')
+                ->leftJoin('user.account', 'account')
+                ->andWhere('profession.available = 1')
+                ->andwhere('account.devicetype = :device')
+                ->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
+                ->setParameter('device', $device)
+                ->setParameter('keyword', $keyword)
+                ->select('COUNT(profession.available)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }else{
+            return $this->createQueryBuilder('user')
+                ->leftJoin('user.profession', 'profession')
+                ->leftJoin('user.account', 'account')
+                ->andWhere('profession.available = 1')
+                ->andwhere('account.devicetype = :device')
+                ->andWhere('user.accounttype = :type')
+                ->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
+                ->setParameter('device', $device)
+                ->setParameter('type', $type)
+                ->setParameter('keyword', $keyword)
+                ->select('COUNT(profession.available)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+    }
+
+    public function registrationNumber($type, $keyword, \DateTime $from,\DateTime $to,\DateInterval $interval)
+    {
+        // if from > to throw expection
+        // from / inreval should reach to
+
+        $column = $this->createQueryBuilder('user')
+            ->select('user.createdtime, user.accounttype')
+            ->orderBy('user.createdtime', 'DESC');
+        if($keyword != null) {
+            $column = $column->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
+                ->setParameter('keyword', $keyword);
+        }
+        if($type != 'all') {
+            $column = $column->andWhere('user.accounttype = :type')
+                ->setParameter('type', $type);
+        }
+        $column = $column->getQuery()
+            ->getArrayResult();
+
+
+        $count = 0;
+        $result = [];
+        while( !($from > $to) ){
+            $intervalEnd = clone $from;
+            $intervalEnd->add($interval);
+
+            $number = 0;
+            /** @var $item \DateTime */
+            foreach ( $column as $item ){
+                if( $from < $item['createdtime'] && $item['createdtime'] < $intervalEnd ){
+                    array_pop($column);
+                    $number++;
+                }
+            }
+
+            $result[$count] = [
+                'from' => clone $from,
+                'to' => $intervalEnd,
+                'number' => $number
+            ];
+            $count++;
+            $from->add($interval);
+        }
+
+        return $result;
     }
 
 }

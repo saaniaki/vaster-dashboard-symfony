@@ -11,6 +11,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\Module;
 use AppBundle\Module\ModuleInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class vdpModule
@@ -33,6 +34,20 @@ class vdpModule
         $type = $info->getType();
         /** @var $instance ModuleInterface*/
         $instance = new $type($module, $this->managerRegistry);
-        return $instance->render();
+
+
+
+        if($module->getAnalytics() == null) {
+            $module->setAnalytics('default');
+        }
+
+        if($module->getUserType() == null) {
+            $module->setUserType('all');
+        }
+
+        $configuration = new ArrayCollection(['userType' => $module->getUserType(), 'keyword' => $module->getKeyword(), 'analytics' => $module->getAnalytics()]);
+
+
+        return $instance->render($configuration);
     }
 }

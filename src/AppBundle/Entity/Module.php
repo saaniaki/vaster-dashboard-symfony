@@ -45,6 +45,69 @@ class Module
     private $moduleInfo;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $analytics;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $userType;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $keyword;
+
+    /**
+     * @return mixed
+     */
+    public function getAnalytics()
+    {
+        return $this->analytics;
+    }
+
+    /**
+     * @param mixed $analytics
+     */
+    public function setAnalytics($analytics)
+    {
+        $this->analytics = $analytics;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserType()
+    {
+        return $this->userType;
+    }
+
+    /**
+     * @param mixed $userType
+     */
+    public function setUserType($userType)
+    {
+        $this->userType = $userType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKeyword()
+    {
+        return $this->keyword;
+    }
+
+    /**
+     * @param mixed $keyword
+     */
+    public function setKeyword($keyword)
+    {
+        $this->keyword = $keyword;
+    }
+
+    /**
      * @return ModuleInfo
      */
     public function getModuleInfo()

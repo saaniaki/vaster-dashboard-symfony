@@ -38,6 +38,69 @@ class ModuleInfo
     private $type;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $guide;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $availableAnalytics;
+
+    /**
+     * @return mixed
+     */
+    public function getAvailableAnalytics()
+    {
+        return $this->availableAnalytics;
+    }
+
+    /**
+     * @param mixed $availableAnalytics
+     */
+    public function setAvailableAnalytics($availableAnalytics)
+    {
+        $this->availableAnalytics = $availableAnalytics;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGuide()
+    {
+        return $this->guide;
+    }
+
+    /**
+     * @param mixed $guide
+     */
+    public function setGuide($guide)
+    {
+        $this->guide = $guide;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
      * @return mixed
      */
     public function getType()

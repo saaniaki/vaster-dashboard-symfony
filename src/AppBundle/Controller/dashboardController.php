@@ -291,14 +291,14 @@ class dashboardController extends Controller
 
 
     /**
-     * @Route("/dashboard/{name}", name="dashboard_alter")
+     * @Route("/dashboard/{id}", name="dashboard_alter")
      */
     public function showPageAction(Page $page){
         return $this->renderDashboard($page);
     }
 
     /**
-     * @Route("/dashboard/render/{name}", name="render_page")
+     * @Route("/dashboard/render/{id}", name="render_page")
      */
     public function renderPageAction(Page $page){
         $version = $this->getParameter('version');
@@ -312,7 +312,7 @@ class dashboardController extends Controller
 
         $modules = [];
         foreach ($page->getModules() as $module) {
-            array_push($modules, $module->getId());
+            array_push($modules, $module);
         }
 
 

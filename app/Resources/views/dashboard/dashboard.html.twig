@@ -29,7 +29,7 @@
                         <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             {% for page in pages %}
-                                <li><a href="{% if app.request.get('_route') != 'dashboard' and app.request.get('_route') != 'dashboard_alter' %}{{ page.name }}{% else %}#{% endif %}" class="js_page_render">{{ page.name }}</a></li>
+                                <li><a data-pageid="{{ page.id }}" href="{% if app.request.get('_route') != 'dashboard' and app.request.get('_route') != 'dashboard_alter' %}{{ page.id }}{% else %}#{% endif %}" class="js_page_render">{{ page.name }}</a></li>
                             {% endfor %}
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ path('manage_pages') }}">Manage Pages</a></li>

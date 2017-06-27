@@ -43,9 +43,9 @@
     </div>
 <script>
 
-    function getPageRenderPath(name) {
-        var path = '{{ path("render_page", {'name': 'page_name'}) }}';
-        return path.replace("page_name", name);
+    function getPageRenderPath(id) {
+        var path = '{{ path("render_page", {'id': 'page_id'}) }}';
+        return path.replace("page_id", id);
     }
 </script>
 {% endblock %}
@@ -60,9 +60,9 @@
     //setInterval(loadTable, 2000);
 
 
-    function renderPage(name) {
+    function renderPage(id) {
         $.ajax({
-            url: getPageRenderPath(name),
+            url: getPageRenderPath(id),
             success: function (data) {
                 $("#renderPage").html(data);
             }
@@ -70,13 +70,13 @@
     }
 
     $('.js_page_render').click(function() {
-        renderPage($(this).text());
+        renderPage($(this).attr('data-pageid'));
     });
 
     $( document ).ready(function() {
 
         //if page exists
-        renderPage('{{ currentPage.name }}');
+        renderPage('{{ currentPage.id }}');
 
 
     });

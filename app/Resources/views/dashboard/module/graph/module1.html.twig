@@ -1,23 +1,77 @@
-{   dump(result) }}
+{# dump(result) #}
 
-<div id="container" style="width:50%; height:400px;"></div>
+
+
+<div id="module-{{ result.module.id }}-container" style="height: 400px;"></div>
+
+
+<style>
+
+    .highcharts-title {
+        display: none;
+    }
+    .highcharts-container{
+        top: -23px;
+    }
+</style>
+
+
 
 <script>
-    var data1 = [];
-    var i = 0;
-    {% for value in result.data1 %}
 
-    data1[i] = {
-            x: {{ value.x }},
-            y: {{ value.y }},
+
+    $('#option-module-{{ result.module.id }}').on('show.bs.modal', function () {
+        $("#option-module-" + '{{ result.module.id }}' + "-analytics" + " input[value='{{ result.module.analytics }}']").prop("checked", true);
+        $("#option-module-" + '{{ result.module.id }}' + "-userType" + " input[value='{{ result.module.userType }}']").prop("checked", true);
+        $("#option-module-" + '{{ result.module.id }}' + "-keyword").val('{{ result.module.keyword }}');
+    });
+
+
+    $('#module-{{ result.module.id }} .panel-footer').text('{{ result.footer }}');
+
+
+
+
+    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+        var colors = [];
+        {% for color in result.color %}
+        colors.push('{{ color }}');
+        {% endfor %}
+        return colors;
+    }());
+
+
+    var data = [];
+    var i = 0;
+    {% for value in result.data %}
+    data[i] = {
+            {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
+            {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
             name: '{{ value.name }}'
         };
         i++;
     {% endfor %}
 
-    var module1 = Highcharts.chart('container', {
+
+
+    {% if result.data1 is defined and result.data1 is not null %}
+        var data1 = [];
+        i = 0;
+        {% for value in result.data1 %}
+        data1[i] = {
+                {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
+                {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
+                name: '{{ value.name }}'
+            };
+            i++;
+        {% endfor %}
+    {% endif %}
+
+    var module{{ result.module.id }} = Highcharts.chart('module-{{ result.module.id }}-container', {
         chart: {
-            type: '{{ result.type }}'
+            zoomType: 'x',
+            panning: true,
+            panKey: 'shift'
             /*,events: {
                 load: function () {
                     var series = this.series[0];
@@ -34,24 +88,116 @@
             title: {
                 text: '{{ result.xTitle }}'
             }
-            /*,type: 'datetime',
+
+            {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+            ,
+            type: '{{ result.xAxisType }}',
             dateTimeLabelFormats: {
-                day: '%e of %b'
-            }*/
+                hour: '%Y, %e of %b %H:%M',
+                day: '%Y, %e of %b %H:%M',
+                week: '%Y, %e of %b',
+                month: '%Y, %e of %b',
+                year: '%Y, %e of %b'
+            }
+            {% endif %}
+
         },
-        yAxis: {
-            title: {
-                text: '{{ result.yTitle }}'
+        yAxis: [
+            {
+                title: {
+                    text: '{{ result.yTitle }}'
+                }
+            }
+            {% if result.y1Title is defined and result.y1Title is not null %} //should be more general
+            , {
+                title: {
+                    text: '{{ result.y1Title }}'
+                },
+                labels: {
+                    format: '{{ result.y1Format }}'
+                },
+                opposite: true,
+                max: {{ result.y1Max }}
+            }
+            {% endif %}
+        ],
+        plotOptions: {
+            line: {
+                allowPointSelect: false
+            },
+            pie: {
+                shadow: true,
+                size: {{ result.size }},
+                slicedOffset: {{ result.size * 0.07 }},
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            },
+            series: {
+                turboThreshold: 0 // wtf
             }
         },
+
         series: [{
+            name: '{{ result.data_name }}',
+            type: '{{ result.type }}',
+
+            {% if result.data_yAxis is defined and result.data_yAxis is not null %}
+            yAxis: {{ result.data_yAxis }},
+            {% endif %}
+
+            data: data,
+
+            tooltip: {
+                {% if result.data_tooltip is defined and result.data_tooltip == 'percentage' %}
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y:.2f} %<br/>'
+                {% endif %}
+            }
+
+            {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+            ,
+            pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}),  //set to module!!
+            pointInterval: {{ result.xInterval }}
+            {% endif %}
+
+        }
+
+        {% if result.data1 is defined and result.data1 is not null %}
+        , {
             name: '{{ result.data1_name }}',
-            data: data1
-            //,pointStart: Date.UTC(2010, 0, 1),
-            //pointInterval: { result.interval }}
-        }]
+            type: '{{ result.type1 }}',
+
+            {% if result.data1_yAxis is defined and result.data1_yAxis is not null %}
+            yAxis: {{ result.data1_yAxis }},
+            {% endif %}
+
+            data: data1,
+
+            tooltip: {
+                {% if result.data1_tooltip is defined and result.data1_tooltip == 'percentage' %}
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y:.2f} %<br/>'
+                {% endif %}
+            }
+
+            {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+            ,
+            pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}),  //set to module!!
+            pointInterval: {{ result.xInterval }}
+            {% endif %}
+        }
+        {% endif %}
+
+        ]
     });
 
-
+    $( document ).ready(function() {
+        $('#module-{{ result.module.id }} .module-title').text($('#module-{{ result.module.id }} .highcharts-title').text());
+    });
 
 </script>
