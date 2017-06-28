@@ -45,7 +45,13 @@ class vdpModule
             $module->setUserType('all');
         }
 
-        $configuration = new ArrayCollection(['userType' => $module->getUserType(), 'keyword' => $module->getKeyword(), 'analytics' => $module->getAnalytics()]);
+        $configuration = new ArrayCollection([
+            'analytics' => $module->getAnalytics(),
+            'userType' => $module->getUserType(),
+            'keyword' => $module->getKeyword(),
+            'fromDate' => $module->getFromDate(),
+            'toDate' => $module->getToDate(),
+        ]);
 
 
         return $instance->render($configuration);

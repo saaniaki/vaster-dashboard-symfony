@@ -275,6 +275,7 @@ class dashboardController extends Controller
 
             $moduleToBeAdded->setPage($page);
 
+            //dump($moduleToBeAdded);die();
 
             //$moduleToBeAdded->setModuleInfo($allInfo[0]);
 

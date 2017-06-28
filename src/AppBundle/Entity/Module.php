@@ -60,6 +60,48 @@ class Module
     private $keyword;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fromDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $toDate;
+
+    /**
+     * @return mixed
+     */
+    public function getFromDate()
+    {
+        return $this->fromDate;
+    }
+
+    /**
+     * @param mixed $fromDate
+     */
+    public function setFromDate($fromDate)
+    {
+        $this->fromDate = $fromDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToDate()
+    {
+        return $this->toDate;
+    }
+
+    /**
+     * @param mixed $toDate
+     */
+    public function setToDate($toDate)
+    {
+        $this->toDate = $toDate;
+    }
+
+    /**
      * @return mixed
      */
     public function getAnalytics()

@@ -78,7 +78,7 @@ class module2 implements ModuleInterface
 
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('UTC'); //remove when server is on UTC
 
         $this->module = $module;
         $em = $managerRegistry->getManager('vaster');
@@ -141,20 +141,20 @@ class module2 implements ModuleInterface
     }
 
     public function hourly($type, $keyword){
-        $today = (new \DateTime(\date('Y-m-d H:00')));//->add(new \DateInterval('PT1H'));
-        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $today, new \DateInterval('PT1H'));
+        $now = new \DateTime('now');
+        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $now, new \DateInterval('PT1H'));
         $this->xInterval = 3600 * 1000;
     }
 
     public function daily($type, $keyword){
-        $today = (new \DateTime(\date('Y-m-d')));//->add(new \DateInterval('P1D'));
-        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $today, new \DateInterval('P1D'));
+        $now = new \DateTime('now');
+        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $now, new \DateInterval('P1D'));
         $this->xInterval = 24 * 3600 * 1000;
     }
 
     public function weekly($type, $keyword){
-        $today = (new \DateTime(\date('Y-m-d')));//->add(new \DateInterval('P1D')); //can be simpler
-        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $today, new \DateInterval('P7D'));
+        $now = new \DateTime('now');
+        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $now, new \DateInterval('P7D'));
         $this->xInterval = 7 * 24 * 3600 * 1000;
     }
 

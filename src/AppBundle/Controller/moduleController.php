@@ -43,6 +43,9 @@ class moduleController extends Controller
         $module->setAnalytics($request->get('analytics'));
         $module->setUserType($request->get('userType'));
         $module->setKeyword($request->get('keyword'));
+        $module->setFromDate(new \DateTime($request->get('fromDate')));
+        if( $request->get('toDate') != null )
+            $module->setToDate(new \DateTime($request->get('toDate')));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($module);
