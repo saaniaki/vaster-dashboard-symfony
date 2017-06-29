@@ -1,0 +1,412 @@
+{# dump(result) #}
+
+
+<div class="col-sm-12">
+
+    <div class="panel panel-default" id="module-{{ result.module.id }}">
+        <div class="panel-heading" style="height: 38px;padding-right: 15%;">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> <span class="module-title"></span></h3>
+        </div>
+
+        <div class="btn-group" style=" float: right; height: 38px; top: -39px; right: -1px;">
+            <button id="LastSeenSwitch" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off" style="float: left; height: 38px; top: 1px; right: -1px; border-radius: 0px;">Switch</button>
+            <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="glyphicon glyphicon-option-vertical btn btn-primary" aria-hidden="true" style="border-radius: 0px 5px 0px 0px; width: 40px; height: 38px; padding-right: 0px; padding-left: 4px; padding-bottom: 0px; padding-top: 8px; float: left;"></span>
+            <ul class="dropdown-menu dropdown-menu-right" style=" top: 104%; right: 3px;">
+                <li><a href="#">Change</a></li>
+                <li><a href="#">Move</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#option-module-{{ result.module.id }}">Options</a></li></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" data-toggle="modal" data-target="#about-module-{{ result.module.id }}">About</a></li>
+            </ul>
+        </div>
+
+        <div class="panel-body" style="height: 450px; width: 100%;">
+
+            <div id="module-{{ result.module.id }}-container" style="height: 400px;"></div>
+
+        </div>
+        <div class="panel-footer">{{ result.footer }}</div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- About Modal -->
+<div class="modal fade" id="about-module-{{ result.module.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                <h4 class="modal-title" id="myModalLabel">About- {{ result.module.moduleInfo.name }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ result.module.moduleInfo.description }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Option Modal -->
+<div class="modal fade" id="option-module-{{ result.module.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                <h4 class="modal-title" id="myModalLabel">Options - {{ result.module.moduleInfo.name }}</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <p class="bg-primary" style="padding: 15px;">{{ result.module.moduleInfo.guide }}</p>
+
+                <div id="option-module-{{ result.module.id }}-analytics" data-default="{{ result.module.analytics }}">
+
+                    <p class="bg-info" style="padding: 15px;">Please select the analytics type for this specific module:</p>
+
+                    {% for name, option in result.module.moduleInfo.availableAnalytics %}
+
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="analytics-{{ result.module.id }}" value="{{ option }}" {# if option == result.module.analytics %} checked="checked"{% endif #}>
+                                {{ name }}
+                            </label>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div id="option-module-{{ result.module.id }}-userType"  data-default="{{ result.module.userType }}">
+
+                    <p class="bg-info" style="padding: 15px;">Please select one of the user type filters:</p>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="userType-{{ result.module.id }}" id="user-all" value="all" {# if 'all' == result.module.userType %} checked="checked"{% endif #}>
+                            All Users
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="userType-{{ result.module.id }}" id="user-standard" value="standard" {# if 'standard' == result.module.userType %} checked="checked"{% endif #}>
+                            Standard User
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="userType-{{ result.module.id }}" id="user-internal" value="internal" {# if 'internal' == result.module.userType %} checked="checked"{% endif #}>
+                            Internal User
+                        </label>
+                    </div>
+                    <div class="radio disabled">
+                        <label>
+                            <input type="radio" name="userType-{{ result.module.id }}" id="user-premium" value="premium" disabled>
+                            Premium User
+                        </label>
+                    </div>
+                </div>
+
+
+                <p class="bg-info" style="padding: 15px;">You can search on the result by typing the keyword down blow:</p>
+
+                <input id="option-module-{{ result.module.id }}-keyword" name="keyword-{{ result.module.id }}" type="text" class="form-control" placeholder="Keyword" data-default="{{ result.module.keyword }}" style="margin-bottom: 10px;">
+
+
+                <p class="bg-info" style="padding: 15px;">
+                    Leave the left box to start from 2016/12/09!
+                    <br>
+                    Leave the right box to have a real-time graph!
+                    <br>
+                    You can also select a dynamic day.
+                </p>
+
+
+                <div class="container-fluid">
+
+                    <div class="row">
+
+                        <div class="form-group col-sm-6">
+                            <div class="btn-group btn-group-xs dateButton from" role="group">
+                                <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
+                                <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
+                                <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div class="btn-group btn-group-xs dateButton to" role="group" style="float: right">
+                                <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
+                                <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
+                                <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="form-group col-sm-5">
+                            <div class="input-group date fromDatetimepicker" data-default="{% if result.module.fromDate is not null %}{{ result.module.fromDate.date }}{% else %}notSet{% endif %}">
+                                <input type="text" class="form-control" name="fromDate-{{ result.module.id }}" readonly="readonly">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-2" style="text-align: center;margin-top: 5px;font-weight: bold;">To</div>
+
+                        <div class="form-group col-sm-5">
+                            <div class="input-group date toDatetimepicker" data-default="{% if result.module.toDate is not null %}{{ result.module.toDate.date }}{% else %}notSet{% endif %}">
+                                <input type="text" class="form-control" name="toDate-{{ result.module.id }}" readonly="readonly">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success option-module-save" data-module-id="{{ result.module.id }}">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+    .highcharts-title {
+        display: none;
+    }
+    .highcharts-container{
+        top: -23px;
+    }
+</style>
+
+
+
+<script>
+
+
+    var analytics_{{ result.module.id }} = '{{ result.module.analytics }}';
+    var userType_{{ result.module.id }} = '{{ result.module.userType }}';
+    var keyword_{{ result.module.id }} = '{{ result.module.keyword }}';
+
+
+
+
+
+
+
+    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+        var colors = [];
+        {% for color in result.color %}
+        colors.push('{{ color }}');
+        {% endfor %}
+        return colors;
+    }());
+
+
+    var data = [];
+    var i = 0;
+    {% for value in result.data %}
+    data[i] = {
+            {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
+            {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
+            name: '{{ value.name }}'
+        };
+        i++;
+    {% endfor %}
+
+
+
+    {% if result.data1 is defined and result.data1 is not null %}
+        var data1 = [];
+        i = 0;
+        {% for value in result.data1 %}
+        data1[i] = {
+                {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
+                {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
+                name: '{{ value.name }}'
+            };
+            i++;
+        {% endfor %}
+    {% endif %}
+
+    var module{{ result.module.id }} = Highcharts.chart('module-{{ result.module.id }}-container', {
+        chart: {
+            zoomType: 'x',
+            panning: true,
+            panKey: 'shift'
+            /*,events: {
+                load: function () {
+                    var series = this.series[0];
+                    setInterval(function () {
+                        series.setData(data1);
+                    }, 1000);
+                }
+            }*/
+        },
+        title: {
+            text: '{{ result.title }}'
+        },
+        xAxis: {
+            title: {
+                text: '{{ result.xTitle }}'
+            }
+
+            {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+            ,
+            type: '{{ result.xAxisType }}',
+            dateTimeLabelFormats: {
+                hour: '%Y, %e of %b %H:%M',
+                day: '%Y, %e of %b %H:%M',
+                week: '%Y, %e of %b',
+                month: '%Y, %e of %b',
+                year: '%Y, %e of %b'
+            }
+            {% endif %}
+
+        },
+        yAxis: [
+            {
+                title: {
+                    text: '{{ result.yTitle }}'
+                }
+            }
+            {% if result.y1Title is defined and result.y1Title is not null %} //should be more general
+            , {
+                title: {
+                    text: '{{ result.y1Title }}'
+                },
+                labels: {
+                    format: '{{ result.y1Format }}'
+                },
+                opposite: true,
+                max: {{ result.y1Max }}
+            }
+            {% endif %}
+        ],
+        plotOptions: {
+            line: {
+                allowPointSelect: false
+            },
+            pie: {
+                shadow: true,
+                size: {{ result.size }},
+                slicedOffset: {{ result.size * 0.07 }},
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            },
+            series: {
+                turboThreshold: 0 // wtf
+            }
+        },
+
+        series: [{
+            name: '{{ result.data_name }}',
+            type: '{{ result.type }}',
+
+            {% if result.data_yAxis is defined and result.data_yAxis is not null %}
+            yAxis: {{ result.data_yAxis }},
+            {% endif %}
+
+            data: data,
+
+            tooltip: {
+                {% if result.data_tooltip is defined and result.data_tooltip == 'percentage' %}
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y:.2f} %<br/>'
+                {% endif %}
+            }
+
+            {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+            ,
+            pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}),  //set to module!!
+            pointInterval: {{ result.xInterval }}
+            {% endif %}
+
+        }
+
+        {% if result.data1 is defined and result.data1 is not null %}
+        , {
+            name: '{{ result.data1_name }}',
+            type: '{{ result.type1 }}',
+
+            {% if result.data1_yAxis is defined and result.data1_yAxis is not null %}
+            yAxis: {{ result.data1_yAxis }},
+            {% endif %}
+
+            data: data1,
+
+            tooltip: {
+                {% if result.data1_tooltip is defined and result.data1_tooltip == 'percentage' %}
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y:.2f} %<br/>'
+                {% endif %}
+            }
+
+            {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+            ,
+            pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}),  //set to module!!
+            pointInterval: {{ result.xInterval }}
+            {% endif %}
+        }
+        {% endif %}
+
+        ]
+    });
+
+
+</script>

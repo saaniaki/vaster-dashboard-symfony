@@ -3,85 +3,13 @@
 {% block title %}VDP{{ version }} Dashboard{% endblock %}
 
 {% block body %}
-
     <div class="container-fluid" style="margin-top: 50px;">
-
-
-        <!--<div class="container" style="max-width: 700px;">
-            <nav aria-label="Page navigation" style=" text-align: center ;">
-                <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>-->
-
-
-
-
-        {# {% if noPage == true %}
-            You have not added any pages yet! :(
-        {% else %}
-            {{  currentPage.name }}
-        {% endif %} #}
-
-        <div id="renderPage" style="margin-top: 10px;"></div>
-
+        <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("render_page", {'id': 'page_id'}) }}" data-page-id-first-load="{{ currentPage.id }}"></div>
     </div>
-<script>
-
-    function getPageRenderPath(id) {
-        var path = '{{ path("render_page", {'id': 'page_id'}) }}';
-        return path.replace("page_id", id);
-    }
-</script>
 {% endblock %}
 
 
 {% block javascripts %}
     {{ parent() }}
-<script>
-
-
-
-    //setInterval(loadTable, 2000);
-
-
-    function renderPage(id) {
-        $.ajax({
-            url: getPageRenderPath(id),
-            success: function (data) {
-                $("#renderPage").html(data);
-            }
-        });
-    }
-
-    $('.js_page_render').click(function() {
-        renderPage($(this).attr('data-pageid'));
-    });
-
-    $( document ).ready(function() {
-
-        //if page exists
-        renderPage('{{ currentPage.id }}');
-
-
-    });
-
-</script>
-
-
+    <script src="{{ asset('build/dashboard.js') }}"></script>
 {% endblock %}

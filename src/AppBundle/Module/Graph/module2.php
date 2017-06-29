@@ -78,8 +78,6 @@ class module2 implements ModuleInterface
 
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
-        date_default_timezone_set('UTC'); //remove when server is on UTC
-
         $this->module = $module;
         $em = $managerRegistry->getManager('vaster');
         $this->userRep = $em->getRepository("VasterBundle:User");
@@ -117,10 +115,30 @@ class module2 implements ModuleInterface
         $type = $configuration['userType'];
         $keyword = $configuration['keyword'];
 
-        if(  in_array($analytics, $this->module->getModuleInfo()->getAvailableAnalytics()) )
-            call_user_func_array(array($this, $analytics), array($type, $keyword));
-        else die('bad configuration');
 
+        $fromDate = $configuration['fromDate'];
+        $toDate = $configuration['toDate'];
+
+        $yesterday = new \DateTime('2000-01-01');
+        $aWeekAgo = new \DateTime('2000-01-07');
+        $aMonthAgo = new \DateTime('2000-02-01');
+
+
+
+        if( $fromDate == $yesterday ) $fromDate = new \DateTime('midnight yesterday');
+        elseif ( $fromDate == $aWeekAgo ) $fromDate = new \DateTime('midnight last week');
+        elseif ( $fromDate == $aMonthAgo ) $fromDate = new \DateTime('midnight last month');
+        elseif( $fromDate == null ) $fromDate = new \DateTime('2016-12-09');
+
+        if( $toDate == $yesterday ) $toDate = new \DateTime('midnight yesterday');
+        elseif ( $toDate == $aWeekAgo ) $toDate = new \DateTime('midnight last week');
+        elseif ( $toDate == $aMonthAgo ) $toDate = new \DateTime('midnight last month');
+        elseif( $toDate == null ) $toDate = new \DateTime('now');
+
+
+        if(  in_array($analytics, $this->module->getModuleInfo()->getAvailableAnalytics()) )
+            call_user_func_array(array($this, $analytics), array($type, $keyword, $fromDate, $toDate));
+        else die('bad configuration');
 
 
         $this->title = 'Registration Over Time';
@@ -136,25 +154,22 @@ class module2 implements ModuleInterface
         return get_object_vars($this);
     }
 
-    public function default($type, $keyword){
-        return $this->daily($type, $keyword);
+    public function default($type, $keyword, $fromDate, $toDate){
+        return $this->daily($type, $keyword, $fromDate, $toDate);
     }
 
-    public function hourly($type, $keyword){
-        $now = new \DateTime('now');
-        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $now, new \DateInterval('PT1H'));
+    public function hourly($type, $keyword, $fromDate, $toDate){
+        $this->rawData = $this->userRep->registrationNumber($type, $keyword, $fromDate, $toDate, new \DateInterval('PT1H'));
         $this->xInterval = 3600 * 1000;
     }
 
-    public function daily($type, $keyword){
-        $now = new \DateTime('now');
-        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $now, new \DateInterval('P1D'));
+    public function daily($type, $keyword, $fromDate, $toDate){
+        $this->rawData = $this->userRep->registrationNumber($type, $keyword, $fromDate, $toDate, new \DateInterval('P1D'));
         $this->xInterval = 24 * 3600 * 1000;
     }
 
-    public function weekly($type, $keyword){
-        $now = new \DateTime('now');
-        $this->rawData = $this->userRep->registrationNumber($type, $keyword, new \DateTime('2016-12-09'), $now, new \DateInterval('P7D'));
+    public function weekly($type, $keyword, $fromDate, $toDate){
+        $this->rawData = $this->userRep->registrationNumber($type, $keyword, $fromDate, $toDate, new \DateInterval('P7D'));
         $this->xInterval = 7 * 24 * 3600 * 1000;
     }
 

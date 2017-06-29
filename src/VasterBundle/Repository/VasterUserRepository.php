@@ -336,6 +336,9 @@ class VasterUserRepository extends EntityRepository
         // if from > to throw expection
         // from / inreval should reach to
 
+        $from = clone $from;
+        $to = clone $to;
+
         $column = $this->createQueryBuilder('user')
             ->select('user.createdtime, user.accounttype')
             ->orderBy('user.createdtime', 'DESC');
