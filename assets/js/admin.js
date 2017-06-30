@@ -166,7 +166,8 @@ function renderTable(ajaxPath){
                 if(user.type === null) user.type = '';
                 else if (user.type === 'Internal') user.type = "<span class='label label-info'>Internal</span>";
                 //console.log(user.profession.available);
-                if(user.profession.available === true) user.profession.available = "<img src='' style='width: 24px;' />";//{{ asset('images/orange-hat.png') }}
+                var orangeHatPic = $('#vaster-user-administration').attr('data-orange-hat-path');
+                if(user.profession.available === true) user.profession.available = "<img src='" + orangeHatPic + "' style='width: 24px;' />";
                 else user.profession.available = '';
 
                 $("#ajaxTbody").append(

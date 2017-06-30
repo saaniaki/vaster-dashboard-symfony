@@ -13,9 +13,9 @@ Encore
     // will output as web/build/app.js
     //.addEntry('app', './assets/js/main.js')
 
-    .addEntry('dashboard', './assets/js/dashboard.js')
-    .addEntry('pages', './assets/js/pages.js')
-    .addEntry('admin', './assets/js/admin.js')
+    .addEntry('dashboard', ['./assets/js/main.js', './assets/js/dashboard.js'])
+    .addEntry('pages', ['./assets/js/main.js', './assets/js/pages.js'])
+    .addEntry('admin', ['./assets/js/main.js', './assets/js/admin.js'])
 
     // will output as web/build/global.css
     .addStyleEntry('global', './assets/css/global.scss')

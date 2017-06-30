@@ -1,6 +1,3 @@
-require('./main');
-
-
 var beingEddited = "";
 var pendingModuleRemove = "";
 

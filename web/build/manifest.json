@@ -1,4 +1,5 @@
 {
+  "build/admin.css": "/build/admin.css",
   "build/admin.js": "/build/admin.js",
   "build/dashboard.css": "/build/dashboard.css",
   "build/dashboard.js": "/build/dashboard.js",

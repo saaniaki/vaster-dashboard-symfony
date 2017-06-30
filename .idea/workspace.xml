@@ -2,27 +2,489 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26aa9230-b2af-468c-8846-06de33591995" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/css/global.scss" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/css/main.scss" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/admin.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/dashboard.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/main.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/js/pages.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webpack.config.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yarn.lock" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/module/graph/tst.html.twig" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/module/graph/module1.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/module/graph/render.html.twig" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.cache/babel-loader/4a3ec4aae1a2ee36d6a57de1aeb0e842c2f66512.json.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.cache/babel-loader/b86278343a1052e3169e945771c1f8c54dfc15ba.json.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.cache/babel-loader/c59cfdfe2b22dcd29387a6bc4a3cba1b531b050d.json.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/node_modules/.cache/babel-loader/e8749333722e7b15650c0bda8eff832640f86044.json.gz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/bootstrap-theme.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/bootstrap-theme.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/bootstrap-theme.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/bootstrap.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/bootstrap.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/bootstrap.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/css/github.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/fonts/glyphicons-halflings-regular.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/fonts/glyphicons-halflings-regular.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/fonts/glyphicons-halflings-regular.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/images/screenshot-1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/bootstrap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/bootstrap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/highlight.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/html5shiv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/jquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/jquery.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/assets/js/respond.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/bootstrap-clockpicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/bootstrap-clockpicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/bootstrap-clockpicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/bootstrap-clockpicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/jquery-clockpicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/jquery-clockpicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/jquery-clockpicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/dist/jquery-clockpicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/gulpfile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/jquery.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/src/clockpicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/src/clockpicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/src/standalone.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/test/all.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/test/assets/qunit-1.14.0.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/test/assets/qunit-1.14.0.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/test/assets/utils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/test/suites/basic.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/clockpicker/test/suites/data-api.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap-theme.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap-theme.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap-theme.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap-theme.min.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/bootstrap.min.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/css/jquery-ui.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/.editorconfig" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/.github/ISSUE_TEMPLATE.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/.github/PULL_REQUEST_TEMPLATE.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/CHANGELOG.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/CODE_OF_CONDUCT.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/Gruntfile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/build/build.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/build/build3.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/build/build_standalone.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/build/build_standalone3.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/composer.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker.standalone.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker.standalone.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker.standalone.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker3.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker3.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker3.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker3.standalone.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker3.standalone.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/css/bootstrap-datepicker3.standalone.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/js/bootstrap-datepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/js/bootstrap-datepicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker-en-CA.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ar-tn.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ar.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.az.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.bg.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.bn.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.br.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.bs.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ca.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.cs.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.cy.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.da.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.de.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.el.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.en-AU.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.en-IE.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.en-NZ.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.en-ZA.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.eo.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.es.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.et.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.eu.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.fa.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.fi.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.fo.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.fr-CH.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.fr.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.gl.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.he.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.hi.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.hr.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.hu.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.hy.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.id.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.is.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.it-CH.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.it.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ja.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ka.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.kh.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.kk.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.km.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ko.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.kr.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.lt.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.lv.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.me.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.mk.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.mn.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ms.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.nb.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.nl-BE.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.nl.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.no.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.oc.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.pl.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.pt.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ro.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.rs-latin.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.rs.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ru.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.si.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sk.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sl.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sq.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sr-latin.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sr.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sv.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.sw.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.ta.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.tg.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.th.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.tr.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.uk.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.uz-cyrl.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.uz-latn.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.vi.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/Makefile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/demo_head.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/markup_component.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/markup_daterange.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/markup_inline.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/markup_input.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_calendarweeks.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_clearbtn.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_daysofweekdisabled.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_enddate.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_language.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_multidate.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_startdate.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_todaybtn.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_todayhighlight.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/option_weekstart.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/script/common.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/script/common.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/script/debug.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/script/html-imports.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_screenshots/script/screenshot.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/demo_head.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/markup_component.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/markup_daterange.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/markup_inline.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/markup_input.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_calendarweeks.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_clearbtn.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_daysofweekdisabled.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_enddate.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_language.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_multidate.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_startdate.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_todaybtn.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_todayhighlight.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/_static/screenshots/option_weekstart.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/conf.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/events.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/i18n.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/index.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/keyboard.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/make.bat" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/markup.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/methods.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/options.rst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/docs/requirements.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/grunt/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/.jscsrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/.jshintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/bootstrap-datepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker-en-CA.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ar-tn.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ar.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.az.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.bg.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.bn.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.br.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.bs.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ca.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.cs.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.cy.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.da.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.de.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.el.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.en-AU.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.en-GB.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.en-IE.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.en-NZ.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.en-ZA.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.eo.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.es.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.et.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.eu.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.fa.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.fi.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.fo.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.fr-CH.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.fr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.gl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.he.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.hi.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.hr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.hu.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.hy.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.id.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.is.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.it-CH.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.it.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ja.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ka.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.kh.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.kk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.km.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ko.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.kr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.lt.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.lv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.me.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.mk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.mn.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ms.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.nb.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.nl-BE.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.nl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.no.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.oc.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.pl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.pt-BR.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.pt.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ro.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.rs-latin.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.rs.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ru.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.si.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sq.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sr-latin.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.sw.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.ta.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.tg.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.th.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.tr.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.uk.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.uz-cyrl.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.uz-latn.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.vi.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.zh-CN.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/js/locales/bootstrap-datepicker.zh-TW.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/less/.csslintrc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/less/datepicker.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/less/datepicker3.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/coverage.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/jquery-1.7.1.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/mock.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/qunit-logging.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/qunit.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/qunit.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/assets/utils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/calendar-weeks.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/component.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/data-api.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/events.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/formats.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/inline.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/keyboard_navigation/2011.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/keyboard_navigation/2012.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/keyboard_navigation/all.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/methods.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/methods_jquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/mouse_navigation/2011.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/mouse_navigation/2012.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/mouse_navigation/all.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/noconflict.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/options.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/timezone.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/suites/touch_navigation/all.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/tests.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/tests/timezone.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datepicker/yarn.lock" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/.gitattributes" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/.jscs.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/Gruntfile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/ISSUE_TEMPLATE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/PULL_REQUEST_TEMPLATE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/bower.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/build/css/bootstrap-datetimepicker-standalone.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/build/css/bootstrap-datetimepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/build/css/bootstrap-datetimepicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/build/js/bootstrap-datetimepicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/component.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/composer.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/ChangeLog.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/ContributorsGuide.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Events.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Extras.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/FAQ.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Functions.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Installing.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Options.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Version 4 Changelog.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/Version 4 Contributors guide.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/index.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/android-chrome-144x144.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/android-chrome-192x192.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/android-chrome-36x36.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/android-chrome-48x48.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/android-chrome-72x72.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/android-chrome-96x96.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-114x114.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-120x120.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-144x144.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-152x152.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-180x180.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-57x57.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-60x60.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-72x72.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-76x76.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon-precomposed.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/apple-touch-icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/base.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/browserconfig.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/content.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/css/base.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/css/prettify-1.0.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/favicon-16x16.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/favicon-32x32.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/favicon-96x96.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/favicon.ico" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/js/base.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/js/prettify-1.0.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/manifest.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/mstile-144x144.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/mstile-150x150.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/mstile-310x150.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/mstile-310x310.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/mstile-70x70.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/nav.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/docs/theme/toc.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/mkdocs.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/js/bootstrap-datetimepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/less/_bootstrap-datetimepicker.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/less/bootstrap-datetimepicker-build.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/nuget/Bootstrap.v3.Datetimepicker.CSS.nuspec" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/nuget/Bootstrap.v3.Datetimepicker.nuspec" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/nuget/NuGet.exe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/nuget/install.ps1" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/sass/_bootstrap-datetimepicker.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/src/sass/bootstrap-datetimepicker-build.scss" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/tasks/bump_version.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/publicApiSpec.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/base.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/compile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/index.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/out/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/pic/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/t1.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/t2.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/t3.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/t4.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/screen-capture/t5.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/datetimepicker/test/timezoneDataHelper.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/fonts/glyphicons-halflings-regular.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/fonts/glyphicons-halflings-regular.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/fonts/glyphicons-halflings-regular.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/AUTHORS.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/LICENSE.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/external/jquery/jquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-bg_diagonals-small_25_c5ddfc_40x40.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-bg_diagonals-thick_20_e69700_40x40.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-bg_diagonals-thick_22_1484e6_40x40.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-bg_diagonals-thick_26_2293f7_40x40.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-bg_highlight-soft_100_f9f9f9_1x100.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-bg_inset-hard_100_eeeeee_1x100.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-icons_0a82eb_256x240.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-icons_0b54d5_256x240.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-icons_5fa5e3_256x240.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-icons_fcdd4a_256x240.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/images/ui-icons_ffffff_256x240.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.structure.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.structure.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.theme.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/jquery-ui.theme.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/jqueryui/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/bootstrap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/bootstrap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/jquery-3.2.1.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/jquery-ui.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/npm.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/themes/toggles-all.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/themes/toggles-dark.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/themes/toggles-iphone.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/themes/toggles-light.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/themes/toggles-modern.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/themes/toggles-soft.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/toggles-full.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/css/toggles.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/js/toggle/toggles.min.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/base.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/pages.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/pages.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/show.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/show.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/showPage.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/showPage.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/Graph/module2.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/Graph/module2.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" afterPath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/global.scss" afterPath="$PROJECT_DIR$/assets/css/global.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/admin.js" afterPath="$PROJECT_DIR$/assets/js/admin.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/main.js" afterPath="$PROJECT_DIR$/assets/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/pages.js" afterPath="$PROJECT_DIR$/assets/js/pages.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/.yarn-integrity" afterPath="$PROJECT_DIR$/node_modules/.yarn-integrity" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/admin.js" afterPath="$PROJECT_DIR$/web/build/admin.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/dashboard.js" afterPath="$PROJECT_DIR$/web/build/dashboard.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/global.css" afterPath="$PROJECT_DIR$/web/build/global.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/manifest.json" afterPath="$PROJECT_DIR$/web/build/manifest.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/pages.js" afterPath="$PROJECT_DIR$/web/build/pages.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webpack.config.js" afterPath="$PROJECT_DIR$/webpack.config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yarn.lock" afterPath="$PROJECT_DIR$/yarn.lock" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -54,8 +516,8 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="651">
-              <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+            <state relative-caret-position="186">
+              <caret line="6" column="26" lean-forward="false" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -64,9 +526,34 @@
       <file leaf-file-name="dashboard.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/js/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1819">
+            <state relative-caret-position="2294">
               <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="admin.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/assets/js/admin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <marker date="1498780970510" expanded="true" signature="137:177" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="4197:4217" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="4659:4676" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="5421:5433" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="6249:6268" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="18358:18405" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="19492:19510" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="21652:21699" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="21865:21901" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="23018:23065" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="24402:24419" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="24716:24763" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="25202:25249" ph="..." />
+                <marker date="1498780970510" expanded="true" signature="32850:32863" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -74,8 +561,8 @@
       <file leaf-file-name="webpack.config.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webpack.config.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="496">
-              <caret line="16" column="46" lean-forward="false" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
+            <state relative-caret-position="31">
+              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -84,10 +571,10 @@
       <file leaf-file-name="pages.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/js/pages.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="31">
-              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <marker date="1498778966507" expanded="true" signature="171:183" ph="..." />
+                <marker date="1498780943479" expanded="true" signature="150:162" ph="..." />
               </folding>
             </state>
           </provider>
@@ -103,46 +590,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/js/admin.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
-              <caret line="168" column="159" lean-forward="false" selection-start-line="168" selection-start-column="159" selection-end-line="168" selection-end-column="159" />
-              <folding>
-                <marker date="1498779314068" expanded="true" signature="137:177" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="4197:4217" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="4659:4676" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="5303:5315" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="6169:6188" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="18278:18325" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="19412:19430" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="21572:21619" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="21785:21821" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="22938:22985" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="24322:24339" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="24636:24683" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="25122:25169" ph="..." />
-                <marker date="1498779314068" expanded="true" signature="32770:32783" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="users.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Resources/views/admin/users.html.twig">
+      <file leaf-file-name="base.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="775">
-              <caret line="329" column="23" lean-forward="false" selection-start-line="329" selection-start-column="23" selection-end-line="329" selection-end-column="23" />
+              <caret line="25" column="12" lean-forward="true" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="81" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html.twig" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+      <file leaf-file-name="global.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/css/global.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1054">
-              <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+            <state relative-caret-position="248">
+              <caret line="8" column="36" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -237,8 +699,6 @@
         <option value="$PROJECT_DIR$/assets/js/greet.js" />
         <option value="$PROJECT_DIR$/assets/js/pageRender.js" />
         <option value="$PROJECT_DIR$/app/Resources/views/dashboard/showPage.html.twig" />
-        <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
-        <option value="$PROJECT_DIR$/assets/css/global.scss" />
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Service/vdpModule.php" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" />
@@ -247,13 +707,15 @@
         <option value="$PROJECT_DIR$/app/Resources/views/dashboard/show.html.twig" />
         <option value="$PROJECT_DIR$/assets/js/dashboard.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/node_modules/@symfony/webpack-encore/index.js" />
-        <option value="$PROJECT_DIR$/assets/js/pages.js" />
         <option value="$PROJECT_DIR$/app/Resources/views/dashboard/pages.html.twig" />
+        <option value="$PROJECT_DIR$/node_modules/@symfony/webpack-encore/index.js" />
+        <option value="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" />
+        <option value="$PROJECT_DIR$/assets/css/global.scss" />
+        <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
         <option value="$PROJECT_DIR$/assets/js/main.js" />
         <option value="$PROJECT_DIR$/webpack.config.js" />
+        <option value="$PROJECT_DIR$/assets/js/pages.js" />
         <option value="$PROJECT_DIR$/assets/js/admin.js" />
-        <option value="$PROJECT_DIR$/app/Resources/views/admin/users.html.twig" />
       </list>
     </option>
   </component>
@@ -907,12 +1369,12 @@
       <workItem from="1498672032962" duration="19981000" />
       <workItem from="1498754094097" duration="5790000" />
       <workItem from="1498760091215" duration="14993000" />
-      <workItem from="1498777948357" duration="1401000" />
+      <workItem from="1498777948357" duration="2938000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439657000" />
+    <option name="totallyTimeSpent" value="441194000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="-20" width="3840" height="2180" extended-state="0" />
@@ -946,40 +1408,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="12" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/VasterBundle/Entity/Location.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="19" column="7" lean-forward="true" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Module/ModuleInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="19" column="57" lean-forward="false" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/VasterBundle/Entity/Account.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/VasterBundle/Entity/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
-          <caret line="119" column="64" lean-forward="false" selection-start-line="119" selection-start-column="56" selection-end-line="119" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/doctrine/common/lib/Doctrine/Common/Persistence/ObjectManager.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="627">
@@ -1137,7 +1570,7 @@
         <state relative-caret-position="527">
           <caret line="27" column="50" lean-forward="false" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
           <folding>
-            <element signature="e#811#852#0#PHP" expanded="true" />
+            <element signature="e#811#852#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1173,6 +1606,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
           <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1197,25 +1631,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/dashboard/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="13" column="61" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/css/main.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/css/global.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="7" column="83" lean-forward="false" selection-start-line="7" selection-start-column="83" selection-end-line="7" selection-end-column="83" />
         </state>
       </provider>
     </entry>
@@ -1246,67 +1665,82 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/@symfony/webpack-encore/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="338" column="25" lean-forward="true" selection-start-line="338" selection-start-column="25" selection-end-line="338" selection-end-column="25" />
+        <state relative-caret-position="798">
+          <caret line="359" column="6" lean-forward="false" selection-start-line="359" selection-start-column="6" selection-end-line="359" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/admin/users.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="6" column="110" lean-forward="false" selection-start-line="6" selection-start-column="84" selection-end-line="6" selection-end-column="110" />
           <folding>
-            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#153#199#0#HTML" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jquery-toggles/css/toggles-full.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jquery-toggles/css/themes/toggles-all.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jquery-toggles/css/themes/toggles-dark.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jquery-toggles/css/toggles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/dashboard/show.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="13" column="61" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/css/global.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="8" column="36" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="775">
+          <caret line="25" column="12" lean-forward="true" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="81" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1819">
-          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/pages.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="31">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding>
-            <marker date="1498778966507" expanded="true" signature="171:183" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/admin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="168" column="159" lean-forward="false" selection-start-line="168" selection-start-column="159" selection-end-line="168" selection-end-column="159" />
-          <folding>
-            <marker date="1498779314068" expanded="true" signature="137:177" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="4197:4217" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="4659:4676" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="5303:5315" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="6169:6188" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="18278:18325" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="19412:19430" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="21572:21619" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="21785:21821" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="22938:22985" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="24322:24339" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="24636:24683" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="25122:25169" ph="..." />
-            <marker date="1498779314068" expanded="true" signature="32770:32783" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webpack.config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="496">
-          <caret line="16" column="46" lean-forward="false" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
+        <state relative-caret-position="186">
+          <caret line="6" column="26" lean-forward="false" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
           <folding />
         </state>
       </provider>
@@ -1319,19 +1753,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/admin/users.html.twig">
+    <entry file="file://$PROJECT_DIR$/assets/js/pages.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="775">
-          <caret line="329" column="23" lean-forward="false" selection-start-line="329" selection-start-column="23" selection-end-line="329" selection-end-column="23" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1498780943479" expanded="true" signature="150:162" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webpack.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="31">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+    <entry file="file://$PROJECT_DIR$/assets/js/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
-          <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+        <state relative-caret-position="2294">
+          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/admin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1498780970510" expanded="true" signature="137:177" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="4197:4217" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="4659:4676" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="5421:5433" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="6249:6268" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="18358:18405" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="19492:19510" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="21652:21699" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="21865:21901" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="23018:23065" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="24402:24419" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="24716:24763" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="25202:25249" ph="..." />
+            <marker date="1498780970510" expanded="true" signature="32850:32863" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

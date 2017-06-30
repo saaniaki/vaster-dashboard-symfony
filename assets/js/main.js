@@ -3,12 +3,8 @@
 // loads the jquery package from node_modules
 var $ = require('jquery');
 require('jquery-ui-bundle');
-
-
-// JS is equivalent to the normal "bootstrap" package
-// no need to set this to a variable, just require it
+require('jquery-toggles');
 require('bootstrap-sass');
-
 require('eonasdan-bootstrap-datetimepicker');
 
 // import the function from greet.js (the .js extension is optional)
