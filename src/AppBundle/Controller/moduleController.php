@@ -40,44 +40,63 @@ class moduleController extends Controller
      */
     public function setModuleConfAction(Request $request ,Module $module){
 
-        $module->setAnalytics($request->get('analytics'));
-        $module->setUserType($request->get('userType'));
-        $module->setKeyword($request->get('keyword'));
+        if( $request->get('info') != null ){
+            $moduleInfo =  $this->getDoctrine()->getRepository("AppBundle:ModuleInfo")->findOneBy(['id' => $request->get('info')]);
+            $module->setModuleInfo($moduleInfo);
+        }
+
+
+        if( $request->get('rank') != null )
+            $module->setRank($request->get('rank'));
+
+        if( $request->get('size') != null )
+            $module->setSize($request->get('size'));
+
+        if( $request->get('analytics') != null )
+            $module->setAnalytics($request->get('analytics'));
+
+        if( $request->get('userType') != null )
+            $module->setUserType($request->get('userType'));
+
+        if( $request->get('keyword') != null )
+            $module->setKeyword($request->get('keyword'));
+
 
 
         $yesterday = new \DateTime('2000-01-01');
         $aWeekAgo = new \DateTime('2000-01-07');
         $aMonthAgo = new \DateTime('2000-02-01');
 
-        if( $request->get('fromDate') == 'Yesterday' )
+
+
+        if ($request->get('fromDate') == 'Yesterday')
             $module->setFromDate($yesterday);
-        elseif( $request->get('fromDate') == 'A week ago' )
+        elseif ($request->get('fromDate') == 'A week ago')
             $module->setFromDate($aWeekAgo);
-        elseif( $request->get('fromDate') == 'A month ago' )
+        elseif ($request->get('fromDate') == 'A month ago')
             $module->setFromDate($aMonthAgo);
-        elseif( $request->get('fromDate') != null )
+        elseif ($request->get('fromDate') != null)
             $module->setFromDate(new \DateTime($request->get('fromDate')));
-        else
-            $module->setFromDate(null);
 
 
-        if( $request->get('toDate') == 'Yesterday' )
+
+
+        if ($request->get('toDate') == 'Yesterday')
             $module->setToDate($yesterday);
-        elseif( $request->get('toDate') == 'A week ago' )
+        elseif ($request->get('toDate') == 'A week ago')
             $module->setToDate($aWeekAgo);
-        elseif( $request->get('toDate') == 'A month ago' )
+        elseif ($request->get('toDate') == 'A month ago')
             $module->setToDate($aMonthAgo);
-        elseif( $request->get('toDate') != null )
+        elseif ($request->get('toDate') != null)
             $module->setToDate(new \DateTime($request->get('toDate')));
-        else
-            $module->setToDate(null);
+
 
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($module);
         $em->flush();
 
-        return new Response($module->getModuleInfo()->getName() . ":" . $module->getId() . " saved");
+        return new Response($module->getModuleInfo()->getName() . ":" . $module->getId() . " saved" . $module->getSize());
     }
 
 

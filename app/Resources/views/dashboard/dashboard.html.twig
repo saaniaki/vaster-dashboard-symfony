@@ -1,71 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'dashboard/menubar.html.twig' %}
 
 {% block title %}VDP{{ version }} Dashboard{% endblock %}
 
-{% block navBar %}
-
-    <nav class="navbar navbar-inverse navbar-fixed-top" style="box-shadow: 0 0 25px -10px rgb(255, 162, 5);">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="http://www.vaster.com">
-                    <img alt="vaster" height="25px" src="{{ asset('images/ic_launcher-web.png') }}">
-                </a>
-                <a class="navbar-brand" href="http://www.vaster.com">Vaster</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li {% if app.request.get('_route') == 'dashboard' %} class="active" {% endif %} ><a href="{{ path('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a></li>
-                    <!--<li class="" ><a href="#">Settings</a></li>-->
-                    <li class {% if app.request.get('_route') == 'manage_pages' %} ="active" {% else %} ="dropdown" {% endif %}>
-                        <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            {% for page in pages %}
-                                <li><a data-pageid="{{ page.id }}" href="{% if app.request.get('_route') != 'dashboard' and app.request.get('_route') != 'dashboard_alter' %}{{ page.id }}{% else %}#{% endif %}" class="js_page_render">{{ page.name }}</a></li>
-                            {% endfor %}
-                            <li role="separator" class="divider"></li>
-                            <li><a href="{{ path('manage_pages') }}">Manage Pages</a></li>
-                        </ul>
-                    </li>
-                    <li class="" ><a href="{{ path('user_management') }}">Administration</a></li>
-                </ul>
-                <!-- search form
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-                -->
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">VDP{{ version }}</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ vasterUser.firstname ~ " " ~ vasterUser.lastname }}<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Edit</a></li>
-                            {% if is_granted('ROLE_USER') %}
-                                <li><a href="{{ path('security_logout') }}">Logout</a></li>
-                            {% endif %}
-
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-
-{% endblock %}
-
-
 {% block body %}
-
+    <div class="container-fluid" style="margin-top: 50px;" id="dashboard">
+        <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("page_modules", {'id': 'page_id'}) }}" data-page-id-first-load="{{ currentPage.id }}">
+            <div id="modules" data-module-render-url="{{ path('render_module', {'id': 'module_id'}) }}">
+                <!-- modules -->
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/dashboard.js') }}"></script>
+{% endblock %}

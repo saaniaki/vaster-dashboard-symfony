@@ -72,6 +72,8 @@ $('#pagesTable').on('click', '.page', function (e) {
     loadEdit( beingEddited );
 });
 
+
+
 $('#editPanel').on('submit', '#update', function (e) {
     e.preventDefault();
 
@@ -147,6 +149,19 @@ function loadEditCallback(id, rank) {
 
 }
 
+
+function configModule(id, data) {
+    $.ajax({
+        url: '../api/module/' + id,
+        type: 'post',
+        data: data,
+        success: function (data) {
+            //alert(data);
+            loadEdit(beingEddited);
+        }
+    });
+}
+
 $( document ).ready(function() {
     loadNew();
 
@@ -184,6 +199,10 @@ $( document ).ready(function() {
     }).disableSelection();
 
 
+
+
+
+
 });
 
 
@@ -193,6 +212,16 @@ function loadNewModule() {
         url: beingEddited + '/new-module',
         success: function (data) {
             $("#addModuleModal").find(".modal-body").html(data);
+        }
+    });
+}
+
+function loadEditModule(id) {
+    $.ajax({
+        url: 'edit-module/' + id,
+        success: function (data) {
+            $("#editModuleModal").find(".modal-body").html(data);
+            $( "#doEditModule" ).attr('data-module-id', id);
         }
     });
 }
@@ -217,6 +246,19 @@ $( "#doAddModule" ).click(function() {
     $("#addModule").trigger( "submit" );
 });
 
+$( "#doEditModule" ).click(function() {
+    var id = $( "#doEditModule" ).attr('data-module-id');
+    configModule(id, {
+        'info' : $("#editModuleModal #app_bundle_new_module_moduleInfo option[value='" + $('#app_bundle_new_module_moduleInfo').val() + "']").attr('data-info-id'),
+        'rank' : $('#editModuleModal #app_bundle_new_module_rank').val(),
+        'size' : $('#editModuleModal #app_bundle_new_module_size').val()
+    });
+    $("#editModuleModal").modal('hide');
+});
+
+
+
+
 $( "#editPanel" ).on( "Content_Loaded", function() {
     $( "#loadNewModule" ).click(function() {
         loadNewModule();
@@ -228,6 +270,47 @@ $( "#editPanel" ).on( "Content_Loaded", function() {
         $('#confirmModuleRemoval').modal();
         pendingModuleRemove = $(this).attr("data-removeLink");
     });
+
+    $( ".module-edit-link" ).click(function() {
+        var id = $(this).parent().find('.module-id').text();
+        loadEditModule(id);
+        $('#editModuleModal').modal();
+    });
+
+    $( "#modules_ajaxTbody" ).sortable({
+        placeholder: "ui-state-highlight",
+        start: function() {
+            $( "#modulesTable" ).removeClass("table-striped");
+        },
+        stop: function() {
+            $( "#modulesTable" ).addClass("table-striped");
+
+        },
+        update: function(event, ui) {
+            var id = $(ui.item).find(".module-id").text();
+
+
+            var intPrev = parseInt($(ui.item).prev().find(".rank").text());
+            var intNext = parseInt($(ui.item).next().find(".rank").text());
+
+            var rank = 0;
+
+            if(isNaN(intPrev) && isNaN(intNext)){
+                console.log("FATAL ERROR");
+            }else if( isNaN(intPrev) ){
+                rank = intNext - 100;
+            }else if( isNaN(intNext) ){
+                rank = intPrev + 100;
+            }else{
+                rank = (intPrev + intNext)/2;
+            }
+
+            configModule(id, {
+                'rank' : rank
+            });
+        }
+    }).disableSelection();
+
 });
 
 

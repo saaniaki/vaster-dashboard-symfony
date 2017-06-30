@@ -84,7 +84,7 @@ class module2 implements ModuleInterface
 
         $this->type = 'column';
         $this->type1 = 'line';
-        $this->size = 300;
+        $this->size = 300; //useless
 
         $this->xAxisType = 'datetime';
         $this->xTitle = 'Time';

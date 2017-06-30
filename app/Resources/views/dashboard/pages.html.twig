@@ -1,11 +1,11 @@
-{% extends 'dashboard/dashboard.html.twig' %}
+{% extends 'dashboard/menubar.html.twig' %}
 
 {% block title %}VDP{{ version }} - new page{% endblock %}
 
 {% block body %}
 
 
-    <div class="container" style="margin-top: 50px;">
+    <div class="container" style="margin-top: 50px;" id="manage-pages"><!--settings-->
 
         <div class="page-header">
             <h1>{{ vasterUser.firstname }}, Manage Your Pages <small>customizing is power!</small></h1>
@@ -142,6 +142,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
                     <button type="submit" class="btn btn-success" id="doAddModule" formnovalidate>Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editModuleModal" tabindex="-1" role="dialog" aria-labelledby="editModuleModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header ">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Module</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+                    <button type="submit" class="btn btn-success" id="doEditModule" data-module-id="" formnovalidate>Save</button>
                 </div>
             </div>
         </div>

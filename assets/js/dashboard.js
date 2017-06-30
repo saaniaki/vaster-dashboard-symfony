@@ -1,5 +1,3 @@
-require('./main');
-
 function formatDate(date) {
     var d = new Date(date),
         minute = '' + d.getMinutes(),
@@ -115,11 +113,28 @@ function renderPage(id) {
 
     $.ajax({
         url: path,
+        dataType:"JSON",
+        type: 'post',
         success: function (data) {
-            $("#renderPage").html(data);
-            $('[id^=renderModule-]').each(function() {
-                renderModule(this.id.replace("renderModule-", ''));
+            $('#modules').html("");
+
+            if(data.modules.length === 0)
+                alert('No modules founded! :( please add modules to this page!');
+
+            var used = 0;
+            var lastRow = 0;
+            $.each( data.modules, function( key, module ) {
+
+                if( used + module.size > Math.ceil(used/12)*12 ){
+                    lastRow++;
+                    $('#modules').append("<div class='row' id='row-" + lastRow + "'></div>");
+                }
+                used += module.size;
+                $('#row-' + lastRow).append("<div id='renderModule-" + module.id + "'></div>");
+                renderModule(module.id);
+
             });
+
         }
     });
 }

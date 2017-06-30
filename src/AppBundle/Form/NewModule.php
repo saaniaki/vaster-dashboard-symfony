@@ -38,18 +38,39 @@ class NewModule extends AbstractType
         }*/
 
         $choices = [];
+        $choicesIDs = [];
         foreach( $allInfo as $info){
             //if( array_search($info->getId() ,$addedInfo) === false )
                 $choices[$info->getName()] = $info;
         }
 
-
         $builder
             ->add("moduleInfo", ChoiceType::class, [
-                'choices'  => $choices
+                'choices'  => $choices,
+                'choice_attr' => function ($allChoices, $currentChoiceKey) {
+                    if (null !== $currentChoiceKey) {
+                        return array('data-info-id' => $allChoices->getId());
+                    }
+
+                    return array();
+                },
                 //'placeholder' => 'Choose an option',
             ])
-            ->add("rank", IntegerType::class);
+            ->add("rank", IntegerType::class)
+            ->add("size", ChoiceType::class, [
+                'choices'  => [
+                    '3' => 3,
+                    '4' => 4,
+                    '5' => 5,
+                    '6' => 6,
+                    '7' => 7,
+                    '8' => 8,
+                    '9' => 9,
+                    '10' => 10,
+                    '11' => 11,
+                    '12' => 12,
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

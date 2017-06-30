@@ -1,7 +1,7 @@
 {# dump(result) #}
 
 
-<div class="col-sm-12">
+<div class="col-sm-{{ result.module.size }}">
 
     <div class="panel panel-default" id="module-{{ result.module.id }}">
         <div class="panel-heading" style="height: 38px;padding-right: 15%;">
@@ -20,9 +20,9 @@
             </ul>
         </div>
 
-        <div class="panel-body" style="height: 450px; width: 100%;">
+        <div class="panel-body" style="height: 350px; width: 100%;">
 
-            <div id="module-{{ result.module.id }}-container" style="height: 400px;"></div>
+            <div id="module-{{ result.module.id }}-container" style="height: 320px;"></div>
 
         </div>
         <div class="panel-footer">{{ result.footer }}</div>

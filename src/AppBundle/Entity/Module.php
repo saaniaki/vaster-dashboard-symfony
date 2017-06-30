@@ -35,6 +35,28 @@ class Module
 
     /**
      * @ORM\Column(type="integer")
+     * an integer between 1 and 12
+     */
+    private $size = 6;
+
+    /**
+     * @return mixed
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param mixed $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    /**
+     * @ORM\Column(type="integer")
      */
     private $rank;
 

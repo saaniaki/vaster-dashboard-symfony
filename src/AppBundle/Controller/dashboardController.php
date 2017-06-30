@@ -63,7 +63,7 @@ class dashboardController extends Controller
             $curPage = $pages[0];
         //dump($curPage);die();
 
-        return $this->render('dashboard/show.html.twig', [
+        return $this->render('dashboard/dashboard.html.twig', [
             "vasterUser" => $vasterUser,
             "version" => $version,
             'pages' => $pages,
@@ -290,6 +290,30 @@ class dashboardController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/dashboard/edit-module/{id}", name="edit_module")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editModule(Request $request, Module $module){
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(NewModule::class, $module,  array(
+            'entity_manager' => $em
+        ));
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($form->getData());
+            $em->flush();
+        }
+
+        return $this->render('dashboard/module/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 
     /**
      * @Route("/dashboard/{id}", name="dashboard_alter")
@@ -299,34 +323,21 @@ class dashboardController extends Controller
     }
 
     /**
-     * @Route("/dashboard/render/{id}", name="render_page")
+     * @Route("/api/page/{id}/modules", name="page_modules")
+     * @Method("POST")
      */
     public function renderPageAction(Page $page){
-        $version = $this->getParameter('version');
-        /** @var $appUser AppUser */
-        $appUser = $this->getUser();
+        $data = [ 'modules' => [] ];
+        foreach ($page->getModules() as $module){
+            //array_push($data['modules'], $module->getId());
 
-        /** @var $vasterUser VasterUser */
-        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-            ->findOneBy([ 'email' => $appUser->getEmail()]);
-
-
-        $modules = [];
-        foreach ($page->getModules() as $module) {
-            array_push($modules, $module);
+            $data['modules'][] = [
+                'id' => $module->getId(),
+                'size' => $module->getSize()
+            ];
         }
 
-
-        return $this->render('dashboard/showPage.html.twig', [
-            "vasterUser" => $vasterUser,
-            "version" => $version,
-            'page' => $page,
-            'modules' => $modules
-        ]);
+        return new JsonResponse($data);
     }
-
-
-
-
 
 }

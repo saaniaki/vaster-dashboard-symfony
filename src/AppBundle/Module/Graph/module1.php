@@ -50,7 +50,7 @@ class module1 implements ModuleInterface
         //$this->xTitle = 'Time';
         //$this->yTitle = 'Registration';
         //$this->interval = 24 * 3600 * 1000;
-        $this->size = 300;
+        $this->size = 200;
 
         $this->footer = "Total Users: " . $this->userRep->count('all');
         //$this->module->getModuleInfo()->setAvailableAnalytics(json_encode($this->availbeAnalytics));

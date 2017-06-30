@@ -45,6 +45,7 @@ class adminController extends Controller
         $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
             ->findOneBy([ 'email' => $appUser->getEmail()]);
         $pages = $appUser->getPages()->toArray();
+        $pages = $appUser->getPages()->toArray();
 
         return $this->render('admin/users.html.twig', [
             'vasterUser' => $vasterUser,

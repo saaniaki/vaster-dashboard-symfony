@@ -1,8 +1,9 @@
 // assets/js/main.js
 
 // loads the jquery package from node_modules
-var $ = require('jquery');
-require('jquery-ui-bundle');
+var $ = require('jquery-ui-bundle');
+window.$ = require('jquery');
+//require('jquery-ui-bundle');
 require('jquery-toggles');
 require('bootstrap-sass');
 require('eonasdan-bootstrap-datetimepicker');
