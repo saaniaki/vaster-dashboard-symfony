@@ -38,13 +38,13 @@ function renderModule(id) {
 
 
 
-                if( fromDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .fromDatetimepicker input').val(null);
+                if( fromDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .fromDatetimepicker input').val('2016-12-09 00:00');
                 else if( fromDateSelector.attr('data-default') === '2000-01-01 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("Yesterday"); $('.from button.day').addClass('active'); }
                 else if( fromDateSelector.attr('data-default') === '2000-01-07 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A week ago"); $('.from button.week').addClass('active'); }
                 else if( fromDateSelector.attr('data-default') === '2000-02-01 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A month ago"); $('.from button.month').addClass('active'); }
                 else fromDateSelector.data("DateTimePicker").date(fromDateSelector.attr('data-default'));
 
-                if( toDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .toDatetimepicker input').val(null);
+                if( toDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .toDatetimepicker input').val('Now');
                 else if( toDateSelector.attr('data-default') === '2000-01-01 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("Yesterday"); $('.to button.day').addClass('active'); }
                 else if( toDateSelector.attr('data-default') === '2000-01-07 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A week ago"); $('.to button.day').addClass('active'); }
                 else if( toDateSelector.attr('data-default') === '2000-02-01 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A month ago"); $('.to button.day').addClass('active'); }
@@ -150,6 +150,12 @@ $("#renderPage").on( "click", ".option-module-save", function() {
     var keyword = $("#option-module-" + id + "-keyword").val();
     var fromDate = $('#option-module-' + id + ' .fromDatetimepicker input').val();
     var toDate = $('#option-module-' + id + ' .toDatetimepicker input').val();
+
+    if( fromDate === "" )
+        fromDate = '2016-12-09 00:00';
+    if( toDate === "" )
+        toDate = 'Now';
+
 
     configModule(id, {
         'analytics' : analytics,

@@ -306,7 +306,7 @@
             type: '{{ result.xAxisType }}',
             dateTimeLabelFormats: {
                 hour: '%Y, %e of %b %H:%M',
-                day: '%Y, %e of %b %H:%M',
+                day: '%Y, %e of %b',
                 week: '%Y, %e of %b',
                 month: '%Y, %e of %b',
                 year: '%Y, %e of %b'
@@ -319,17 +319,32 @@
                 title: {
                     text: '{{ result.yTitle }}'
                 }
+
+                {% if result.yMax is defined and result.yMax is not null %}
+                ,max: {{ result.yMax }}
+                {% endif %}
+
+                {% if result.yAllowDecimals is defined and result.yAllowDecimals is not null %}
+                , allowDecimals: false
+                {% endif %}
             }
             {% if result.y1Title is defined and result.y1Title is not null %} //should be more general
-            , {
+            ,
+            {
                 title: {
                     text: '{{ result.y1Title }}'
                 },
                 labels: {
                     format: '{{ result.y1Format }}'
                 },
-                opposite: true,
-                max: {{ result.y1Max }}
+                opposite: true
+                {% if result.y1Max is defined and result.y1Max is not null %}
+                ,max: {{ result.y1Max }}
+                {% endif %}
+
+                {% if result.y1AllowDecimals is defined and result.y1AllowDecimals is not null %}
+                , allowDecimals: false
+                {% endif %}
             }
             {% endif %}
         ],

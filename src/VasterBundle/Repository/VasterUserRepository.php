@@ -145,38 +145,33 @@ class VasterUserRepository extends EntityRepository
     /**
      * @return integer
      */
-    public function count($type, $keyword = null){
-        if($keyword == null){
-            if($type == 'all'){
-                return $this->createQueryBuilder('user')
-                    ->select('COUNT(user)')
-                    ->getQuery()
-                    ->getSingleScalarResult();
-            }else{
-                return $this->createQueryBuilder('user')
-                    ->andWhere('user.accounttype = :type')
-                    ->setParameter('type', $type)
-                    ->select('COUNT(user)')
-                    ->getQuery()
-                    ->getSingleScalarResult();
-            }
-        }else if($type == 'all'){
-            return $this->createQueryBuilder('user')
-                ->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
-                ->setParameter('keyword', $keyword)
-                ->select('COUNT(user)')
-                ->getQuery()
-                ->getSingleScalarResult();
-        }else{
-            return $this->createQueryBuilder('user')
-                ->andWhere('user.accounttype = :type')
-                ->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
-                ->setParameter('type', $type)
-                ->setParameter('keyword', $keyword)
-                ->select('COUNT(user)')
-                ->getQuery()
-                ->getSingleScalarResult();
+    public function count($type, $keyword = null, \DateTime $from = null,\DateTime $to = null){
+        $query = $this->createQueryBuilder('user')
+            ->select('COUNT(user)');
+
+        if($type != 'all')
+            $query->andWhere('user.accounttype = :type')
+                ->setParameter('type', $type);
+
+        if($keyword != null)
+            $query->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
+                ->setParameter('keyword', $keyword);
+
+        if($from != null){
+            $query->andWhere('user.createdtime > :from')
+                ->setParameter('from', $from);
         }
+
+        if($to != null){
+            $query->andWhere('user.createdtime < :to')
+                ->setParameter('to', $to);
+        }
+
+        return $query->getQuery()
+            ->getSingleScalarResult();
+
+
+
     }
 
     /**

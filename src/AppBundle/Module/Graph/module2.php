@@ -42,11 +42,14 @@ class module2 implements ModuleInterface
     private $yFormat;
     /** @var  $yMax integer */
     private $yMax;
+    private $yAllowDecimals;
+
 
     private $y1Title;
     private $y1Format;
     /** @var  $y1Max integer */
     private $y1Max;
+    private $y1AllowDecimals;
 
 
     private $xValues;
@@ -91,10 +94,14 @@ class module2 implements ModuleInterface
         $this->yTitle = 'Registration';
         $this->y1Title = 'Percentage';
         $this->data1_yAxis = 1;
-        $this->y1Format = '{value}%';
-        $this->y1Max = 100;
+        $this->y1Format = '{value}'; //'{value}%'
+        //$this->yMax = 10;
+        //$this->y1Max = 100;
 
-        $this->data1_tooltip = 'percentage';
+        //$this->data1_tooltip = 'percentage';
+
+        $this->yAllowDecimals = false;
+        $this->y1AllowDecimals = false;
     }
 
     /**
@@ -148,7 +155,13 @@ class module2 implements ModuleInterface
         $this->footer = "Total Users: " . $totalUsers;
 
 
-        $this->proccess($this->rawData, $totalUsers);
+        $this->start = [
+            'year' => $fromDate->format('Y'),
+            'month' => $fromDate->format('m') - 1,
+            'day' => $fromDate->format('d'),
+        ];
+
+        $this->process($this->rawData, $this->userRep->count($type, $keyword, null, $fromDate));
 
 
         return get_object_vars($this);
@@ -173,20 +186,27 @@ class module2 implements ModuleInterface
         $this->xInterval = 7 * 24 * 3600 * 1000;
     }
 
-    private function proccess($rawData, $totalUsers){
-        $sum = 0;
+    private function process($rawData, $startNumber){
+        $max = 0;
+        $filteredUsers = 0;
+        $sum = $startNumber;
         foreach ( $rawData as $dot ){
             $temp = [
                 'y' => $dot['number'],
                 'name' => "from " . $dot['from']->format('Y-m-d H:i') . " to " . $dot['to']->format('Y-m-d H:i')
             ];
             array_push($this->data, $temp);
+
+            if( $max < $dot['number'] )
+                $max = $dot['number'];
+
+            $filteredUsers += $dot['number'];
             $sum += $dot['number'];
-            $temp = [
-                'y' => ($sum/$totalUsers)*100,
-                'name' => "from " . $dot['from']->format('Y-m-d H:i') . " to " . $dot['to']->format('Y-m-d H:i')
-            ];
+            $temp['y'] = $sum;
             array_push($this->data1, $temp);
         }
+
+        $this->yMax = $max;
+        $this->footer .= " / Currently Showing: " . $filteredUsers;
     }
 }

@@ -3,6 +3,10 @@
 // customize some Bootstrap variables
 //$brand-primary: darken(#428bca, 20%);
 
+
+//$icon-font-path: '/build/fonts/';
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/'; //this is not the output tho!
+
 // the ~ allows you to reference things in node_modules
 @import '~bootstrap-sass/assets/stylesheets/bootstrap';
 @import '~eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';

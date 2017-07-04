@@ -63,6 +63,7 @@ class moduleController extends Controller
 
 
 
+
         $yesterday = new \DateTime('2000-01-01');
         $aWeekAgo = new \DateTime('2000-01-07');
         $aMonthAgo = new \DateTime('2000-02-01');
@@ -87,6 +88,8 @@ class moduleController extends Controller
             $module->setToDate($aWeekAgo);
         elseif ($request->get('toDate') == 'A month ago')
             $module->setToDate($aMonthAgo);
+        elseif ($request->get('toDate') == 'Now')
+            $module->setToDate(null);
         elseif ($request->get('toDate') != null)
             $module->setToDate(new \DateTime($request->get('toDate')));
 
@@ -96,7 +99,7 @@ class moduleController extends Controller
         $em->persist($module);
         $em->flush();
 
-        return new Response($module->getModuleInfo()->getName() . ":" . $module->getId() . " saved" . $module->getSize());
+        return new Response($module->getModuleInfo()->getName() . ":" . $module->getId() . " saved");
     }
 
 
