@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\QueryBuilder;
 
 class module1 implements ModuleInterface
 {
@@ -33,10 +34,13 @@ class module1 implements ModuleInterface
     private $xValues;
     private $yValues;
     private $interval;
-    private $data = [];
-    private $data_name;
 
     private $footer;
+
+    private $currentlyShowing = 0;
+
+    private $tooltip_shared = 1; //true
+    private $all_data = [];
 
 
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
@@ -46,8 +50,7 @@ class module1 implements ModuleInterface
         $this->userRep = $em->getRepository("VasterBundle:User");
         $this->type = 'pie';
         $this->size = 200;
-        //$this->footer = "Total Users: " . $this->userRep->generalCount();
-
+        $this->tooltip_shared = 0; // false but false is null so 0
     }
 
     /**
@@ -86,10 +89,10 @@ class module1 implements ModuleInterface
         else die('bad configuration');*/
 
 
-
-        //dump($this->combinations($categories));
-        $this->makeNames($this->combinations($categories), $filters, $removeZeros);
-        //die();
+        $this->makeNames($presentation, $this->combinations($categories), $filters, $removeZeros);
+        $this->title = 'Users Count';
+        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
+        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
 
         return get_object_vars($this);
     }
@@ -111,73 +114,38 @@ class module1 implements ModuleInterface
         return $combinations;
     }
 
-    private function makeNames($combinations, $filters, $removeZeros){
-
+    private function makeNames($presentation, $combinations, $filters, $removeZeros){
+        $data = [];
         foreach( $combinations as $combo){
-            $name = $userType = $deviceType = $availability = $searches = $dates = null;
 
-            foreach( $combo as $key => $cat ){
-                if( is_string($cat) ) {
-                    // $key is the type
-                    $name .= "/" . $cat;
-
-                    if( strtolower($key) == 'usertype' ) $userType = [$cat];
-
-                    if( strtolower($key) == 'availability' ){
-                        if( strtolower($cat) == "orange hat" ) $availability = true;
-                        else $availability = false;
-                    }
-                    if( strtolower($key) == 'devicetype' ){
-                        if( strtolower($cat) == "android" ) $deviceType = ["android"];
-                        else if( strtolower($cat) == "ios" ) $deviceType = ["iPhone", "iPad"];
-                    }
-
-                }
-                else {
-                    if( strtolower($cat['type']) == 'search' ) $searches = $cat['value'];
-
-                    if( strtolower($cat['type']) == 'date' ) $dates = $cat['value'];
-
-                    if( $cat['match'] ) $name .= "/" . $key;
-                    else {
-                        $name .= "/!" . $key;
-                        if( strtolower($cat['type']) == 'search' ) foreach ( $searches as $k => $search ) $searches[$k]['negate'] = !$search['negate'];
-                        if( strtolower($cat['type']) == 'date' ) foreach ( $dates as $k => $date ) $dates[$k]['negate'] = !$date['negate'];
-                    }
-                }
-            }
-
-            $name = substr($name, 1);
-
-            if( $name == null ) $name .= "All Users : " . $this->userRep->generalCount($userType, $availability, $deviceType, $searches, $dates);
-            else {
-
-                $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)');
-
-                //$name .= " : " . $this->userRep->generalCount($userType, $availability, $deviceType, $searches, $dates);
-
-                $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-                $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-                $query = $this->userRep->applyFilter($filters, $query);
-                $query = $this->userRep->NEWmodifyCount($userType, $availability, $deviceType, $searches, $dates, $query);
-                $number = $query->getQuery()->getSingleScalarResult();
-                //dump($query->getQuery());
-                //$number = 0;
-                //$name .= " : " . $number;
-
-                if( !$removeZeros || $number != 0 ){
-                    $this->data_name = 'Users';
-                    $this->data[] = [
-                        'y' => $number,
-                        'name' => $name
-                    ];
-                }
-
-                //dump($this->data);
-
+            //$name can be null :::: if( $name == null ) $name .= "All Users : " . $this->userRep->generalCount($userType, $availability, $deviceType, $searches, $dates);
+            $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
+                ->orderBy('user.createdtime', 'DESC');
+            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query = $this->userRep->applyFilters($filters, $query);
+            $catArray = $this->userRep->applyCategories($combo, $query);
+            $name = $catArray['name'];
+            /** @var $query QueryBuilder */
+            $query = $catArray['query'];
+            $number = $query->getQuery()->getSingleScalarResult();
+            //process
+            if( !$removeZeros || $number != 0 ){
+                //$this->data_name = 'Users';
+                $data[] = [
+                    'y' => $number,
+                    'name' => $name
+                ];
+                $this->currentlyShowing += $number;
             }
 
         }
+        //process
+        $this->all_data[] = [
+            'name' => 'Users',
+            'data' => $data,
+            'type' => 'pie'
+        ];
 
         return $combinations;
     }

@@ -269,7 +269,7 @@
 
 
 <script>
-
+    {#
     var all_data = [];
     {% for dataSet in result.all_data %}
 
@@ -284,7 +284,7 @@
 
         all_data.push({
             name: '{{ dataSet.name }}',
-            type: '{{ dataSet.type }}',
+            //type: '{ dataSet.type }}',
             data: data_data,
 
             {% if dataSet.yAxis is defined and dataSet.yAxis is not null %}
@@ -310,8 +310,54 @@
         });
 
     {% endfor %}
+#}
 
 
+    var all_data = [];
+    {% for dataSet in result.all_data %}
+
+
+
+    var data_data = [];
+    {% for value in dataSet.data %}
+    data_data.push({
+        {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
+        {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
+        name: '{{ value.name }}'
+    });
+    {% endfor %}
+
+
+
+
+    all_data.push({
+        name: '{{ dataSet.name }}',
+        type: '{{ dataSet.type }}',
+        data: data_data,
+
+        {% if dataSet.yAxis is defined and dataSet.yAxis is not null %}
+        yAxis: {{ dataSet.yAxis }},
+        {% endif %}
+
+        tooltip: {
+            {% if dataSet.tooltip is defined and dataSet.tooltip == 'percentage' %}
+            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y:.2f} %<br/>'
+            {% endif %}
+        }
+
+        {% if dataSet.color is defined and dataSet.color is not null %}
+        ,
+        color: '{{ dataSet.color }}'
+        {% endif %}
+
+        {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
+        ,
+        pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}),  //set to module!!
+        pointInterval: {{ result.xInterval }}
+        {% endif %}
+    });
+
+    {% endfor %}
 
 
 
@@ -343,7 +389,9 @@
             text: '{{ result.title }}'
         },
         tooltip: {
-            shared: true
+            {% if result.tooltip_shared is defined and result.tooltip_shared is not null %}
+                shared: {{ result.tooltip_shared }}
+            {% endif %}
         },
         xAxis: {
             title: {

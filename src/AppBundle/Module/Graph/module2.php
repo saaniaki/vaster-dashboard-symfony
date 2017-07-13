@@ -59,29 +59,12 @@ class module2 implements ModuleInterface
     /** @var  $xInterval integer */
     private $xInterval;
 
-
-    private $type;
-    private $data = [];
-    private $data_name;
-    private $data_tooltip; //percentage
-    /** @var  $data_yAxis integer */
-    private $data_yAxis;
-
-    private $type1;
-    private $data1 = [];
-    private $data1_name;
-    private $data1_tooltip; //percentage
-    /** @var  $data1_yAxis integer */
-    private $data1_yAxis;
+    private $currentlyShowing = 0;
 
     private $footer;
 
 
-    //for this module only
-    private $rawData;
-
-
-
+    private $tooltip_shared = 1;
     private $all_data = [];
 
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
@@ -90,15 +73,13 @@ class module2 implements ModuleInterface
         $em = $managerRegistry->getManager('vaster');
         $this->userRep = $em->getRepository("VasterBundle:User");
 
-        //$this->type = 'column';
-        //$this->type1 = 'line';
         $this->size = 300; //useless
 
         $this->xAxisType = 'datetime';
         $this->xTitle = 'Time';
         $this->yTitle = 'Registration';
-        $this->y1Title = 'Percentage';
-        $this->data1_yAxis = 1;
+        $this->y1Title = 'Registration Cumulative';
+        //$this->data1_yAxis = 1;
         $this->y1Format = '{value}'; //'{value}%'
         //$this->yMax = 10;
         //$this->y1Max = 100;
@@ -112,14 +93,6 @@ class module2 implements ModuleInterface
     }
 
     /**
-     * 'userType' => 'all', 'standard', 'internal'
-     * 'keyword' => null, $keyword
-     * 'analytics' => 'device-type', 'user-type', 'availability', 'device-type/user-type', 'availability/user-type', 'availability/device-type', 'mix'
-     *
-     * EX:
-     * ['userType' => 'all', 'keyword' => null, 'analytics' => 'availability/device-type']
-     *
-     *
      * @param ArrayCollection $configuration
      * @return array
      */
@@ -153,22 +126,20 @@ class module2 implements ModuleInterface
 
 
 
-        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
-
-        $this->title = 'Registration Over Time';
-        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: (";
 
         $this->makeNames($presentation, $this->combinations($categories), $filters, $removeZeros);
+        $this->title = 'Registration Over Time';
+        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
+        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
 
-        $this->footer .= ")";
         return get_object_vars($this);
     }
 
 
     private function process($rawData, $startNumber, $name, $removeZeros)
     {
-        $data_newVersion = [];
-        $data_cumulative_newVersion = [];
+        $data = [];
+        $data_cumulative = [];
 
 
         $max = 0;
@@ -180,7 +151,7 @@ class module2 implements ModuleInterface
                 'name' => "from " . $dot['from']->format('Y-m-d H:i') . " to " . $dot['to']->format('Y-m-d H:i')
             ];
             //array_push($this->data, $temp);
-            array_push($data_newVersion, $temp);
+            array_push($data, $temp);
 
             if ($max < $dot['number'])
                 $max = $dot['number'];
@@ -189,19 +160,21 @@ class module2 implements ModuleInterface
             $sum += $dot['number'];
             $temp['y'] = $sum;
             //array_push($this->data1, $temp);
-            array_push($data_cumulative_newVersion, $temp);
+            array_push($data_cumulative, $temp);
         }
 
         if (!$removeZeros || $sum != 0){
 
+            $this->currentlyShowing += $filteredUsers;
+/*
             if( count($this->all_data) == 0 )
-                $this->footer .= " $name: " . $filteredUsers;
+                $this->footer .= " $name: " . $sum;
             else
-                $this->footer .= ", $name: " . $filteredUsers;
-
+                $this->footer .= ", $name: " . $sum;
+*/
             $this->all_data[] = [
                 'name' => $name,
-                'data' => $data_newVersion,
+                'data' => $data,
                 'type' => 'column',
                 'yAxis' => 0,
                 'color' => $this->color->current()
@@ -209,7 +182,7 @@ class module2 implements ModuleInterface
 
             $this->all_data[] = [
                 'name' => $name . ' Cumulative',
-                'data' => $data_cumulative_newVersion,
+                'data' => $data_cumulative,
                 'type' => 'line',
                 'yAxis' => 1,
                 'color' => $this->color->current()
@@ -240,6 +213,8 @@ class module2 implements ModuleInterface
     private function makeNames($presentation, $combinations, $filters, $removeZeros){
 
         foreach( $combinations as $combo){
+
+            //name can be null!!!
 
             $query = $this->userRep->createQueryBuilder('user')->select('user.createdtime, user.accounttype')
                 ->orderBy('user.createdtime', 'DESC');
