@@ -1,0 +1,103 @@
+{
+	"categories" : {
+		"multi" : {
+			"date" : {
+				"date1" : {
+					"0" : {
+						"column" : "user.createdtime",
+						"from" : "2017/01/01",
+						"operator" : "and",
+						"to" : "2017/05/01"
+					},
+					"1" : {
+						"column" : "user.createdtime",
+						"from" : "2017/01/01",
+						"operator" : "null",
+						"to" : "2017/05/01"
+					}
+				}
+			}
+		},
+		"single" : [
+			"availability"
+		]
+	}
+}
+
+
+					"0" : {
+						"column" : "user.createdtime",
+						"from" : "2017/01/01",
+						"negate" : false,
+						"operator" : "and",
+						"to" : "2017/05/01"
+					},
+					"1" : {
+						"column" : "user.createdtime",
+						"from" : "2017/01/01",
+						"negate" : false,
+						"operator" : "or",
+						"to" : "2017/05/01"
+					},
+					"2" : {
+						"column" : "user.createdtime",
+						"from" : "2017/01/01",
+						"negate" : false,
+						"operator" : "and",
+						"to" : "2017/05/01"
+					},
+					"3" : {
+						"column" : "user.createdtime",
+						"from" : "2017/01/01",
+						"negate" : false,
+						"operator" : "null",
+						"to" : "2017/05/01"
+					}
+
+
+
+					{
+                    	"categories" : {
+                    		"multi" : {
+                    			"date" : {
+                    				"date1" : {
+                    					"0" : {
+                    						"column" : "user.createdtime",
+                    						"from" : "2017/02/01",
+                    						"negate" : false,
+                    						"operator" : "and",
+                    						"to" : "2017/03/01"
+                    					}
+                    				}
+                    			}
+                    		},
+                    		"single" : [
+                    			"availability"
+                    		]
+                    	},
+                    	"filters" : {
+                    		"search" : {
+                    			"search1" : {
+                    				"0" : {
+                    					"columnOperator" : "or",
+                    					"columns" : [
+                    						"user.email",
+                    						"user.firstname"
+                    					],
+                    					"expressionOperator" : "and",
+                    					"keyword" : "%va%",
+                    					"negate" : false
+                    				},
+                    				"1" : {
+                    					"columnOperator" : "or",
+                    					"columns" : [
+                    						"user.phone"
+                    					],
+                    					"expressionOperator" : null,
+                    					"keyword" : "1416%",
+                    					"negate" : false
+                    				}
+                    			}
+                    		}
+                    	}
+                    }

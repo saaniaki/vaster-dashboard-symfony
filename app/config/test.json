@@ -1,0 +1,89 @@
+{
+  "available_conf" : {
+    "filters" : {
+      "userType" : ["Standard", "Internal", "Premium"],
+      "deviceType" : ["Android", "ios"],
+      "availability" : ["Orange Hat", "Regular"],
+      "keyword" : null
+    },
+    "dateFilters" : ["registration", "lastSeen", "lastSearch"],
+    "presentation" : ["daily", "weekly"],
+    "categories" : {
+      "single" : ["userType", "deviceType", "availability"],
+      "multi" : ["keyword", "registration", "lastSeen", "lastSearch"]
+    }
+  },
+
+
+  "conf" : {
+    "filters" : {
+      "userType" : ["Standard", "Premium"],
+      "deviceType" : ["Android"],
+      "availability" : ["Orange Hat", "Regular"],
+      "keyword" : "%vaster%"
+    },
+    "dateFilters" : {
+      "registration" : {
+        "from" : "2016-12-01 10:30",
+        "to" : "2017-06-10 16:00"
+      },
+      "lastSeen" : {
+        "from" : "2016-12-01 10:30",
+        "to" : "2017-06-10 16:00"
+      },
+      "lastSearch" : {
+        "from" : "2016-12-01 10:30",
+        "to" : "2017-06-10 16:00"
+      }
+    },
+    "presentation" : "daily",
+    "categories" : {
+      "single" : ["availability"],
+      "multi" : {
+        "search" : {
+          "keyword1" : {
+            "0" : {
+              "negate" : true,
+              "keyword" : "%vaster%",
+              "columns" : ["user.email"],
+              "operator" : "and"
+            },
+            "1" : {
+              "negate" : false,
+              "keyword" : "%vaster%",
+              "columns" : ["user.firstname"],
+              "operator" : null
+            }
+          },
+          "keyword2" : {
+            "0" : {
+              "negate" : true,
+              "keyword" : "%gmail%",
+              "columns" : ["user.email"],
+              "operator" : "or"
+            },
+            "1" : {
+              "negate" : true,
+              "keyword" : "%gmail%",
+              "columns" : ["user.firstname"],
+              "operator" : null
+            }
+        },
+        "registration" : {
+          "last week": {
+            "from" : "2016-12-01 10:30",
+            "to" : "2017-06-10 16:00"
+          },
+          "last month": {
+            "from" : "2016-12-01 10:30",
+            "to" : "2017-06-10 16:00"
+          }
+        }
+      }
+    }
+  }
+
+
+
+
+}

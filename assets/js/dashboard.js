@@ -1,17 +1,3 @@
-function formatDate(date) {
-    var d = new Date(date),
-        minute = '' + d.getMinutes(),
-        hour = '' + d.getHours(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-') + " " + [hour, minute].join(':');
-}
-
 
 function renderModule(id) {
     var path = $("#modules").attr('data-module-render-url');
@@ -44,7 +30,7 @@ function renderModule(id) {
                 else if( fromDateSelector.attr('data-default') === '2000-02-01 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A month ago"); $('.from button.month').addClass('active'); }
                 else fromDateSelector.data("DateTimePicker").date(fromDateSelector.attr('data-default'));
 
-                if( toDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .toDatetimepicker input').val('Now');
+                if( toDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .toDatetimepicker input').val(); // turn real-time light on!
                 else if( toDateSelector.attr('data-default') === '2000-01-01 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("Yesterday"); $('.to button.day').addClass('active'); }
                 else if( toDateSelector.attr('data-default') === '2000-01-07 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A week ago"); $('.to button.day').addClass('active'); }
                 else if( toDateSelector.attr('data-default') === '2000-02-01 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A month ago"); $('.to button.day').addClass('active'); }
@@ -146,24 +132,33 @@ $("#renderPage").on( "click", ".option-module-save", function() {
     var id = $(this).attr('data-module-id');
 
     var analytics = $("#option-module-" + id + "-analytics" + " input[name='analytics-" + id + "']:checked").val();
-    var userType = $("#option-module-" + id + "-userType" + " input[name='userType-" + id + "']:checked").val();
+    var userType = function () {
+        var temp = "#option-module-" + id + "-userType" + " input[name='userType-" + id + "']";
+        var result = [];
+        if( $(temp + ":checked").length === $(temp).length ) return null;
+        else if( $(temp + ":checked").length === 0 ) {console.log('please select something'); return null;}
+        else $(temp + ":checked").each( function() { result.push($(this).val()); });
+        return result;
+    };
+    var availability = $("#option-module-" + id + "-availability" + " input[name='availability-" + id + "']:checked").val();
+    var deviceType = $("#option-module-" + id + "-deviceType" + " input[name='deviceType-" + id + "']:checked").val();
     var keyword = $("#option-module-" + id + "-keyword").val();
     var fromDate = $('#option-module-' + id + ' .fromDatetimepicker input').val();
     var toDate = $('#option-module-' + id + ' .toDatetimepicker input').val();
 
-    if( fromDate === "" )
-        fromDate = '2016-12-09 00:00';
-    if( toDate === "" )
-        toDate = 'Now';
-
 
     configModule(id, {
-        'analytics' : analytics,
-        'userType' : userType,
-        'keyword' : keyword,
-        'fromDate' : fromDate,
-        'toDate' : toDate
+        'settings' : {
+            'analytics' : analytics,
+            'userType' : userType(),
+            'availability' : availability,
+            'deviceType' : deviceType,
+            'keyword' : keyword,
+            'fromDate' : fromDate,
+            'toDate' : toDate
+        }
     });
+
 
     $('#option-module-' + id).modal('hide');
 

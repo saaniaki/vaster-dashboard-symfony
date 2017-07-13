@@ -72,9 +72,72 @@ class Module
     private $analytics;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="json_array", nullable=true)
      */
     private $userType;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $availability;
+
+    /**
+     * @ORM\Column(type="json_array", nullable=true)
+     */
+    private $configuration;
+
+    /**
+     * @return mixed
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @param mixed $configuration
+     */
+    public function setConfiguration($configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAvailability()
+    {
+        return $this->availability;
+    }
+
+    /**
+     * @param mixed $availability
+     */
+    public function setAvailability($availability)
+    {
+        $this->availability = $availability;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
+    }
+
+    /**
+     * @param mixed $deviceType
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->deviceType = $deviceType;
+    }
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $deviceType;
 
     /**
      * @ORM\Column(type="string", nullable=true)

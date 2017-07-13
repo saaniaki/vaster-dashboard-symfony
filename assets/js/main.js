@@ -17,3 +17,4 @@ require('../css/main.scss');
 
 
 console.log("VDP 0.6 is awesome!");
+

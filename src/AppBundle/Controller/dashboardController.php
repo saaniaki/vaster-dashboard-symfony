@@ -26,6 +26,8 @@ use VasterBundle\VasterBundle;
 use AppBundle\Entity\User as AppUser;
 use VasterBundle\Entity\User as VasterUser;
 
+use GoogleBundle\Analytics\tst;
+
 
 class dashboardController extends Controller
 {
@@ -36,6 +38,13 @@ class dashboardController extends Controller
      */
     public function showAction(){
         return $this->renderDashboard();
+
+        /*$tst = new tst();
+
+
+        dump($tst->printResults($tst->getReport()));die();
+
+        return new Response($tst);*/
     }
 
     /**

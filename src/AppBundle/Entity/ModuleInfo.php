@@ -53,6 +53,27 @@ class ModuleInfo
     private $availableAnalytics;
 
     /**
+     * @ORM\Column(type="json_array")
+     */
+    private $availableConfiguration;
+
+    /**
+     * @return mixed
+     */
+    public function getAvailableConfiguration()
+    {
+        return $this->availableConfiguration;
+    }
+
+    /**
+     * @param mixed $availableConfiguration
+     */
+    public function setAvailableConfiguration($availableConfiguration)
+    {
+        $this->availableConfiguration = $availableConfiguration;
+    }
+
+    /**
      * @return mixed
      */
     public function getAvailableAnalytics()

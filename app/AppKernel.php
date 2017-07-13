@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new AppBundle\AppBundle(),
             new VasterBundle\VasterBundle(),
+            new GoogleBundle\GoogleBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

@@ -41,17 +41,8 @@ class vdpModule
             $module->setAnalytics('default');
         }
 
-        if($module->getUserType() == null) {
-            $module->setUserType('all');
-        }
 
-        $configuration = new ArrayCollection([
-            'analytics' => $module->getAnalytics(),
-            'userType' => $module->getUserType(),
-            'keyword' => $module->getKeyword(),
-            'fromDate' => $module->getFromDate(),
-            'toDate' => $module->getToDate(),
-        ]);
+        $configuration = new ArrayCollection($module->getConfiguration());
 
 
         return $instance->render($configuration);

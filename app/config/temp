@@ -49,3 +49,66 @@ doctrine:
                 connection: vaster
                 mappings:
                     AcmeCustomerBundle: ~
+
+
+
+
+{
+	"categories" : {
+		"multi" : {
+
+			}
+		},
+		"single" : [
+			"availability"
+		]
+	},
+	"dateFilters" : {
+		"lastSearch" : {
+			"from" : "2016-12-01 10:30",
+			"to" : "2017-06-10 16:00"
+		},
+		"lastSeen" : {
+			"from" : "2016-12-01 10:30",
+			"to" : "2017-06-10 16:00"
+		},
+		"registration" : {
+			"from" : "2016-12-01 10:30",
+			"to" : "2017-06-10 16:00"
+		}
+	},
+	"filters" : {
+		"availability" : [
+			"Orange Hat",
+			"Regular"
+		],
+		"deviceType" : [
+			"Android"
+		],
+		"search" : {
+			"search1" : {
+				"0" : {
+					"columns" : [
+						"user.email"
+					],
+					"keyword" : "%vaster%",
+					"negate" : true,
+					"operator" : "and"
+				},
+				"1" : {
+					"columns" : [
+						"user.firstname"
+					],
+					"keyword" : "%vaster%",
+					"negate" : false,
+					"operator" : null
+				}
+			}
+		},
+		"userType" : [
+			"Standard",
+			"Premium"
+		]
+	},
+	"presentation" : "daily"
+}
