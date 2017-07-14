@@ -15,6 +15,28 @@
   },
 
 
+
+  "categories" : {
+    "multi" : {		},
+    "single" : [		]
+  },
+  "filters" : {
+    "date" : {
+      "period" : {
+        "0" : {
+          "column" : "user.createdtime",
+          "from" : null,
+          "negate" : false,
+          "operator" : "and",
+          "to" : null
+        }
+      }
+    }
+  },
+  "presentation" : null,
+  "remove_zeros" : true
+  ,
+
   "conf" : {
     "filters" : {
       "userType" : ["Standard", "Premium"],

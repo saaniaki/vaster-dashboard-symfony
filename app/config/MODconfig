@@ -101,3 +101,27 @@
                     		}
                     	}
                     }
+
+
+                    {
+                    	"categories" : {
+                    		"multi" : {		},
+                    		"single" : [
+                    			"deviceType"
+                    		]
+                    	},
+                    	"filters" : {
+                    		"date" : {
+                    			"period" : {
+                    				"0" : {
+                    					"column" : "user.createdtime",
+                    					"from" : "2017-03-01",
+                    					"negate" : false,
+                    					"operator" : "and",
+                    					"to" : null
+                    				}
+                    			}
+                    		}
+                    	},
+                    	"remove_zeros" : true
+                    }

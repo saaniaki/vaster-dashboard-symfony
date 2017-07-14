@@ -59,6 +59,8 @@ class module1 implements ModuleInterface
      */
     public function render(ArrayCollection $configuration)
     {
+        //dump($configuration);die();
+
         $presentation = $configuration['presentation']; //this value should be parsed!!
 
         $filters = $configuration['filters'];
@@ -72,7 +74,7 @@ class module1 implements ModuleInterface
         $multiCategories = new ArrayCollection($configuration['categories']['multi']);
 
         foreach ($singleCategories as $cat){
-            $categories[$cat] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][$cat];//get actual values from module info
+            $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
         }
 
         foreach ($multiCategories as $type => $cat){
@@ -88,6 +90,8 @@ class module1 implements ModuleInterface
             call_user_func_array([$this, $analytics], [$userType, $keyword, $deviceType, $availability]);
         else die('bad configuration');*/
 
+
+        //dump($categories);die();
 
         $this->makeNames($presentation, $this->combinations($categories), $filters, $removeZeros);
         $this->title = 'Users Count';
@@ -118,16 +122,18 @@ class module1 implements ModuleInterface
         $data = [];
         foreach( $combinations as $combo){
 
-            //$name can be null :::: if( $name == null ) $name .= "All Users : " . $this->userRep->generalCount($userType, $availability, $deviceType, $searches, $dates);
             $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
                 ->orderBy('user.createdtime', 'DESC');
             $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query = $this->userRep->applyFilters($filters, $query);
             $catArray = $this->userRep->applyCategories($combo, $query);
+
             $name = $catArray['name'];
+            if( $name == null ) $name .= "All Users";
             /** @var $query QueryBuilder */
             $query = $catArray['query'];
+
             $number = $query->getQuery()->getSingleScalarResult();
             //process
             if( !$removeZeros || $number != 0 ){

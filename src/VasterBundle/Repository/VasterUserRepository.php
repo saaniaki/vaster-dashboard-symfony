@@ -153,13 +153,13 @@ class VasterUserRepository extends EntityRepository
                 // $key is the type
                 $name .= "/" . $cat;
 
-                if( strtolower($key) == 'usertype' ) $userType = [$cat];
+                if( strtolower($key) == 'user_type' ) $userType = [$cat]; //changed
 
                 if( strtolower($key) == 'availability' ){
                     if( strtolower($cat) == "orange hat" ) $availability = true;
                     else $availability = false;
                 }
-                if( strtolower($key) == 'devicetype' ){
+                if( strtolower($key) == 'device_type' ){ //changed
                     if( strtolower($cat) == "android" ) $deviceType = ["android"];
                     else if( strtolower($cat) == "ios" ) $deviceType = ["iPhone", "iPad"];
                 }
@@ -188,39 +188,46 @@ class VasterUserRepository extends EntityRepository
     public function applyFilters($filters, $query){
         $filter_userTypes =  $filter_availability = $filter_deviceTypes = $filter_searches = $filter_dates = null;
 
-        if( isset($filters['userType']) ){
-            $filter_userTypes = new ArrayCollection($filters['userType']);
+        if( isset($filters['user_type']) ){ //changed
+            $filter_userTypes = new ArrayCollection($filters['user_type']);//changed
         }
 
         if( isset($filters['availability']) ){
             $filter_availability = new ArrayCollection($filters['availability']);
-            if ($filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular")) $filter_availability = true;
-            else if (!$filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = false;
-            else if (!$filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular")) $filter_availability = null; // this should return error
-            else if ($filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = null;
+            if ($filter_availability->contains(strtolower("Orange Hat")) && !$filter_availability->contains(strtolower("Regular")) )$filter_availability = true;
+            else if (!$filter_availability->contains(strtolower("Orange Hat")) && $filter_availability->contains(strtolower("Regular"))) $filter_availability = false;
+            else if (!$filter_availability->contains(strtolower("Orange Hat")) && !$filter_availability->contains(strtolower("Regular"))) $filter_availability = null; // this should return error
+            else if ($filter_availability->contains(strtolower("Orange Hat")) && $filter_availability->contains(strtolower("Regular"))) $filter_availability = null;
         }
 
-        if( isset($filters['deviceType']) ){
+        if( isset($filters['device_type']) ){
             $filter_deviceTypes = [];
-            $temp = new ArrayCollection($filters['deviceType']);
-            if( $temp->contains("Android") ) array_push($filter_deviceTypes, "android");
-            if( $temp->contains("ios") ) {
+            $temp = new ArrayCollection($filters['device_type']);
+            if( $temp->contains(strtolower("Android")) ) array_push($filter_deviceTypes, "android");
+            if( $temp->contains(strtolower("ios")) ) {
                 array_push($filter_deviceTypes, "iPhone");
                 array_push($filter_deviceTypes, "iPad");
             }
         }
 
         if( isset($filters['search']) ){
-            $filter_searches = new ArrayCollection($filters['search']);
-            $filter_searches = $filter_searches->first();
+            $temp = new ArrayCollection($filters['search']);
+
+            foreach ($temp as $item){
+                $filter_searches[] = $item[0];
+            }
+
+
             //dump $filter_searches to make sure
         }
-
+        //dump($filter_searches);die();
         if( isset($filters['date']) ){
             $filter_dates = new ArrayCollection($filters['date']);
             $filter_dates = $filter_dates->first();
             //dump $filter_dates to make sure
+            //dump($filter_dates);die();
         }
+
 
         return $this->filter($filter_userTypes, $filter_availability, $filter_deviceTypes, $filter_searches, $filter_dates, $query);
     }
@@ -239,6 +246,8 @@ class VasterUserRepository extends EntityRepository
      * @return QueryBuilder
      */
     public function filter($types = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
+
+
         /* and ( type1 or type2 ) */
         $ors = []; // put inside
         if($types != null){
@@ -272,6 +281,7 @@ class VasterUserRepository extends EntityRepository
 
             $outer = [];
             foreach ($searches as $key => $search) {
+
                 $expressions = [];
                 foreach ( $search['columns'] as $column ){
 
@@ -516,6 +526,9 @@ class VasterUserRepository extends EntityRepository
                         $query->expr()->gt($date['column'], ':dateTo' . $key),
                         $query->expr()->lt($date['column'], ':dateFrom' . $key)
                     );
+
+                    if( $date['operator'] == 'and' ) $date['operator'] = 'or';
+                    else if( $date['operator'] == 'or' ) $date['operator'] = 'and';
                 }else {
                     $temp = $query->expr()->andX(
                         $query->expr()->gte($date['column'], ':dateFrom' . $key),
@@ -527,6 +540,8 @@ class VasterUserRepository extends EntityRepository
                 $adjustedDates = $this->adjustDate($date['from'], $date['to']);
                 $query->setParameter('dateFrom' . $key, $adjustedDates['from']);
                 $query->setParameter('dateTo' . $key, $adjustedDates['to']);
+
+
 
                 $expressions->add(['expression' => $temp, 'operator' => $date['operator']]);
             }
@@ -555,7 +570,9 @@ class VasterUserRepository extends EntityRepository
                 }
             }
 
-            $query->andWhere($full);
+            //dump($full);die();
+
+            $query->andWhere($full); //put it in ()
         }
 
         return $query;

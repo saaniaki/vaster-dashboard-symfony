@@ -214,8 +214,6 @@ class module2 implements ModuleInterface
 
         foreach( $combinations as $combo){
 
-            //name can be null!!!
-
             $query = $this->userRep->createQueryBuilder('user')->select('user.createdtime, user.accounttype')
                 ->orderBy('user.createdtime', 'DESC');
             $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
@@ -225,6 +223,7 @@ class module2 implements ModuleInterface
             $name = $catArray['name'];
             /** @var $query QueryBuilder */
             $query = $catArray['query'];
+            //dump($query->getQuery());die();
             $column = $query->getQuery()->getArrayResult();
 
 
@@ -254,11 +253,14 @@ class module2 implements ModuleInterface
             $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query = $this->userRep->applyFilters($newFilters, $query);
             $catArray = $this->userRep->applyCategories($combo, $query);
+
+
             $name = $catArray['name'];
+            if( $name == null ) $name .= "All Users";
             /** @var $query QueryBuilder */
             $query = $catArray['query'];
-            $startNumber = $query->getQuery()->getSingleScalarResult();
 
+            $startNumber = $query->getQuery()->getSingleScalarResult();
 
 
 
@@ -273,8 +275,8 @@ class module2 implements ModuleInterface
                 $interval = new \DateInterval('P7D');
                 $this->xInterval = 7 * 24 * 3600 * 1000;
             } else { // default is daily
-                $interval = new \DateInterval('P1D');
-                $this->xInterval = 24 * 3600 * 1000;
+                $interval = new \DateInterval('P7D');
+                $this->xInterval = 7 * 24 * 3600 * 1000;
             }
 
 
