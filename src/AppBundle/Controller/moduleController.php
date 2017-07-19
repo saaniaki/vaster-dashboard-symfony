@@ -75,8 +75,7 @@ class moduleController extends Controller
         $userType = $conf['filters']['user_type'];
         $availabilities = $conf['filters']['availability'];
         $device_types = $conf['filters']['device_type'];
-
-        dump(Search::$columns_available);
+        
 
         return $this->render('dashboard/module/graph/render.html.twig', [
             'result' => $result,
