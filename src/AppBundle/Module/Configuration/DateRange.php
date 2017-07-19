@@ -17,7 +17,7 @@ class DateRange
     private static $operators_available;
 
     /** @var $singleCategories ArrayCollection */
-    private static $columns_available;
+    public static $columns_available = ['user.createdtime'];
 
     public $from;
     public $to;
@@ -30,8 +30,8 @@ class DateRange
         if( !isset(self::$operators_available) )
             self::$operators_available = new ArrayCollection(['and', 'or']);
 
-        if( !isset(self::$columns_available) )
-            self::$columns_available = new ArrayCollection(['user.createdtime']);
+        if( is_array(self::$columns_available) )
+            self::$columns_available = new ArrayCollection(self::$columns_available);
 
         $this->setColumn('user.createdtime');
         $this->setOperator('or');

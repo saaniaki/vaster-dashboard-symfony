@@ -17,6 +17,7 @@ use AppBundle\Form\NewModule;
 use AppBundle\Form\NewPage;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\DateRange;
+use AppBundle\Module\Configuration\Filters;
 use AppBundle\Module\Configuration\Search;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -303,100 +304,20 @@ class dashboardController extends Controller
 
 
             $configuration = new Configuration();
-            $configuration->getCategories()->setSingle(['device_type']); // ['device_type', 'user_type', 'availability']
-
-/*
-            $dateRanges = [];
-            $range1 = new DateRange();
-            $range1->setFrom('2017-04-01');
-            $range1->setTo('2017-05-01');
-            $dateRanges[] = $range1;
-
-            $range2 = new DateRange();
-            $range2->setFrom('2017-06-01');
-            $range2->setOperator(null);
-            $dateRanges[] = $range2;
-
-            $configuration->getCategories()->addDate('period', $dateRanges);
-
-            $searches = [];
-            $search1 = new Search();
-            $search1->setKeyword('%vaster%');
-            $search1->addColumn('user.email');
-            $searches[] = $search1;
-
-            $search2 = new Search();
-            $search2->setKeyword('%p%');
-            $search2->addColumn('user.firstname');
-            $search2->addColumn('user.lastname');
-            $search2->setExpressionOperator(null);
-            $searches[] = $search2;
-
-            $configuration->getCategories()->addSearch('search1', $searches);
-
-            $configuration->getFilters()->addUserType('standard');
-            $configuration->getFilters()->addDeviceType('android');
-            $configuration->getFilters()->addAvailability('regular');
-
-            $dateRanges = [];
-            $range1 = new DateRange();
-            $range1->setFrom('2017-04-01');
-            $range1->setTo('2017-05-01');
-            $dateRanges[] = $range1;
-            $configuration->getFilters()->addDate('period', $dateRanges);
-*/
-
-
-            $dateRanges = [];
-            $range1 = new DateRange();
-            $range1->setFrom('2017-02-01');
-            $range1->setTo(null);
-            $dateRanges[] = $range1;
-            $configuration->getFilters()->addDate('period', $dateRanges);
-
-            $searches = [];
-            $search1 = new Search();
-            $search1->setKeyword('%1416%');
-            $search1->setExpressionOperator('or');
-            $search1->addColumn('user.phone');
-            $searches[] = $search1;
-            $configuration->getFilters()->addSearch('search1', $searches);
-
-            $searches = [];
-            $search2 = new Search();
-            $search2->setKeyword('%1905%');
-            $search2->setExpressionOperator('or');
-            $search2->addColumn('user.phone');
-            $searches[] = $search2;
-            $configuration->getFilters()->addSearch('search2', $searches);
-
-            $searches = [];
-            $search3 = new Search();
-            $search3->setKeyword('%1647%');
-            $search3->setExpressionOperator('or');
-            $search3->addColumn('user.phone');
-            $searches[] = $search3;
-            $configuration->getFilters()->addSearch('search3', $searches);
-
-            $searches = [];
-            $search4 = new Search();
-            $search4->setKeyword('%1289%');
-            $search4->setExpressionOperator('or');
-            $search4->addColumn('user.phone');
-            $searches[] = $search4;
-            $configuration->getFilters()->addSearch('search4', $searches);
-
-
-
-
-
-            $configuration->setPresentation('weekly');
-
+            $infoName = $moduleToBeAdded->getModuleInfo()->getName();
+            if( $infoName == "Count" ) $configuration->setPresentation('User Count');
+            elseif ( $infoName == "Registration" ) {
+                $configuration->setPresentation('Weekly');
+                $filters = new Filters();
+                $date = new DateRange();
+                //$date->setColumn('user.createdtime');
+                //$date->setFrom(null);
+                //$date->setTo(null);
+                $filters->addDate('period', $date);
+                $configuration->setFilters($filters);
+            }
             $moduleToBeAdded->setConfiguration($configuration->extract());
 
-            //dump($configuration);die();
-
-            //$moduleToBeAdded->setModuleInfo($allInfo[0]);
 
 
             $em = $this->getDoctrine()->getManager();

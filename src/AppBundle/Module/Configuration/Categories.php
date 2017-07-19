@@ -47,21 +47,27 @@ class Categories
 
     /**
      * @param string $name
-     * @param DateRange[] $date
+     * @param DateRange $date
      */
-    public function addDate(string $name, array $date)
+    public function addDate(string $name, DateRange $date)
     {
-        //check is $date is and array of DateRanges (and make sure the last one's operator is null)
         $this->multi['date'][$name] = $date;
     }
 
     /**
-     * @param string $name
-     * @param Search[] $search
+     * @return array
      */
-    public function addSearch(string $name, array $search)
+    public function getSearches()
     {
-        //check is $date is and array of Searches (and make sure the last one's operator is null)
+        return $this->multi['search'];
+    }
+
+    /**
+     * @param string $name
+     * @param Search $search
+     */
+    public function addSearch(string $name, Search $search)
+    {
         $this->multi['search'][$name] = $search;
     }
 }

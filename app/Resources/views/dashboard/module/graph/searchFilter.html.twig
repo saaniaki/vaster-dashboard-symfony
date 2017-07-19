@@ -1,0 +1,52 @@
+<fieldset data-index="{{ index }}" id="{{ section }}-search-{{ index }}">
+    <legend>New Search<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
+
+    <div class="col-md-4">
+        Title:
+        <input id="{{ section }}-search-{{ module.id }}-title-{{ index }}" type="text" class="form-control" placeholder="Title" style="margin-bottom: 10px;">
+        Keyword:
+        <input id="{{ section }}-search-{{ module.id }}-keyword-{{ index }}" type="text" class="form-control" placeholder="Keyword" style="margin-bottom: 10px;">
+    </div>
+
+    <div class="col-md-4">
+        <!-- load columns dynamically -->
+        <!-- set defualts -->
+        <!-- don't use the actual fields' names -->
+        Columns:
+        <select multiple class="form-control" id="{{ section }}-search-{{ module.id }}-columns-{{ index }}" title="">
+            {% for column in searchColumns %}
+                <option value="{{ column }}">{{ column }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <div class="row">
+            Columns Operator:
+            <select class="form-control" id="{{ section }}-search-{{ module.id }}-col-op-{{ index }}" title="">
+                <option value="and">AND</option>
+                <option value="or">OR</option>
+            </select>
+        </div>
+
+        {% if section == 'filter' %}
+            <div class="row">
+                Expression Operator:
+                <select class="form-control" id="{{ section }}-search-{{ module.id }}-expr-op-{{ index }}" title="">
+                    <option value="and">AND</option>
+                    <option value="or">OR</option>
+                </select>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="{{ section }}-search-{{ module.id }}-negate-{{ index }}" value="negate">
+                    Negate this search
+                </label>
+            </div>
+        </div>
+    </div>
+
+</fieldset>

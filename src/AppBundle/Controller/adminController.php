@@ -7,6 +7,7 @@
  */
 
 namespace AppBundle\Controller;
+use AppBundle\Module\Configuration\Filters;
 use Doctrine\DBAL\Types\Type;
 use AppBundle\AppBundle;
 use AppBundle\Entity\Module;
@@ -63,11 +64,23 @@ class adminController extends Controller
 
         $userRep = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster");
 
-        $total = $userRep->count($type, $keyword);
-        $totalInter = $userRep->count('Internal', $keyword);
-        $totalORG= $userRep->countProfession($type, $keyword);
-        $android = $userRep->countAccount($type, 'Android', $keyword);
-        $ios = $userRep->countAccount($type, 'iPhone', $keyword) + $userRep->countAccount($type, 'iPad', $keyword);
+        $filters = new Filters();
+        $total = $userRep->generalCount(null);
+
+        $filters->addUserType('Internal');
+        $totalInter = $userRep->generalCount((array) $filters);
+
+        $filters->setUserType([]);
+        $filters->addAvailability('Orange Hat');
+        $totalORG= $userRep->generalCount((array) $filters);
+
+        $filters->setAvailability([]);
+        $filters->addDeviceType('Android');
+        $android = $userRep->generalCount((array) $filters);
+
+        $filters->setDeviceType([]);
+        $filters->addDeviceType('iOS');
+        $ios = $userRep->generalCount((array) $filters);
 
         $result[] = [
             'total' => $total,

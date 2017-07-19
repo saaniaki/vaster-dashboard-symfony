@@ -11,7 +11,7 @@ var totalORG = 0;
 var android = 0;
 var ios = 0;
 
-var limit = 2;//25
+var limit = 25;//25
 var offset = 0;
 var sort = 'user.createdtime';
 var order = 'DESC';

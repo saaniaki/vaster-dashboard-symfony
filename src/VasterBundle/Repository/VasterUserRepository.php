@@ -9,6 +9,7 @@
 namespace VasterBundle\Repository;
 
 
+use AppBundle\Module\Configuration\Filters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -146,7 +147,8 @@ class VasterUserRepository extends EntityRepository
 
     //$key => $cat
     public function applyCategories($combo, $query){
-        $name = $userType = $deviceType = $availability = $searches = $dates = null;
+        $name = $userType = $deviceType = $availability = null;
+        $searches = $dates =[];
 
         foreach( $combo as $key => $cat ){
             if( is_string($cat) ) {
@@ -166,21 +168,32 @@ class VasterUserRepository extends EntityRepository
 
             }
             else {
-                if( strtolower($cat['type']) == 'search' ) $searches = $cat['value'];
+                if( strtolower($cat['type']) == 'search' ) $search = $cat['value'];
 
-                if( strtolower($cat['type']) == 'date' ) $dates = $cat['value'];
+                if( strtolower($cat['type']) == 'date' ) $date = $cat['value'];
 
-                if( $cat['match'] ) $name .= "/" . $key;
+                if( $cat['match'] ) {
+                    $name .= "/" . $key;
+                    if( strtolower($cat['type']) == 'search' ) $searches[] = $search;
+                    if( strtolower($cat['type']) == 'date' ) $dates[] = $date;
+                }
                 else {
                     $name .= "/!" . $key;
-                    if( strtolower($cat['type']) == 'search' ) foreach ( $searches as $k => $search ) $searches[$k]['negate'] = !$search['negate'];
-                    if( strtolower($cat['type']) == 'date' ) foreach ( $dates as $k => $date ) $dates[$k]['negate'] = !$date['negate'];
+                    if( strtolower($cat['type']) == 'search' ) {
+                        $search['negate'] = !$search['negate'];
+                        $searches[] = $search;
+                    }
+                    if( strtolower($cat['type']) == 'date' ) {
+                        $date['negate'] = !$date['negate'];
+                        $dates[] = $date;
+                    }
                 }
             }
         }
-
+        //dump($searches);
+        //die($name);
         $name = substr($name, 1);
-        $query = $this->NEWmodifyCount($userType, $availability, $deviceType, $searches, $dates, $query);
+        $query = $this->count($userType, $availability, $deviceType, $searches, $dates, $query);
 
         return ['query' => $query, 'name' => $name];
     }
@@ -188,45 +201,30 @@ class VasterUserRepository extends EntityRepository
     public function applyFilters($filters, $query){
         $filter_userTypes =  $filter_availability = $filter_deviceTypes = $filter_searches = $filter_dates = null;
 
-        if( isset($filters['user_type']) ){ //changed
+        if( isset($filters['user_type']) && $filters['user_type'] != null ){ //changed
             $filter_userTypes = new ArrayCollection($filters['user_type']);//changed
         }
 
-        if( isset($filters['availability']) ){
+        if( isset($filters['availability']) && $filters['availability'] != null ){
             $filter_availability = new ArrayCollection($filters['availability']);
-            if ($filter_availability->contains(strtolower("Orange Hat")) && !$filter_availability->contains(strtolower("Regular")) )$filter_availability = true;
-            else if (!$filter_availability->contains(strtolower("Orange Hat")) && $filter_availability->contains(strtolower("Regular"))) $filter_availability = false;
-            else if (!$filter_availability->contains(strtolower("Orange Hat")) && !$filter_availability->contains(strtolower("Regular"))) $filter_availability = null; // this should return error
-            else if ($filter_availability->contains(strtolower("Orange Hat")) && $filter_availability->contains(strtolower("Regular"))) $filter_availability = null;
+            if ($filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular"))$filter_availability = true;
+            else if (!$filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = false;
+            else if (!$filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular")) $filter_availability = null; // this should return error
+            else if ($filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = null;
         }
 
-        if( isset($filters['device_type']) ){
+        if( isset($filters['device_type']) && $filters['device_type'] != null ){
             $filter_deviceTypes = [];
             $temp = new ArrayCollection($filters['device_type']);
-            if( $temp->contains(strtolower("Android")) ) array_push($filter_deviceTypes, "android");
-            if( $temp->contains(strtolower("ios")) ) {
+            if( $temp->contains("Android")) array_push($filter_deviceTypes, "android");
+            if( $temp->contains("iOS")) {
                 array_push($filter_deviceTypes, "iPhone");
                 array_push($filter_deviceTypes, "iPad");
             }
         }
 
-        if( isset($filters['search']) ){
-            $temp = new ArrayCollection($filters['search']);
-
-            foreach ($temp as $item){
-                $filter_searches[] = $item[0];
-            }
-
-
-            //dump $filter_searches to make sure
-        }
-        //dump($filter_searches);die();
-        if( isset($filters['date']) ){
-            $filter_dates = new ArrayCollection($filters['date']);
-            $filter_dates = $filter_dates->first();
-            //dump $filter_dates to make sure
-            //dump($filter_dates);die();
-        }
+        if( isset($filters['search']) && $filters['search'] != null ) $filter_searches = $filters['search'];
+        if( isset($filters['date']) && $filters['date'] != null ) $filter_dates = $filters['date'];
 
 
         return $this->filter($filter_userTypes, $filter_availability, $filter_deviceTypes, $filter_searches, $filter_dates, $query);
@@ -406,7 +404,7 @@ class VasterUserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function NEWmodifyCount($types = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
+    public function count($types = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
         //if($types != null) foreach ($types as $key => $type) $query->orWhere('user.accounttype = :type' . $key)->setParameter('type' . $key, $type);
         /* and ( type1 or type2 ) */
         $ors = []; // put inside
@@ -473,9 +471,10 @@ class VasterUserRepository extends EntityRepository
                     if( $search['columnOperator'] == 'and' ) $search['columnOperator'] = 'or';
                     else if( $search['columnOperator'] == 'or' ) $search['columnOperator'] = 'and';
 
-                    if( $search['expressionOperator'] == 'and' ) $search['expressionOperator'] = 'or';
-                    else if( $search['expressionOperator'] == 'or' ) $search['expressionOperator'] = 'and';
 
+                    $search['expressionOperator'] = 'and'; //overriding null, this is a category not a filter
+                    //if( $search['expressionOperator'] == 'and' ) $search['expressionOperator'] = 'or';
+                    //else if( $search['expressionOperator'] == 'or' ) $search['expressionOperator'] = 'and';
                 }
 
                 $temp = $query->expr();
@@ -527,8 +526,9 @@ class VasterUserRepository extends EntityRepository
                         $query->expr()->lt($date['column'], ':dateFrom' . $key)
                     );
 
-                    if( $date['operator'] == 'and' ) $date['operator'] = 'or';
-                    else if( $date['operator'] == 'or' ) $date['operator'] = 'and';
+                    $date['operator'] = 'and'; //overriding null, this is a category not a filter
+                    //if( $date['operator'] == 'and' ) $date['operator'] = 'or';
+                    //else if( $date['operator'] == 'or' ) $date['operator'] = 'and';
                 }else {
                     $temp = $query->expr()->andX(
                         $query->expr()->gte($date['column'], ':dateFrom' . $key),
@@ -607,19 +607,21 @@ class VasterUserRepository extends EntityRepository
 
     /**
      * Counts users who match the configuration
-     * @param mixed $types
-     * @param boolean $availability
-     * @param mixed $devices
-     * @param string|null $searches
-     * @param mixed $dates
+     * @param $filters
+     * @return int
+     * @internal param mixed $types
+     * @internal param bool $availability
+     * @internal param mixed $devices
+     * @internal param null|string $searches
+     * @internal param mixed $dates
      *
-     * @return integer
      */
-    public function generalCount($types = null, bool $availability = null, $devices = [], $searches = null, $dates = null){
-        //$query = $this->createQueryBuilder('user')->select('user.userid');
-        //dump($this->NEWmodifyCount($types, $availability, $devices, $searches, $dates, $query)->orderBy('user.userid')->getQuery()->getArrayResult());
+    public function generalCount($filters = null){
         $query = $this->createQueryBuilder('user')->select('COUNT(user)');
-        return $this->NEWmodifyCount($types, $availability, $devices, $searches, $dates, $query)->getQuery()->getSingleScalarResult();
+        $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query = $this->applyFilters($filters, $query);
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /*

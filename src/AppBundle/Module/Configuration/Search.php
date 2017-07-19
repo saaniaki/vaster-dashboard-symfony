@@ -16,7 +16,7 @@ class Search
     private static $operators_available;
 
     /** @var $singleCategories ArrayCollection */
-    private static $columns_available;
+    public static $columns_available = ['user.firstname', 'user.lastname', 'user.email', 'user.phone'];
 
     public $keyword;
     public $columns = [];
@@ -29,8 +29,8 @@ class Search
         if( !isset(self::$operators_available) )
             self::$operators_available = new ArrayCollection(['and', 'or']);
 
-        if( !isset(self::$columns_available) )
-            self::$columns_available = new ArrayCollection(['user.firstname', 'user.lastname', 'user.email', 'user.phone']);
+        if( is_array(self::$columns_available) )
+            self::$columns_available = new ArrayCollection(self::$columns_available);
 
         $this->setColumnOperator('or');
         $this->setExpressionOperator('or');

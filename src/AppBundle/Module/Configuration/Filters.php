@@ -29,7 +29,7 @@ class Filters
     public function __construct()
     {
         if( !isset(self::$userTypes_available) )
-            self::$userTypes_available = new ArrayCollection(['standard', 'internal']);
+            self::$userTypes_available = new ArrayCollection(['standard', 'internal', 'premium']);
 
         if( !isset(self::$deviceTypes_available) )
             self::$deviceTypes_available = new ArrayCollection(['android', 'ios']);
@@ -130,21 +130,19 @@ class Filters
 
     /**
      * @param string $name
-     * @param DateRange[] $date
+     * @param DateRange $date
      */
-    public function addDate(string $name, array $date)
+    public function addDate(string $name, DateRange $date)
     {
-        //check is $date is and array of DateRanges (and make sure the last one's operator is null)
         $this->date[$name] = $date;
     }
 
     /**
      * @param string $name
-     * @param Search[] $search
+     * @param Search $search
      */
-    public function addSearch(string $name, array $search)
+    public function addSearch(string $name,Search $search)
     {
-        //check is $date is and array of Searches (and make sure the last one's operator is null)
         $this->search[$name] = $search;
     }
 

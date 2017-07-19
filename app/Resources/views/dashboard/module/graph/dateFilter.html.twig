@@ -1,0 +1,83 @@
+<fieldset data-index="{{ index }}" id="{{ section }}-date-{{ index }}">
+    <legend>New Date<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-4">
+                Title:
+                <input id="{{ section }}-date-{{ module.id }}-title-{{ index }}" name="date-{{ module.id }}-title" type="text" class="form-control" placeholder="Title" style="margin-bottom: 10px;">
+            </div>
+            <div class="col-md-4">
+                <!-- load columns dynamically -->
+                <!-- don't use the actual fields' names -->
+                Column:
+                <select class="form-control" id="{{ section }}-date-{{ module.id }}-column-{{ index }}" title="">
+                    {% for column in dateColumns %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if section == 'filter' %}
+                <div class="col-md-4">
+                    <div class="row">
+                        Expression Operator:
+                        <select class="form-control" id="{{ section }}-date-{{ module.id }}-expr-op-{{ index }}" title="">
+                            <option value="and">AND</option>
+                            <option value="or">OR</option>
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+
+            <div class="form-group col-sm-6">
+                <div class="btn-group btn-group-xs dateButton from" role="group">
+                    <button type="button" class="btn btn-info month" data-module-id="{{ module.id }}">A month ago</button>
+                    <button type="button" class="btn btn-info week" data-module-id="{{ module.id }}">A week ago</button>
+                    <button type="button" class="btn btn-info day" data-module-id="{{ module.id }}">Yesterday</button>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="btn-group btn-group-xs dateButton to" role="group" style="float: right">
+                    <button type="button" class="btn btn-info month" data-module-id="{{ module.id }}">A month ago</button>
+                    <button type="button" class="btn btn-info week" data-module-id="{{ module.id }}">A week ago</button>
+                    <button type="button" class="btn btn-info day" data-module-id="{{ module.id }}">Yesterday</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="form-group col-sm-5">
+                <div class="input-group date fromDatetimepicker">
+                    <input type="text" class="form-control" id="{{ section }}-date-{{ module.id }}-from-{{ index }}" readonly="readonly" data-index="{{ index }}">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-2" style="text-align: center;margin-top: 5px;font-weight: bold;">To</div>
+
+            <div class="form-group col-sm-5">
+                <div class="input-group date toDatetimepicker">
+                    <input type="text" class="form-control" id="{{ section }}-date-{{ module.id }}-to-{{ index }}" readonly="readonly" data-index="{{ index }}">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</fieldset>

@@ -69,155 +69,483 @@
 
                 <p class="bg-primary" style="padding: 15px;">{{ result.module.moduleInfo.guide }}</p>
 
-                <div id="option-module-{{ result.module.id }}-analytics" data-default="{{ result.module.analytics }}">
 
-                    <p class="bg-info" style="padding: 15px;">Please select the analytics type for this specific module:</p>
+                <div>
 
-                    {% for name, option in result.module.moduleInfo.availableAnalytics %}
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#presentation-{{ result.module.id }}" aria-controls="presentation" role="tab" data-toggle="tab">Presentation</a></li>
+                        <li role="presentation"><a href="#filters-{{ result.module.id }}" aria-controls="filters" role="tab" data-toggle="tab">Filters</a></li>
+                        <li role="presentation"><a href="#date-filters-{{ result.module.id }}" aria-controls="date-filters" role="tab" data-toggle="tab">Date Filters</a></li>
+                        <li role="presentation"><a href="#categories-{{ result.module.id }}" aria-controls="categories" role="tab" data-toggle="tab">Categories</a></li>
+                        <li role="presentation"><a href="#date_categories-{{ result.module.id }}" aria-controls="date_categories" role="tab" data-toggle="tab">Date Categories</a></li>
+                    </ul>
 
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="analytics-{{ result.module.id }}" value="{{ option }}" {# if option == result.module.analytics %} checked="checked"{% endif #}>
-                                {{ name }}
-                            </label>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div role="tabpanel" class="tab-pane active" id="presentation-{{ result.module.id }}">
+
+                            <p class="bg-info" style="padding: 15px;">Please select the right presentation fo this module:</p>
+
+                            <div class="row">
+                                <div id="option-module-{{ result.module.id }}-presentation"  data-default="{{ conf.presentation }}" class="col-md-6">
+                                    {% for presentation in presentations %}
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="presentation-{{ result.module.id }}" value="{{ presentation }}" {# if option == result.module.analytics %} checked="checked"{% endif #}>
+                                                {{ presentation }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+
                         </div>
 
-                    {% endfor %}
+                        <div role="tabpanel" class="tab-pane" id="filters-{{ result.module.id }}">
+
+                            <p class="bg-info" style="padding: 15px;">You can filter the result of this module within this tab:</p>
+
+                            <div class="row">
+
+                                <div id="option-module-{{ result.module.id }}-userType" class="col-md-4">
+                                    <p class="bg-info" style="padding: 15px;">User Type</p>
+                                    {% for type in user_types %}
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="userType-{{ result.module.id }}" value="{{ type }}" {% if conf.filters is not null and type in conf.filters.user_type %}data-default="checked"{% endif %}>
+                                                {{ type }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div id="option-module-{{ result.module.id }}-availability" class="col-md-4">
+                                    <p class="bg-info" style="padding: 15px;">Availability</p>
+                                    {% for availability in availabilities %}
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="availability-{{ result.module.id }}" value="{{ availability }}" {% if conf.filters is not null and availability in conf.filters.availability %}data-default="checked"{% endif %}>
+                                                {{ availability }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div id="option-module-{{ result.module.id }}-deviceType" class="col-md-4">
+                                    <p class="bg-info" style="padding: 15px;">Device Type</p>
+                                    {% for type in device_types %}
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="deviceType-{{ result.module.id }}" value="{{ type }}" {% if conf.filters is not null and type in conf.filters.device_type %}data-default="checked"{% endif %}>
+                                                {{ type }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div id="option-module-{{ result.module.id }}-search" class="col-md-12" data-number="{% if conf.filters is not null %}{{ conf.filters.search|length }}{% else %}0{% endif %}">
+                                    <p class="bg-info" style="padding: 15px;">You can search on the result by making a search request:</p>
+
+                                    <div class="container-fluid" style="text-align: center;">
+                                        <button class='btn btn-success' id="filter-search-{{ result.module.id }}-add">Add a search filter</button>
+                                    </div>
+
+                                    {% set index = 0 %}
+
+                                    {% if conf.filters is not null %}
+
+                                        {% for name, search in conf.filters.search %}
+                                        <fieldset data-index="{{ index }}" id="filter-search-{{ index }}">
+                                            <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
+
+                                            <div class="col-md-4">
+                                                Title:
+                                                <input id="filter-search-{{ result.module.id }}-title-{{ index }}" type="text" class="form-control" placeholder="Title" data-default="{{ name }}" style="margin-bottom: 10px;">
+                                                Keyword:
+                                                <input id="filter-search-{{ result.module.id }}-keyword-{{ index }}" type="text" class="form-control" placeholder="Keyword" data-default="{{ search.keyword }}" style="margin-bottom: 10px;">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <!-- don't use the actual fields' names -->
+                                                Columns:
+                                                <select multiple class="form-control" id="filter-search-{{ result.module.id }}-columns-{{ index }}" title="">
+                                                    {% for column in searchColumns %}
+                                                        <option value="{{ column }}" {% if column in search.columns %}data-default="checked"{% endif %}>{{ column }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    Columns Operator:
+                                                    <select class="form-control" id="filter-search-{{ result.module.id }}-col-op-{{ index }}" title="" data-default="{{ search.columnOperator }}">
+                                                        <option value="and">AND</option>
+                                                        <option value="or">OR</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row">
+                                                    Expression Operator:
+                                                    <select class="form-control" id="filter-search-{{ result.module.id }}-expr-op-{{ index }}" title="" data-default="{{ search.expressionOperator }}">
+                                                        <option value="and">AND</option>
+                                                        <option value="or">OR</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" id="filter-search-{{ result.module.id }}-negate-{{ index }}" value="negate" data-default="{{ search.negate }}">
+                                                            Negate this search
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                            {% set index = index + 1 %}
+                                        {% endfor %}
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="date-filters-{{ result.module.id }}">
+
+
+                            <p class="bg-info" style="padding: 15px;">
+                                Leave the left box to start from 2016/12/09!
+                                <br>
+                                Leave the right box to have a real-time graph!
+                                <br>
+                                You can also select a dynamic day.
+                            </p>
+
+                            <div class="container-fluid" style="text-align: center;">
+                                <button class='btn btn-success' id="filter-date-{{ result.module.id }}-add">Add a date range filter</button>
+                            </div>
+
+                            <div id="option-module-{{ result.module.id }}-date" data-number="{% if conf.filters is not null %}{{ conf.filters.date|length }}{% else %}0{% endif %}">
+
+                                {% set index = 0 %}
+
+                                {% if conf.filters is not null %}
+
+                                    {% for name, date in conf.filters.date %}
+
+                                    <fieldset data-index="{{ index }}" id="filter-date-{{ index }}">
+                                    <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
+
+                                    <div class="container-fluid">
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                Title:
+                                                <input id="filter-date-{{ result.module.id }}-title-{{ index }}" name="date-{{ result.module.id }}-title" type="text" class="form-control" placeholder="Title" data-default="{{ name }}" style="margin-bottom: 10px;">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <!-- load columns dynamically -->
+                                                <!-- don't use the actual fields' names -->
+                                                Column:
+                                                <select class="form-control" id="filter-date-{{ result.module.id }}-column-{{ index }}" title="" data-default="{{ date.column }}">
+                                                    {% for column in dateColumns %}
+                                                        <option value="{{ column }}">{{ column }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    Expression Operator:
+                                                    <select class="form-control" id="filter-date-{{ result.module.id }}-expr-op-{{ index }}" title="" data-default="{{ date.operator }}">
+                                                        <option value="and">AND</option>
+                                                        <option value="or">OR</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="form-group col-sm-6">
+                                                <div class="btn-group btn-group-xs dateButton from" role="group">
+                                                    <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
+                                                    <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
+                                                    <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <div class="btn-group btn-group-xs dateButton to" role="group" style="float: right">
+                                                    <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
+                                                    <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
+                                                    <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="row">
+
+                                            <div class="form-group col-sm-5">
+                                                <div class="input-group date fromDatetimepicker" data-default="{% if date.from is not null %}{{ date.from }}{% endif %}">
+                                                    <input type="text" class="form-control" name="date-{{ result.module.id }}-from" id="filter-date-{{ result.module.id }}-from-{{ index }}" readonly="readonly">
+                                                    <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-sm-2" style="text-align: center;margin-top: 5px;font-weight: bold;">To</div>
+
+                                            <div class="form-group col-sm-5">
+                                                <div class="input-group date toDatetimepicker" data-default="{% if date.to is not null %}{{ date.to }}{% endif %}">
+                                                    <input type="text" class="form-control" name="date-{{ result.module.id }}-to" id="filter-date-{{ result.module.id }}-to-{{ index }}" readonly="readonly">
+                                                    <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </fieldset>
+
+                                        {% set index = index + 1 %}
+                                    {% endfor %}
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="categories-{{ result.module.id }}">
+
+                            <div class="row">
+                                <div id="option-module-{{ result.module.id }}-singleCat"  data-default="" class="col-md-12">
+                                    <p class="bg-info" style="padding: 15px;">Single Categories</p>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="singleCat-{{ result.module.id }}" value="user_type" {% if conf.categories.single is not null and "user_type" in conf.categories.single %}data-default="checked"{% endif %}>
+                                            User Type
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="singleCat-{{ result.module.id }}" value="availability" {% if conf.categories.single is not null and "availability" in conf.categories.single %}data-default="checked"{% endif %}>
+                                            Availability
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="singleCat-{{ result.module.id }}" value="device_type" {% if conf.categories.single is not null and "device_type" in conf.categories.single %}data-default="checked"{% endif %}>
+                                            Device Type
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div id="option-module-{{ result.module.id }}-category-search" class="col-md-12" data-number="{% if conf.categories.multi.search is not null %}{{ conf.categories.multi.search|length }}{% else %}0{% endif %}">
+                                    <p class="bg-info" style="padding: 15px;">If you perform a search category, you would end up with adding two categories; matching and not matching the search.</p>
+
+                                    <div class="container-fluid" style="text-align: center;">
+                                        <button class='btn btn-success' id="cat-search-{{ result.module.id }}-add">Add a search category</button>
+                                    </div>
+
+                                    {% set index = 0 %}
+
+                                    {% if conf.categories.multi.search is not null %}
+
+                                        {% for name, search in conf.categories.multi.search %}
+
+                                        <fieldset data-index="{{ index }}" id="cat-search-{{ index }}">
+                                        <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
+
+                                        <div class="col-md-4">
+                                            Title:
+                                            <input id="cat-search-{{ result.module.id }}-title-{{ index }}" type="text" class="form-control" placeholder="Title" data-default="{{ name }}" style="margin-bottom: 10px;">
+                                            Keyword:
+                                            <input id="cat-search-{{ result.module.id }}-keyword-{{ index }}" type="text" class="form-control" placeholder="Keyword" data-default="{{ search.keyword }}" style="margin-bottom: 10px;">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            Columns:
+                                            <select multiple class="form-control" id="cat-search-{{ result.module.id }}-columns-{{ index }}" title="">
+                                                {% for column in searchColumns %}
+                                                    <option value="{{ column }}" {% if column in search.columns %}data-default="checked"{% endif %}>{{ column }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                Columns Operator:
+                                                <select class="form-control" id="cat-search-{{ result.module.id }}-col-op-{{ index }}" title="" data-default="{{ search.columnOperator }}">
+                                                    <option value="and">AND</option>
+                                                    <option value="or">OR</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="cat-search-{{ result.module.id }}-negate-{{ index }}" value="negate" data-default="{{ search.negate }}">
+                                                        Negate this search
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                            {% set index = index + 1 %}
+                                        {% endfor %}
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="date_categories-{{ result.module.id }}">
+
+
+
+
+                                    <p class="bg-info" style="padding: 15px;">
+                                        Leave the left box to start from 2016/12/09!
+                                        <br>
+                                        Leave the right box to have a real-time graph!
+                                        <br>
+                                        You can also select a dynamic day.
+                                    </p>
+
+
+                                    <div class="container-fluid" style="text-align: center;">
+                                        <button class='btn btn-success' id="cat-date-{{ result.module.id }}-add">Add a date range category</button>
+                                    </div>
+
+                                    <div id="option-module-{{ result.module.id }}-category-date" data-number="{% if conf.categories.multi.date is not null %}{{ conf.categories.multi.date|length }}{% else %}0{% endif %}">
+
+                                        {% set index = 0 %}
+
+                                        {% if conf.categories.multi.date is not null %}
+
+                                            {% for name, date in conf.categories.multi.date %}
+                                        <fieldset data-index="{{ index }}" id="cat-date-{{ index }}">
+                                            <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
+
+
+                                        <div class="container-fluid">
+
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    Title:
+                                                    <input id="cat-date-{{ result.module.id }}-title-{{ index }}" name="date-{{ result.module.id }}-title" type="text" class="form-control" placeholder="Title" data-default="{{ name }}" style="margin-bottom: 10px;">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <!-- load columns dynamically -->
+                                                    <!-- don't use the actual fields' names -->
+                                                    Column:
+                                                    <select class="form-control" id="cat-date-{{ result.module.id }}-column-{{ index }}" title="" data-default="{{ date.column }}">
+                                                        {% for column in dateColumns %}
+                                                            <option value="{{ column }}">{{ column }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="form-group col-sm-6">
+                                                    <div class="btn-group btn-group-xs dateButton from" role="group">
+                                                        <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
+                                                        <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
+                                                        <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-sm-6">
+                                                    <div class="btn-group btn-group-xs dateButton to" role="group" style="float: right">
+                                                        <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
+                                                        <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
+                                                        <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="form-group col-sm-5">
+                                                    <div class="input-group date fromDatetimepicker" data-default="{% if date.from is not null %}{{ date.from }}{% endif %}">
+                                                        <input type="text" class="form-control" name="date-{{ result.module.id }}-from" id="cat-date-{{ result.module.id }}-from-{{ index }}" readonly="readonly">
+                                                        <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-sm-2" style="text-align: center;margin-top: 5px;font-weight: bold;">To</div>
+
+                                                <div class="form-group col-sm-5">
+                                                    <div class="input-group date toDatetimepicker" data-default="{% if date.to is not null %}{{ date.to }}{% endif %}">
+                                                        <input type="text" class="form-control" name="date-{{ result.module.id }}-to" id="cat-date-{{ result.module.id }}-to-{{ index }}" readonly="readonly">
+                                                        <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </fieldset>
+
+                                                {% set index = index + 1 %}
+                                            {% endfor %}
+
+                                        {% endif %}
+
+                                </div>
+
+
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <div class="row">
-
-                    <div id="option-module-{{ result.module.id }}-userType"  data-default="" class="col-md-4">
-                        <p class="bg-info" style="padding: 15px;">User Type</p>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="userType-{{ result.module.id }}" value="standard" {# if 'standard' == result.module.userType %} checked="checked"{% endif #}>
-                                Standard
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="userType-{{ result.module.id }}" value="internal" {# if 'internal' == result.module.userType %} checked="checked"{% endif #}>
-                                Internal
-                            </label>
-                        </div>
-                    </div>
 
 
-                    <div id="option-module-{{ result.module.id }}-availability"  data-default="" class="col-md-4">
-                        <p class="bg-info" style="padding: 15px;">Availability</p>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="availability-{{ result.module.id }}" id="user-all" value="" {# if 'all' == result.module.userType %} checked="checked"{% endif #}>
-                                All
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="availability-{{ result.module.id }}" id="user-standard" value="true" {# if 'standard' == result.module.userType %} checked="checked"{% endif #}>
-                                Orange Hat
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="availability-{{ result.module.id }}" id="user-internal" value="false" {# if 'internal' == result.module.userType %} checked="checked"{% endif #}>
-                                Regular
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="option-module-{{ result.module.id }}-deviceType"  data-default="" class="col-md-4">
-                        <p class="bg-info" style="padding: 15px;">Device Type</p>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="deviceType-{{ result.module.id }}" id="user-all" value="" {# if 'all' == result.module.userType %} checked="checked"{% endif #}>
-                                All
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="deviceType-{{ result.module.id }}" id="user-standard" value="android" {# if 'standard' == result.module.userType %} checked="checked"{% endif #}>
-                                Android
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="deviceType-{{ result.module.id }}" id="user-internal" value="ios" {# if 'internal' == result.module.userType %} checked="checked"{% endif #}>
-                                ios
-                            </label>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div id="option-module-{{ result.module.id }}-keyword" class="col-md-12" data-default="{{ result.module.keyword }}">
-                        <p class="bg-info" style="padding: 15px;">You can search on the result by typing the keyword down blow:</p>
-                        <input id="option-module-{{ result.module.id }}-keyword" name="keyword-{{ result.module.id }}" type="text" class="form-control" placeholder="Keyword" data-default="{{ result.module.keyword }}" style="margin-bottom: 10px;">
-                    </div>
-                </div>
 
 
-                <p class="bg-info" style="padding: 15px;">
-                    Leave the left box to start from 2016/12/09!
-                    <br>
-                    Leave the right box to have a real-time graph!
-                    <br>
-                    You can also select a dynamic day.
-                </p>
 
 
-                <div class="container-fluid">
-
-                    <div class="row">
-
-                        <div class="form-group col-sm-6">
-                            <div class="btn-group btn-group-xs dateButton from" role="group">
-                                <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
-                                <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
-                                <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <div class="btn-group btn-group-xs dateButton to" role="group" style="float: right">
-                                <button type="button" class="btn btn-info month" data-module-id="{{ result.module.id }}">A month ago</button>
-                                <button type="button" class="btn btn-info week" data-module-id="{{ result.module.id }}">A week ago</button>
-                                <button type="button" class="btn btn-info day" data-module-id="{{ result.module.id }}">Yesterday</button>
-                            </div>
-                        </div>
-
-                    </div>
 
 
-                    <div class="row">
-
-                        <div class="form-group col-sm-5">
-                            <div class="input-group date fromDatetimepicker" data-default="{% if result.module.fromDate is not null %}{{ result.module.fromDate.date }}{% else %}notSet{% endif %}">
-                                <input type="text" class="form-control" name="fromDate-{{ result.module.id }}" readonly="readonly">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-sm-2" style="text-align: center;margin-top: 5px;font-weight: bold;">To</div>
-
-                        <div class="form-group col-sm-5">
-                            <div class="input-group date toDatetimepicker" data-default="{% if result.module.toDate is not null %}{{ result.module.toDate.date }}{% else %}notSet{% endif %}">
-                                <input type="text" class="form-control" name="toDate-{{ result.module.id }}" readonly="readonly">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </div>
 
             </div>
             <div class="modal-footer">
