@@ -9,6 +9,7 @@
 namespace AppBundle\Module\Graph;
 
 use AppBundle\Entity\Module;
+use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\ModuleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -93,26 +94,27 @@ class Registration implements ModuleInterface
     }
 
     /**
-     * @param ArrayCollection $configuration
+     * @param Configuration|ArrayCollection $configuration
      * @return array
      */
-    public function render(ArrayCollection $configuration)
+    public function render(Configuration $configuration)
     {
-        $presentation = $configuration['presentation']; //this value should be parsed!! and checked
+        $presentation = $configuration->getPresentation(); //this value should be valued!!
 
-        $filters = $configuration['filters'];
-        $removeZeros = $configuration['remove_zeros'];
+        $filters = (array) $configuration->getFilters();
+        $removeZeros = $configuration->isRemoveZeros();
 
         /*
          * getting all the possible categories
          */
         $categories = [];
-        $singleCategories = $configuration['categories']['single'];
-        $multiCategories = new ArrayCollection($configuration['categories']['multi']);
+        $singleCategories = $configuration->getCategories()->getSingle();
+        $multiCategories = new ArrayCollection((array) $configuration->getCategories()->getMulti());
 
         foreach ($singleCategories as $cat){
-            $categories[$cat] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][$cat];//get actual values from module info
+            $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
         }
+
 
         foreach ($multiCategories as $type => $cat){
             foreach ($cat as $catName => $value) {
@@ -189,7 +191,7 @@ class Registration implements ModuleInterface
             ];
         }
         $this->color->next();
-        $this->yMax = $max;
+        //$this->yMax = $max;
 
     }
 
@@ -227,8 +229,10 @@ class Registration implements ModuleInterface
             $column = $query->getQuery()->getArrayResult();
 
 
-            $from = $filters['date']['period']['from'];
-            $to = $filters['date']['period']['to'];
+
+
+            $from = ($filters['date']['period'])->getFrom();
+            $to = ($filters['date']['period'])->getTo();
             $adjustedDates = $this->userRep->adjustDate($from, $to);
             /** @var \DateTime $from $to */
             $from = $adjustedDates['from'];
@@ -243,9 +247,10 @@ class Registration implements ModuleInterface
 
             //Calculating the starting number
             $newFilters = $filters;
-            $temp = &$newFilters['date']['period']; //error id 'period is not there
-            $temp['from'] = null;
-            $temp['to'] = $from->format('Y-m-d');
+            $temp = clone $newFilters['date']['period']; //error id 'period is not there
+            $temp->setFrom(null);
+            $temp->setTo($from->format('Y-m-d'));
+            $newFilters['date']['period'] = $temp;
 
             $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
                 ->orderBy('user.createdtime', 'DESC');

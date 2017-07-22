@@ -42,9 +42,6 @@ class vdpModule
         }
 
 
-        $configuration = new ArrayCollection($module->getConfiguration());
-
-
-        return $instance->render($configuration);
+        return $instance->render($module->getConfiguration());
     }
 }

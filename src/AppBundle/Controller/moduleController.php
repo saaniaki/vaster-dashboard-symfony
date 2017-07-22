@@ -15,6 +15,7 @@ use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\DateRange;
 use AppBundle\Module\Configuration\Filters;
 use AppBundle\Module\Configuration\Search;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -75,7 +76,7 @@ class moduleController extends Controller
         $userType = $conf['filters']['user_type'];
         $availabilities = $conf['filters']['availability'];
         $device_types = $conf['filters']['device_type'];
-        
+
 
         return $this->render('dashboard/module/graph/render.html.twig', [
             'result' => $result,
@@ -93,98 +94,41 @@ class moduleController extends Controller
 
 
     /**
-     * accepts JSON
-     * {layout: {info, rank, size}, settings: {analytics, userType, keyword, fromDate, toDate}}
+     * accepts JSON and configures the module with module_id of {id}
      * @param $module Module
+     * @param $request Request
      * @Route("api/module/{id}", name="set_module_conf")
      * @return \Symfony\Component\HttpFoundation\Response
      * @Method("POST")
      */
     public function setModuleConfAction(Request $request ,Module $module){
 
-        $categories = $request->get('categories');
-        $filters = $request->get('filters');
-        $presentation = $request->get('presentation');
-        $removeZeros = $request->get('remove_zeros');
+        /*
+         * Getting the new json data by $request and parsing it to a Configuration object.
+         * This will override any data that exists in the request and keeps the old parameters
+         * if they are not provided in $request.
+         */
+        $data = new ArrayCollection();
+        $data->set('categories', $request->get('categories'));
+        $data->set('filters', $request->get('filters'));
+        $data->set('layout', $request->get('layout'));
+        $data->set('presentation', $request->get('presentation'));
+        $data->set('remove_zeros', $request->get('remove_zeros'));
 
-        ////////////////////////////////////////////////////////////////////////// Filters: creating $filtersObj
-        $filtersObj = new Filters();
+        $configuration = $module->getConfiguration();           // To keep the old useful configuration
+        $configuration->load($data);                            // To rewrite the new configuration
+        $module->setConfiguration($configuration->extract());
 
-        if( isset($filters['user_type']) && $filters['user_type'] != null )$filtersObj->setUserType($filters['user_type']);
-        if( isset($filters['availability']) && $filters['availability'] != null )$filtersObj->setAvailability($filters['availability']);
-        if( isset($filters['device_type']) && $filters['device_type'] != null )$filtersObj->setDeviceType($filters['device_type']);
+        /*
+         * These are basic information about each module, and they are not
+         * stored in configuration. Therefore, they should be handled separately.
+         */
+        $info = $request->get('info');
+        $rank = $request->get('rank');
 
-        if( isset($filters['search']) ){
-            foreach ( $filters['search'] as $name => $SearchArray ){
-                $search = new Search();
-                $search->setKeyword($SearchArray['keyword']);
-                $search->setColumnOperator($SearchArray['columnOperator']);
-                $search->setExpressionOperator($SearchArray['expressionOperator']);
-                $search->setColumns($SearchArray['columns']);
-                $search->setNegate($SearchArray['negate'] === 'true'? true: false);
-                $filtersObj->addSearch($name, $search);
-            }
-        }
+        if($info != null) $module->setModuleInfo($this->getDoctrine()->getRepository("AppBundle:ModuleInfo")->findOneBy(['id' => $info]));
+        if($rank != null) $module->setRank($rank);
 
-        if( isset($filters['date']) ){
-            foreach ( $filters['date'] as $name => $rangeArray ){
-                $range = new DateRange();
-                $range->setFrom($rangeArray['from']);
-                $range->setTo($rangeArray['to']);
-                $range->setColumn($rangeArray['column']);
-                $range->setOperator($rangeArray['operator']);
-                $range->setNegate($rangeArray['negate'] === 'true'? true: false);
-                $filtersObj->addDate($name, $range);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////// Categories: creating $categoriesObj
-        $categoriesObj = new Categories();
-        if( isset($categories['single']) && $categories['single'] != null )$categoriesObj->setSingle($categories['single']);
-
-        if( isset($categories['multi']['search']) ) {
-            foreach ($categories['multi']['search'] as $name => $SearchArray) {
-                $search = new Search();
-                $search->setKeyword($SearchArray['keyword']);
-                $search->setColumnOperator($SearchArray['columnOperator']);
-                $search->setExpressionOperator($SearchArray['expressionOperator']);
-                $search->setColumns($SearchArray['columns']);
-                $search->setNegate($SearchArray['negate'] === 'true'? true: false);
-                $categoriesObj->addSearch($name, $search);
-            }
-        }
-
-        if( isset($categories['multi']['date']) ) {
-            foreach ($categories['multi']['date'] as $name => $rangeArray) {
-                $range = new DateRange();
-                $range->setFrom($rangeArray['from']);
-                $range->setTo($rangeArray['to']);
-                $range->setColumn($rangeArray['column']);
-                $range->setOperator($rangeArray['operator']);
-                $range->setNegate($rangeArray['negate'] === 'true'? true: false);
-                $categoriesObj->addDate($name, $range);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
-        $configuration = new Configuration();
-        if( isset($removeZeros) && $removeZeros != null )$configuration->setRemoveZeros($removeZeros);
-        if( isset($presentation) && $presentation != null )$configuration->setPresentation($presentation);
-        $configuration->setFilters($filtersObj);
-        $configuration->setCategories($categoriesObj);
-
-        dump($configuration);
-
-        ////////////////////////////////////////////////////////////////////////// Layout: a part of old code
-        if($request->get('layout') != null){
-            if( isset($request->get('layout')['info']) && $request->get('layout')['info'] != null){
-                $moduleInfo =  $this->getDoctrine()->getRepository("AppBundle:ModuleInfo")->findOneBy(['id' => $request->get('layout')['info']]);
-                $module->setModuleInfo($moduleInfo);
-            }
-
-            if( isset($request->get('layout')['rank']) && $request->get('layout')['rank'] != null ) $module->setRank($request->get('layout')['rank']);
-            if( isset($request->get('layout')['size']) && $request->get('layout')['size'] != null ) $module->setSize($request->get('layout')['size']);
-        }
 
 /*
 
@@ -238,7 +182,6 @@ class moduleController extends Controller
         }
 */
 
-        $module->setConfiguration($configuration->extract());
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($module);

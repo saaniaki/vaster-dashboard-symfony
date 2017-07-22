@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 use AppBundle\Module\Configuration\Filters;
+use AppBundle\Module\Configuration\Search;
 use Doctrine\DBAL\Types\Type;
 use AppBundle\AppBundle;
 use AppBundle\Entity\Module;
@@ -59,26 +60,44 @@ class adminController extends Controller
     /**
      * @Route("/admin/api/user/count/{type}/{keyword}", name="api_user_count")
      * /admin/api/user/page/20/20/user.email/ASC
+     * @param string $type
+     * @param null|string $keyword
+     * @return JsonResponse
      */
-    public function userCountAction($type, $keyword = null){
+    public function userCountAction(string $type, string $keyword = null){
 
         $userRep = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster");
 
         $filters = new Filters();
         $total = $userRep->generalCount(null);
 
+        // can be optimised to call it if internal is not filtered
         $filters->addUserType('Internal');
         $totalInter = $userRep->generalCount((array) $filters);
 
-        $filters->setUserType([]);
+
+
+        if($type == 'standard')
+            $filters->setUserType(['Standard']);
+        else if ( $type == 'all')
+            $filters->setUserType();
+        if($keyword != null){
+            $search = new Search();
+            $search->setColumns(['user.firstname', 'user.lastname', 'user.email', 'user.phone']);
+            $search->setKeyword($keyword);
+            $filters->addSearch('search', $search);
+        }
+
+        dump($filters);
+
         $filters->addAvailability('Orange Hat');
         $totalORG= $userRep->generalCount((array) $filters);
 
-        $filters->setAvailability([]);
+        $filters->setAvailability();
         $filters->addDeviceType('Android');
         $android = $userRep->generalCount((array) $filters);
 
-        $filters->setDeviceType([]);
+        $filters->setDeviceType();
         $filters->addDeviceType('iOS');
         $ios = $userRep->generalCount((array) $filters);
 

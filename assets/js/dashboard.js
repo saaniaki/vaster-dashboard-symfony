@@ -114,6 +114,7 @@ function renderModule(id) {
                 $(this).closest('fieldset').remove();
             });
 
+
             setDefaultOptions(id);
         }
     });
@@ -192,7 +193,7 @@ function setDefaultOptions(id) {
         var toDateSelector = $(this);
 
         var fromDefault = fromDateSelector.attr('data-default');
-        if(fromDefault === "") fromDefault = null;
+        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
         var toDefault = toDateSelector.attr('data-default');
         if(toDefault === "") toDefault = null;
 
@@ -243,14 +244,19 @@ function setDefaultOptions(id) {
         var fromDateSelector = $(this);
         var toDateSelector = $(this).closest(".row").find(".toDatetimepicker");
 
+        var fromDefault = fromDateSelector.attr('data-default');
+        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
+        var toDefault = toDateSelector.attr('data-default');
+        if(toDefault === "") toDefault = null;
+
         fromDateSelector.datetimepicker({
             format: "YYYY-MM-DD HH:mm",
             ignoreReadonly: true,
-            defaultDate: fromDateSelector.attr('data-default'),
+            defaultDate: fromDefault,
             useCurrent: false,
             showClear: true,
             minDate: new Date(2016, 11, 9),
-            maxDate: toDateSelector.attr('data-default')
+            maxDate: toDefault
         }).on("dp.change", function (e) {
             if( e.date === null ) toDateSelector.data("DateTimePicker").minDate(new Date(2016, 11, 9));
             else toDateSelector.data("DateTimePicker").minDate(e.date);
@@ -262,13 +268,18 @@ function setDefaultOptions(id) {
         var fromDateSelector = $(this).closest(".row").find(".fromDatetimepicker");
         var toDateSelector = $(this);
 
+        var fromDefault = fromDateSelector.attr('data-default');
+        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
+        var toDefault = toDateSelector.attr('data-default');
+        if(toDefault === "") toDefault = null;
+
         toDateSelector.datetimepicker({
             format: "YYYY-MM-DD HH:mm",
             ignoreReadonly: true,
-            defaultDate: toDateSelector.attr('data-default'),
+            defaultDate: toDefault,
             useCurrent: false,
             showClear: true,
-            minDate: fromDateSelector.attr('data-default'),
+            minDate: fromDefault,
             maxDate: new Date()
         }).on("dp.change", function (e) {
             if( e.date === null ) fromDateSelector.data("DateTimePicker").maxDate(new Date());
@@ -301,6 +312,9 @@ function setDefaultOptions(id) {
 
     });
 */
+
+    $('#loading-' + id).hide();
+    $('#module-' + id + '-container').show();
 
 }
 
@@ -456,6 +470,8 @@ $("#renderPage").on( "click", ".option-module-save", function() {
         'remove_zeros' : true
     };
 
+    $('#module-' + id + '-container').hide();
+    $('#loading-' + id).show();
     //console.log(data);
     configModule(id, data);
 

@@ -20,7 +20,16 @@
             </ul>
         </div>
 
-        <div class="panel-body" style="height: 350px; width: 100%;">
+        <div class="panel-body" style="height: 350px; width: 100%; position: relative;">
+            <div id="loading-{{ result.module.id }}" class="loading">
+                <div class="sk-folding-cube">
+                    <div class="sk-cube1 sk-cube"></div>
+                    <div class="sk-cube2 sk-cube"></div>
+                    <div class="sk-cube4 sk-cube"></div>
+                    <div class="sk-cube3 sk-cube"></div>
+                </div>
+
+            </div>
 
             <div id="module-{{ result.module.id }}-container" style="height: 320px;"></div>
 
@@ -536,15 +545,6 @@
                     </div>
 
                 </div>
-
-
-
-
-
-
-
-
-
 
 
             </div>

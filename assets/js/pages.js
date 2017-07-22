@@ -249,10 +249,12 @@ $( "#doAddModule" ).click(function() {
 $( "#doEditModule" ).click(function() {
     var id = $( "#doEditModule" ).attr('data-module-id');
 
+
     configModule(id, {
+        'info' : $("#editModuleModal #app_bundle_new_module_moduleInfo option[value='" + $('#app_bundle_new_module_moduleInfo').val() + "']").attr('data-info-id'),
+        'rank' : $('#editModuleModal #app_bundle_new_module_rank').val(),
         'layout': {
-            'info' : $("#editModuleModal #app_bundle_new_module_moduleInfo option[value='" + $('#app_bundle_new_module_moduleInfo').val() + "']").attr('data-info-id'),
-            'rank' : $('#editModuleModal #app_bundle_new_module_rank').val(),
+            'title' : null,
             'size' : $('#editModuleModal #app_bundle_new_module_size').val()
         }
     });
@@ -311,9 +313,7 @@ $( "#editPanel" ).on( "Content_Loaded", function() {
             }
 
             configModule(id, {
-                'layout': {
-                    'rank' : rank
-                }
+                'rank' : rank
             });
         }
     }).disableSelection();

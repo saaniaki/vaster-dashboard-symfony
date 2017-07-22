@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Module\Configuration\Configuration;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,7 +45,10 @@ class Module
      */
     public function getSize()
     {
-        return $this->size;
+        //return $this->size;
+        if( $this->getConfiguration() == null )
+            return 6;
+        return $this->getConfiguration()->getLayout()->getSize();
     }
 
     /**
@@ -87,11 +91,13 @@ class Module
     private $configuration;
 
     /**
-     * @return mixed
+     * @return Configuration
      */
     public function getConfiguration()
     {
-        return $this->configuration;
+        if( $this->configuration == null )
+            return null;
+        return new Configuration(new ArrayCollection($this->configuration));
     }
 
     /**

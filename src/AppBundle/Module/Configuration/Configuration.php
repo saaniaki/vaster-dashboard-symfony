@@ -19,16 +19,23 @@ class Configuration
 
     public $categories;
     public $filters;
+    public $layout;
     public $presentation;
     public $remove_zeros = true;
 
-    public function __construct()
+    public function __construct(ArrayCollection $data = null)
     {
         if( !isset(Configuration::$singleCategories) )
             Configuration::$singleCategories = new ArrayCollection(['user_type', 'device_type', 'availability']);
 
-        $this->filters = new Filters();
-        $this->categories = new Categories();
+        if( $data != null )
+            $this->load($data);
+        else {
+            $this->filters = new Filters();
+            $this->categories = new Categories();
+            $this->layout = new Layout();
+        }
+
     }
 
     /**
@@ -70,9 +77,9 @@ class Configuration
     }*/
 
     /**
-     * @return Filters
+     * @return Filters|null
      */
-    public function getFilters(): Filters
+    public function getFilters(): ?Filters
     {
         return $this->filters;
     }
@@ -118,18 +125,124 @@ class Configuration
     }
 
     /**
+     * @return Layout
+     */
+    public function getLayout(): Layout
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param Layout $layout
+     */
+    public function setLayout(Layout $layout)
+    {
+        $this->layout = $layout;
+    }
+
+    /**
      * returns a json string
      * @return array
      */
     public function extract(): array
     {
-        if( $this->getFilters()->isEmpty() ){
+        if( $this->getFilters() != null && $this->getFilters()->isEmpty() ){
             $other = clone $this;
             $other->setFilters();
             return ((array) $other);
         }
 
         return ((array) $this);
+    }
+
+
+    public function load(ArrayCollection $data)
+    {
+        $categories = $data->get('categories');
+        $filters = $data->get('filters');
+        $layout = $data->get('layout');
+        $presentation = $data->get('presentation');
+        $removeZeros = $data->get('remove_zeros');
+
+        ////////////////////////////////////////////////////////////////////////// Filters: creating $filtersObj
+
+        if( $filters != null ){
+            $filtersObj = new Filters();
+            if( isset($filters['user_type']) && $filters['user_type'] != null )$filtersObj->setUserType($filters['user_type']);
+            if( isset($filters['availability']) && $filters['availability'] != null )$filtersObj->setAvailability($filters['availability']);
+            if( isset($filters['device_type']) && $filters['device_type'] != null )$filtersObj->setDeviceType($filters['device_type']);
+
+            if( isset($filters['search']) ){
+                foreach ( $filters['search'] as $name => $SearchArray ){
+                    $search = new Search();
+                    $search->setKeyword($SearchArray['keyword']);
+                    $search->setColumnOperator($SearchArray['columnOperator']);
+                    $search->setExpressionOperator($SearchArray['expressionOperator']);
+                    $search->setColumns($SearchArray['columns']);
+                    $search->setNegate($SearchArray['negate'] === 'true'? true: false);
+                    $filtersObj->addSearch($name, $search);
+                }
+            }
+
+            if( isset($filters['date']) ){
+                foreach ( $filters['date'] as $name => $rangeArray ){
+                    $range = new DateRange();
+                    $range->setFrom($rangeArray['from']);
+                    $range->setTo($rangeArray['to']);
+                    $range->setColumn($rangeArray['column']);
+                    $range->setOperator($rangeArray['operator']);
+                    $range->setNegate($rangeArray['negate'] === 'true'? true: false);
+                    $filtersObj->addDate($name, $range);
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////// Categories: creating $categoriesObj
+
+        if( $categories != null ){
+            $categoriesObj = new Categories();
+            if( isset($categories['single']) && $categories['single'] != null )$categoriesObj->setSingle($categories['single']);
+
+            if( isset($categories['multi']['search']) ) {
+                foreach ($categories['multi']['search'] as $name => $SearchArray) {
+                    $search = new Search();
+                    $search->setKeyword($SearchArray['keyword']);
+                    $search->setColumnOperator($SearchArray['columnOperator']);
+                    $search->setExpressionOperator($SearchArray['expressionOperator']);
+                    $search->setColumns($SearchArray['columns']);
+                    $search->setNegate($SearchArray['negate'] === 'true'? true: false);
+                    $categoriesObj->addSearch($name, $search);
+                }
+            }
+
+            if( isset($categories['multi']['date']) ) {
+                foreach ($categories['multi']['date'] as $name => $rangeArray) {
+                    $range = new DateRange();
+                    $range->setFrom($rangeArray['from']);
+                    $range->setTo($rangeArray['to']);
+                    $range->setColumn($rangeArray['column']);
+                    $range->setOperator($rangeArray['operator']);
+                    $range->setNegate($rangeArray['negate'] === 'true'? true: false);
+                    $categoriesObj->addDate($name, $range);
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////// Layout: creating $layoutObj
+
+        if( $layout != null ){
+            $layoutObj = new Layout();
+            if( isset($layout['title']) && $layout['title'] != null )$layoutObj->setTitle($layout['title']);
+            if( isset($layout['size']) && $layout['size'] != null )$layoutObj->setSize($layout['size']);
+        }
+
+        ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
+        if( isset($removeZeros) && $removeZeros != null )       $this->setRemoveZeros($removeZeros);
+        if( isset($presentation) && $presentation != null )     $this->setPresentation($presentation);
+        if( isset($filtersObj) && $filtersObj != null )       $this->setFilters($filtersObj);
+        if( isset($categoriesObj) && $categoriesObj != null )    $this->setCategories($categoriesObj);
+        if( isset($layoutObj) && $layoutObj != null )    $this->setLayout($layoutObj);
+
     }
 
 }

@@ -10,6 +10,7 @@ namespace AppBundle\Module;
 
 
 use AppBundle\Entity\Module;
+use AppBundle\Module\Configuration\Configuration;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,5 +18,5 @@ interface ModuleInterface
 {
     function __construct(Module $module, ManagerRegistry $managerRegistry);
 
-    public function render(ArrayCollection $configuration);
+    public function render(Configuration $configuration);
 }

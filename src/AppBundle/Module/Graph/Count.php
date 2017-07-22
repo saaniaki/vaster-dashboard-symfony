@@ -10,6 +10,7 @@ namespace AppBundle\Module\Graph;
 
 
 use AppBundle\Entity\Module;
+use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\ModuleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -54,24 +55,23 @@ class Count implements ModuleInterface
     }
 
     /**
-     * @param ArrayCollection $configuration
+     * @param Configuration|ArrayCollection $configuration
      * @return array
      */
-    public function render(ArrayCollection $configuration)
+    public function render(Configuration $configuration)
     {
-        //dump($configuration);die();
 
-        $presentation = $configuration['presentation']; //this value should be parsed!!
+        $presentation = $configuration->getPresentation(); //this value should be valued!!
 
-        $filters = $configuration['filters'];
-        $removeZeros = $configuration['remove_zeros'];
+        $filters = (array) $configuration->getFilters();
+        $removeZeros = $configuration->isRemoveZeros();
 
         /*
          * getting all the possible categories
          */
         $categories = [];
-        $singleCategories = $configuration['categories']['single'];
-        $multiCategories = new ArrayCollection($configuration['categories']['multi']);
+        $singleCategories = $configuration->getCategories()->getSingle();
+        $multiCategories = new ArrayCollection((array) $configuration->getCategories()->getMulti());
 
         foreach ($singleCategories as $cat){
             $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
@@ -87,7 +87,7 @@ class Count implements ModuleInterface
             }
         }
 
-
+        //dump($presentation,$categories, $filters, $removeZeros);die();
 
         /*if(  in_array($analytics, $this->module->getModuleInfo()->getAvailableAnalytics()) )
             call_user_func_array([$this, $analytics], [$userType, $keyword, $deviceType, $availability]);

@@ -245,7 +245,6 @@ class VasterUserRepository extends EntityRepository
      */
     public function filter($types = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
 
-
         /* and ( type1 or type2 ) */
         $ors = []; // put inside
         if($types != null){
@@ -279,6 +278,7 @@ class VasterUserRepository extends EntityRepository
 
             $outer = [];
             foreach ($searches as $key => $search) {
+                $search = (array) $search;
 
                 $expressions = [];
                 foreach ( $search['columns'] as $column ){
@@ -341,7 +341,7 @@ class VasterUserRepository extends EntityRepository
             $expressions = new ArrayCollection();
 
             foreach ($dates as $key => $date) {
-
+                $date = (array) $date;
 
                 if( $date['negate'] ){ //switch from and to, remove equal
                     $temp = $query->expr()->orX(
@@ -456,6 +456,8 @@ class VasterUserRepository extends EntityRepository
 
             $outer = [];
             foreach ($searches as $key => $search) {
+                $search = (array) $search;
+
                 $expressions = [];
                 foreach ( $search['columns'] as $column ){
 
@@ -518,7 +520,7 @@ class VasterUserRepository extends EntityRepository
             $expressions = new ArrayCollection();
 
             foreach ($dates as $key => $date) {
-
+                $date = (array) $date;
 
                 if( $date['negate'] ){ //switch from and to, remove equal
                     $temp = $query->expr()->orX(

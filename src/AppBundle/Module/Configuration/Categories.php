@@ -57,6 +57,30 @@ class Categories
     /**
      * @return array
      */
+    public function getSingle(): array
+    {
+        return $this->single;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMulti(): array
+    {
+        return $this->multi;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDates()
+    {
+        return $this->multi['date'];
+    }
+
+    /**
+     * @return array
+     */
     public function getSearches()
     {
         return $this->multi['search'];

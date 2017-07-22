@@ -50,10 +50,12 @@ class Filters
      * @param array $types
      * @throws \Exception
      */
-    public function setUserType(array $types)
+    public function setUserType(array $types = null)
     {
-        foreach ($types as $type)
-            $this->addUserType($type);
+        $this->user_type = null;
+        if( $types != null )
+            foreach ($types as $type)
+                $this->addUserType($type);
     }
 
     /**
@@ -77,13 +79,15 @@ class Filters
     }
 
     /**
-     * @param array $array
-     * @throws \Exception
+     * @param array $types
+     * @internal param array $array
      */
-    public function setDeviceType(array $array)
+    public function setDeviceType(array $types = null)
     {
-        foreach ($array as $value)
-            $this->addDeviceType($value);
+        $this->device_type = null;
+        if( $types != null )
+            foreach ($types as $type)
+                $this->addDeviceType($type);
     }
 
     /**
@@ -122,10 +126,12 @@ class Filters
      * @param array $types
      * @throws \Exception
      */
-    public function setAvailability(array $types)
+    public function setAvailability(array $types = null)
     {
-        foreach ($types as $type)
-            $this->addAvailability($type);
+        $this->availability = null;
+        if( $types != null )
+            foreach ($types as $type)
+                $this->addAvailability($type);
     }
 
     /**
@@ -156,5 +162,14 @@ class Filters
             return true;
         else
             return false;
+    }
+
+    /**
+     * returns a json string
+     * @return array
+     */
+    public function extract(): array
+    {
+        return ((array) $this);
     }
 }
