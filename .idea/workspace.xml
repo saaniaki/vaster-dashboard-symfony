@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26aa9230-b2af-468c-8846-06de33591995" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/dashboard.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/dashboard.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/edit.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/edit.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/menubar.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/menubar.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/dashboard/module/graph/render.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/dashboard/module/graph/render.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/admin.js" afterPath="$PROJECT_DIR$/assets/js/admin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/dashboard.js" afterPath="$PROJECT_DIR$/assets/js/dashboard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/adminController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/adminController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Configuration.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Configuration.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Filters.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Filters.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Layout.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Layout.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/Graph/Count.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/Graph/Count.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/Graph/Registration.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/Graph/Registration.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Module/ModuleInterface.php" afterPath="$PROJECT_DIR$/src/AppBundle/Module/ModuleInterface.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Service/vdpModule.php" afterPath="$PROJECT_DIR$/src/AppBundle/Service/vdpModule.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" afterPath="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/admin.js" afterPath="$PROJECT_DIR$/web/build/admin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/dashboard.js" afterPath="$PROJECT_DIR$/web/build/dashboard.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/global.css" afterPath="$PROJECT_DIR$/web/build/global.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/build/pages.js" afterPath="$PROJECT_DIR$/web/build/pages.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,83 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="Registration.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Module/Graph/Registration.php">
+      <file leaf-file-name="global.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/build/global.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="676">
-              <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
-              <folding>
-                <element signature="e#127#155#0#PHP" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dashboard.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/js/dashboard.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="767">
-              <caret line="348" column="12" lean-forward="false" selection-start-line="348" selection-start-column="12" selection-end-line="348" selection-end-column="12" />
-              <folding>
-                <marker date="1501277639943" expanded="true" signature="6849:6880" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="users.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Resources/views/admin/users.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="menubar.html.twig" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Resources/views/dashboard/menubar.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="814">
-              <caret line="31" column="201" lean-forward="false" selection-start-line="31" selection-start-column="201" selection-end-line="31" selection-end-column="201" />
-              <folding>
-                <element signature="e#12#26#0#Twig" expanded="true" />
-                <element signature="e#1404#1413#0#Twig" expanded="true" />
-                <element signature="e#2142#2151#0#Twig" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="moduleController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="888">
-              <caret line="100" column="54" lean-forward="false" selection-start-line="100" selection-start-column="39" selection-end-line="100" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dashboard.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Resources/views/dashboard/dashboard.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="6" column="144" lean-forward="false" selection-start-line="6" selection-start-column="124" selection-end-line="6" selection-end-column="144" />
-              <folding>
-                <element signature="e#12#39#0#Twig" expanded="false" />
-                <element signature="e#282#294#0#Twig" expanded="false" />
-                <element signature="e#505#518#0#Twig" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Filters.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Module/Configuration/Filters.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="774">
-              <caret line="164" column="5" lean-forward="false" selection-start-line="164" selection-start-column="5" selection-end-line="164" selection-end-column="5" />
+            <state relative-caret-position="950">
+              <caret line="751" column="102" lean-forward="false" selection-start-line="751" selection-start-column="102" selection-end-line="751" selection-end-column="102" />
               <folding />
             </state>
           </provider>
@@ -228,12 +136,12 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/moduleController.php" />
         <option value="$PROJECT_DIR$/src/VasterBundle/Repository/VasterUserRepository.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/adminController.php" />
-        <option value="$PROJECT_DIR$/web/build/global.css" />
         <option value="$PROJECT_DIR$/src/AppBundle/Module/Configuration/Filters.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Module/Graph/Registration.php" />
         <option value="$PROJECT_DIR$/app/Resources/views/dashboard/dashboard.html.twig" />
         <option value="$PROJECT_DIR$/assets/js/dashboard.js" />
         <option value="$PROJECT_DIR$/app/Resources/views/dashboard/menubar.html.twig" />
+        <option value="$PROJECT_DIR$/web/build/global.css" />
       </list>
     </option>
   </component>
@@ -998,12 +906,12 @@
       <workItem from="1500757228998" duration="59000" />
       <workItem from="1501011232694" duration="2058000" />
       <workItem from="1501227839535" duration="3632000" />
-      <workItem from="1501241434483" duration="21309000" />
+      <workItem from="1501241434483" duration="21649000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="760563000" />
+    <option name="totallyTimeSpent" value="760903000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="129" y="13" width="3712" height="2148" extended-state="6" />
@@ -1460,14 +1368,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/build/global.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="913">
-          <caret line="750" column="60" lean-forward="true" selection-start-line="750" selection-start-column="60" selection-end-line="750" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Module/Graph/Registration.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="676">
@@ -1543,6 +1443,14 @@
             <element signature="e#1404#1413#0#Twig" expanded="true" />
             <element signature="e#2142#2151#0#Twig" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/build/global.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="950">
+          <caret line="751" column="102" lean-forward="false" selection-start-line="751" selection-start-column="102" selection-end-line="751" selection-end-column="102" />
+          <folding />
         </state>
       </provider>
     </entry>
