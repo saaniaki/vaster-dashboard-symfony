@@ -36,7 +36,7 @@
             <tbody id="modules_ajaxTbody">
             {% for module in modules %}
                 <tr class="module">
-                    <td><span class="module-id">{{ module.id }}</span><a class="module-edit-link" href="#">{{ module.moduleInfo.name }}</a></td>
+                    <td><span class="module-id">{{ module.id }}</span><a class="module-edit-link" href="#">{% if module.configuration.layout.title is null %}{{ module.configuration.presentation }}{% else %}{{ module.configuration.layout.title }}{% endif %}</a></td>
                     <td class="rank">{{ module.rank }}</td>
                     <td class="size">{{ module.size }}</td>
                     <td class="removeModule" data-removeLink="{{ module.id }}/remove-module"><span class="glyphicon glyphicon-trash" style=" color: rgba(196, 0, 0, 0.94); font-size: 17px;"></span></td>

@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 interface ModuleInterface
 {
-    function __construct(Module $module, ManagerRegistry $managerRegistry);
+    public function __construct(Module $module, ManagerRegistry $managerRegistry);
 
-    public function render(Configuration $configuration);
+    public function render();
 }

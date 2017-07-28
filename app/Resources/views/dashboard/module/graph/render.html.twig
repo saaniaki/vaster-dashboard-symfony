@@ -1,11 +1,11 @@
 {# dump(result) #}
 
 
-<div class="col-sm-{{ result.module.size }}">
+<div class="col-sm-{{ conf.layout.size }}">
 
     <div class="panel panel-default" id="module-{{ result.module.id }}">
         <div class="panel-heading" style="height: 38px;padding-right: 15%;">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> <span class="module-title"></span></h3>
+            <h3 class="panel-title"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> <span class="module-title">{{ result.title }}</span></h3>
         </div>
 
         <div class="btn-group" style=" float: right; height: 38px; top: -39px; right: -1px;">
@@ -71,7 +71,7 @@
         <div class="modal-content">
             <div class="modal-header ">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
-                <h4 class="modal-title" id="myModalLabel">Options - {{ result.module.moduleInfo.name }}</h4>
+                <h4 class="modal-title" id="myModalLabel">Options - {{ result.title }}</h4>
             </div>
             <div class="modal-body">
 
@@ -94,6 +94,16 @@
                     <div class="tab-content">
 
                         <div role="tabpanel" class="tab-pane active" id="presentation-{{ result.module.id }}">
+
+                            <p class="bg-info" style="padding: 15px;">You can type a custom name for this module:</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Custom Title:
+                                    <input id="option-module-{{ result.module.id }}-title" type="text" class="form-control" value="{{ result.title }}" data-default="{{ result.title }}" style="margin-bottom: 10px;">
+                                    <input id="option-module-{{ result.module.id }}-size" type="hidden" class="form-control" value="{{ conf.layout.size }}" data-default="{{ conf.layout.size }}" style="margin-bottom: 10px;">
+                                </div>
+                            </div>
 
                             <p class="bg-info" style="padding: 15px;">Please select the right presentation fo this module:</p>
 

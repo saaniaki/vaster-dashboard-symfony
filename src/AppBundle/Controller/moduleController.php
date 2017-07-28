@@ -28,7 +28,7 @@ class moduleController extends Controller
      * @param $module Module
      * @param $index integer
      * @param $section string
-     * @Route("/module/{id}/search/{section}/{index}", name="get_module_search_filter")
+     * @Route("/module/{id}/search/{section}/{index}", name="get_module_search")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getSearchFilter(Module $module, $section, $index){
@@ -47,7 +47,7 @@ class moduleController extends Controller
      * @param $module Module
      * @param $section string
      * @param $index integer
-     * @Route("/module/{id}/date/{section}/{index}", name="get_module_date_filter")
+     * @Route("/module/{id}/date/{section}/{index}", name="get_module_date")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getDateFilter(Module $module, $section, $index){
@@ -71,6 +71,7 @@ class moduleController extends Controller
         $moduleService = $this->get('app.module');
         $result = $moduleService->render($module);
 
+        // IMPORTANT $available conf
         $conf = $module->getModuleInfo()->getAvailableConfiguration();
         $presentations = $conf['presentation'];
         $userType = $conf['filters']['user_type'];

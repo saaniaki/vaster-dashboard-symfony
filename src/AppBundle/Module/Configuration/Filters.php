@@ -39,11 +39,12 @@ class Filters
     }
 
     /**
-     * @return string[]
+     * @return ArrayCollection|null
      */
-    public function getUserType(): array
+    public function getUserType()
     {
-        return $this->user_type;
+        if ( $this->user_type == null ) return null;
+        return new ArrayCollection($this->user_type);
     }
 
     /**
@@ -75,7 +76,17 @@ class Filters
      */
     public function getDeviceType(): array
     {
-        return $this->device_type;
+        $deviceTypes = [];
+        if( $this->device_type != null ){
+            $temp = new ArrayCollection($this->device_type);
+            if( $temp->contains("Android")) array_push($deviceTypes, "android");
+            if( $temp->contains("iOS")) {
+                array_push($deviceTypes, "iPhone");
+                array_push($deviceTypes, "iPad");
+            }
+        }
+
+        return $deviceTypes;
     }
 
     /**
@@ -115,11 +126,21 @@ class Filters
     }
 
     /**
-     * @return string[]
+     * @return mixed
      */
-    public function getAvailability(): array
+    public function getAvailability()
     {
-        return $this->availability;
+
+        $filter_availability = null;
+        if( $this->availability != null ){
+            $filter_availability = new ArrayCollection($this->availability);
+            if ($filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular"))$filter_availability = true;
+            else if (!$filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = false;
+            else if (!$filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular")) $filter_availability = null; // this should return error
+            else if ($filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = null;
+        }
+
+        return $filter_availability;
     }
 
     /**
@@ -144,12 +165,28 @@ class Filters
     }
 
     /**
+     * @return array
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
      * @param string $name
      * @param Search $search
      */
     public function addSearch(string $name,Search $search)
     {
         $this->search[$name] = $search;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSearch()
+    {
+        return $this->search;
     }
 
     public function isEmpty(){

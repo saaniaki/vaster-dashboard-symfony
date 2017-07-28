@@ -42,6 +42,6 @@ class vdpModule
         }
 
 
-        return $instance->render($module->getConfiguration());
+        return $instance->render();
     }
 }

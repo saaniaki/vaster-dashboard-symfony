@@ -69,11 +69,11 @@ class adminController extends Controller
         $userRep = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster");
 
         $filters = new Filters();
-        $total = $userRep->generalCount(null);
+
 
         // can be optimised to call it if internal is not filtered
         $filters->addUserType('Internal');
-        $totalInter = $userRep->generalCount((array) $filters);
+        $totalInter = $userRep->generalCount($filters);
 
 
 
@@ -88,18 +88,18 @@ class adminController extends Controller
             $filters->addSearch('search', $search);
         }
 
-        dump($filters);
+        $total = $userRep->generalCount($filters);
 
         $filters->addAvailability('Orange Hat');
-        $totalORG= $userRep->generalCount((array) $filters);
+        $totalORG= $userRep->generalCount($filters);
 
         $filters->setAvailability();
         $filters->addDeviceType('Android');
-        $android = $userRep->generalCount((array) $filters);
+        $android = $userRep->generalCount($filters);
 
         $filters->setDeviceType();
         $filters->addDeviceType('iOS');
-        $ios = $userRep->generalCount((array) $filters);
+        $ios = $userRep->generalCount($filters);
 
         $result[] = [
             'total' => $total,

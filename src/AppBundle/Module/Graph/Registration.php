@@ -9,7 +9,10 @@
 namespace AppBundle\Module\Graph;
 
 use AppBundle\Entity\Module;
+use AppBundle\Module\AbstractModule;
+use AppBundle\Module\Combination;
 use AppBundle\Module\Configuration\Configuration;
+use AppBundle\Module\Configuration\Filters;
 use AppBundle\Module\ModuleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -18,64 +21,20 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\QueryBuilder;
 
 
-class Registration implements ModuleInterface
+class Registration extends AbstractModule
 {
-    /**
-     * @var Module
-     */
-    private $module;
-    private $userRep;
-
-    private $title;
-    private $size;
-    private $color;
-
-
-    private $xTitle;
-    private $xAxisType; //linear, logarithmic, datetime or category
-    private $start = [
-        'year' => 2016,
-        'month' => 11,
-        'day' => 9,
-    ];
-
-
-    private $yTitle;
     private $yFormat;
     /** @var  $yMax integer */
     private $yMax;
-    private $yAllowDecimals;
-
-
-    private $y1Title;
-    private $y1Format;
     /** @var  $y1Max integer */
     private $y1Max;
-    private $y1AllowDecimals;
-
-
-    private $xValues;
-    private $yValues;
-
-    /** @var  $xInterval integer */
-    private $xInterval;
-
-    private $currentlyShowing = 0;
-
-    private $footer;
-
-
-    private $tooltip_shared = 1;
-    private $all_data = [];
 
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
-        $this->module = $module;
-        $em = $managerRegistry->getManager('vaster');
-        $this->userRep = $em->getRepository("VasterBundle:User");
+        parent::__construct($module, $managerRegistry);
 
-        $this->size = 300; //useless
-
+        $this->setTitle('Registration Over Time');
+        $this->size = 200; //useless but no validation
         $this->xAxisType = 'datetime';
         $this->xTitle = 'Time';
         $this->yTitle = 'Registration';
@@ -89,131 +48,10 @@ class Registration implements ModuleInterface
 
         $this->yAllowDecimals = false;
         $this->y1AllowDecimals = false;
-
-        $this->color = new ArrayCollection(['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a']);
     }
 
-    /**
-     * @param Configuration|ArrayCollection $configuration
-     * @return array
-     */
-    public function render(Configuration $configuration)
-    {
-        $presentation = $configuration->getPresentation(); //this value should be valued!!
-
-        $filters = (array) $configuration->getFilters();
-        $removeZeros = $configuration->isRemoveZeros();
-
-        /*
-         * getting all the possible categories
-         */
-        $categories = [];
-        $singleCategories = $configuration->getCategories()->getSingle();
-        $multiCategories = new ArrayCollection((array) $configuration->getCategories()->getMulti());
-
-        foreach ($singleCategories as $cat){
-            $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
-        }
-
-
-        foreach ($multiCategories as $type => $cat){
-            foreach ($cat as $catName => $value) {
-                $categories[$catName] = [
-                    '0' => ['match' => false, 'value' => $value, 'type' => $type],
-                    '1' => ['match' => true, 'value' => $value, 'type' => $type]
-                ];
-            }
-        }
-
-
-
-
-
-        $this->makeNames($presentation, $this->combinations($categories), $filters, $removeZeros);
-        $this->title = 'Registration Over Time';
-        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
-        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
-
-        return get_object_vars($this);
-    }
-
-
-    private function process($rawData, $startNumber, $name, $removeZeros)
-    {
-        $data = [];
-        $data_cumulative = [];
-
-
-        $max = 0;
-        $filteredUsers = 0;
-        $sum = $startNumber;
-        foreach ($rawData as $dot) {
-            $temp = [
-                'y' => $dot['number'],
-                'name' => "from " . $dot['from']->format('Y-m-d H:i') . " to " . $dot['to']->format('Y-m-d H:i')
-            ];
-            //array_push($this->data, $temp);
-            array_push($data, $temp);
-
-            if ($max < $dot['number'])
-                $max = $dot['number'];
-
-            $filteredUsers += $dot['number'];
-            $sum += $dot['number'];
-            $temp['y'] = $sum;
-            //array_push($this->data1, $temp);
-            array_push($data_cumulative, $temp);
-        }
-
-        if (!$removeZeros || $sum != 0){
-
-            $this->currentlyShowing += $filteredUsers;
-/*
-            if( count($this->all_data) == 0 )
-                $this->footer .= " $name: " . $sum;
-            else
-                $this->footer .= ", $name: " . $sum;
-*/
-            $this->all_data[] = [
-                'name' => $name,
-                'data' => $data,
-                'type' => 'column',
-                'yAxis' => 0,
-                'color' => $this->color->current()
-            ];
-
-            $this->all_data[] = [
-                'name' => $name . ' Cumulative',
-                'data' => $data_cumulative,
-                'type' => 'line',
-                'yAxis' => 1,
-                'color' => $this->color->current()
-            ];
-        }
-        $this->color->next();
-        //$this->yMax = $max;
-
-    }
-
-    private function combinations($data){ //should gp to abstract class
-        $combinations = [[]];
-        $comKeys = array_keys($data);
-
-        for ($count = 0; $count < count($comKeys); $count++) {
-            $tmp = [];
-            foreach ($combinations as $v1) {
-                foreach ($data[$comKeys[$count]] as $v2)
-                    $tmp[] = $v1 + [$comKeys[$count] => $v2];
-
-            }
-            $combinations = $tmp;
-        }
-
-        return $combinations;
-    }
-
-    private function makeNames($presentation, $combinations, $filters, $removeZeros){
-
+    protected function feedData($presentation, $combinations, $filters, $removeZeros){
+        /** @var Combination $combo */
         foreach( $combinations as $combo){
 
             $query = $this->userRep->createQueryBuilder('user')->select('user.createdtime, user.accounttype')
@@ -221,18 +59,12 @@ class Registration implements ModuleInterface
             $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query = $this->userRep->applyFilters($filters, $query);
-            $catArray = $this->userRep->applyCategories($combo, $query);
-            $name = $catArray['name'];
-            /** @var $query QueryBuilder */
-            $query = $catArray['query'];
-            //dump($query->getQuery());die();
+            $query = $this->userRep->applyCategories($combo, $query);
             $column = $query->getQuery()->getArrayResult();
 
 
-
-
-            $from = ($filters['date']['period'])->getFrom();
-            $to = ($filters['date']['period'])->getTo();
+            $from = $filters->getDate()['period']->getFrom();
+            $to = $filters->getDate()['period']->getTo();
             $adjustedDates = $this->userRep->adjustDate($from, $to);
             /** @var \DateTime $from $to */
             $from = $adjustedDates['from'];
@@ -246,24 +78,23 @@ class Registration implements ModuleInterface
 
 
             //Calculating the starting number
-            $newFilters = $filters;
-            $temp = clone $newFilters['date']['period']; //error id 'period is not there
+            $newFilters = clone $filters;
+            $temp = clone $newFilters->getDate()['period']; //error key 'period' is not there
             $temp->setFrom(null);
             $temp->setTo($from->format('Y-m-d'));
-            $newFilters['date']['period'] = $temp;
+            //$newFilters['date']['period'] = $temp;
+            $newFilters->addDate('period', $temp);
 
             $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
                 ->orderBy('user.createdtime', 'DESC');
             $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query = $this->userRep->applyFilters($newFilters, $query);
-            $catArray = $this->userRep->applyCategories($combo, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
 
 
-            $name = $catArray['name'];
+            $name = $combo->getName();
             if( $name == null ) $name .= "All Users";
-            /** @var $query QueryBuilder */
-            $query = $catArray['query'];
 
             $startNumber = $query->getQuery()->getSingleScalarResult();
 
@@ -315,6 +146,65 @@ class Registration implements ModuleInterface
         }
 
         return $combinations;
+    }
+
+
+
+    private function process($rawData, $startNumber, $name, $removeZeros)
+    {
+        $data = [];
+        $data_cumulative = [];
+
+
+        $max = 0;
+        $filteredUsers = 0;
+        $sum = $startNumber;
+        foreach ($rawData as $dot) {
+            $temp = [
+                'y' => $dot['number'],
+                'name' => "from " . $dot['from']->format('Y-m-d H:i') . " to " . $dot['to']->format('Y-m-d H:i')
+            ];
+            //array_push($this->data, $temp);
+            array_push($data, $temp);
+
+            if ($max < $dot['number'])
+                $max = $dot['number'];
+
+            $filteredUsers += $dot['number'];
+            $sum += $dot['number'];
+            $temp['y'] = $sum;
+            //array_push($this->data1, $temp);
+            array_push($data_cumulative, $temp);
+        }
+
+        if (!$removeZeros || $sum != 0){
+
+            $this->currentlyShowing += $filteredUsers;
+            /*
+                        if( count($this->all_data) == 0 )
+                            $this->footer .= " $name: " . $sum;
+                        else
+                            $this->footer .= ", $name: " . $sum;
+            */
+            $this->all_data[] = [
+                'name' => $name,
+                'data' => $data,
+                'type' => 'column',
+                'yAxis' => 0,
+                'color' => $this->color->current()
+            ];
+
+            $this->all_data[] = [
+                'name' => $name . ' Cumulative',
+                'data' => $data_cumulative,
+                'type' => 'line',
+                'yAxis' => 1,
+                'color' => $this->color->current()
+            ];
+        }
+        $this->color->next();
+        //$this->yMax = $max;
+
     }
 
 }

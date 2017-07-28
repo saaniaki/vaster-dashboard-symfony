@@ -38,6 +38,7 @@ class Configuration
 
     }
 
+
     /**
      * @return Categories
      */

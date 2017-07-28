@@ -9,12 +9,14 @@
 namespace VasterBundle\Repository;
 
 
+use AppBundle\Module\Combination;
+use AppBundle\Module\Configuration\DateRange;
 use AppBundle\Module\Configuration\Filters;
+use AppBundle\Module\Configuration\Search;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use VasterBundle\Entity\User;
-use \DateTime;
 
 class VasterUserRepository extends EntityRepository
 {
@@ -145,92 +147,20 @@ class VasterUserRepository extends EntityRepository
             ->execute();
     }
 
-    //$key => $cat
+    /**
+     * @param $combo Combination
+     * @param $query
+     * @return QueryBuilder
+     */
     public function applyCategories($combo, $query){
-        $name = $userType = $deviceType = $availability = null;
-        $searches = $dates =[];
-
-        foreach( $combo as $key => $cat ){
-            if( is_string($cat) ) {
-                // $key is the type
-                $name .= "/" . $cat;
-
-                if( strtolower($key) == 'user_type' ) $userType = [$cat]; //changed
-
-                if( strtolower($key) == 'availability' ){
-                    if( strtolower($cat) == "orange hat" ) $availability = true;
-                    else $availability = false;
-                }
-                if( strtolower($key) == 'device_type' ){ //changed
-                    if( strtolower($cat) == "android" ) $deviceType = ["android"];
-                    else if( strtolower($cat) == "ios" ) $deviceType = ["iPhone", "iPad"];
-                }
-
-            }
-            else {
-                if( strtolower($cat['type']) == 'search' ) $search = $cat['value'];
-
-                if( strtolower($cat['type']) == 'date' ) $date = $cat['value'];
-
-                if( $cat['match'] ) {
-                    $name .= "/" . $key;
-                    if( strtolower($cat['type']) == 'search' ) $searches[] = $search;
-                    if( strtolower($cat['type']) == 'date' ) $dates[] = $date;
-                }
-                else {
-                    $name .= "/!" . $key;
-                    if( strtolower($cat['type']) == 'search' ) {
-                        $search['negate'] = !$search['negate'];
-                        $searches[] = $search;
-                    }
-                    if( strtolower($cat['type']) == 'date' ) {
-                        $date['negate'] = !$date['negate'];
-                        $dates[] = $date;
-                    }
-                }
-            }
-        }
-        //dump($searches);
-        //die($name);
-        $name = substr($name, 1);
-        $query = $this->count($userType, $availability, $deviceType, $searches, $dates, $query);
-
-        return ['query' => $query, 'name' => $name];
+        $query = $this->count($combo->getUserType(), $combo->isAvailability(), $combo->getDeviceType(), $combo->getSearch(), $combo->getDate(), $query);
+        return $query;
     }
 
-    public function applyFilters($filters, $query){
-        $filter_userTypes =  $filter_availability = $filter_deviceTypes = $filter_searches = $filter_dates = null;
-
-        if( isset($filters['user_type']) && $filters['user_type'] != null ){ //changed
-            $filter_userTypes = new ArrayCollection($filters['user_type']);//changed
-        }
-
-        if( isset($filters['availability']) && $filters['availability'] != null ){
-            $filter_availability = new ArrayCollection($filters['availability']);
-            if ($filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular"))$filter_availability = true;
-            else if (!$filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = false;
-            else if (!$filter_availability->contains("Orange Hat") && !$filter_availability->contains("Regular")) $filter_availability = null; // this should return error
-            else if ($filter_availability->contains("Orange Hat") && $filter_availability->contains("Regular")) $filter_availability = null;
-        }
-
-        if( isset($filters['device_type']) && $filters['device_type'] != null ){
-            $filter_deviceTypes = [];
-            $temp = new ArrayCollection($filters['device_type']);
-            if( $temp->contains("Android")) array_push($filter_deviceTypes, "android");
-            if( $temp->contains("iOS")) {
-                array_push($filter_deviceTypes, "iPhone");
-                array_push($filter_deviceTypes, "iPad");
-            }
-        }
-
-        if( isset($filters['search']) && $filters['search'] != null ) $filter_searches = $filters['search'];
-        if( isset($filters['date']) && $filters['date'] != null ) $filter_dates = $filters['date'];
-
-
-        return $this->filter($filter_userTypes, $filter_availability, $filter_deviceTypes, $filter_searches, $filter_dates, $query);
+    public function applyFilters(Filters $filters = null, $query){
+        if ( $filters == null ) return $query;
+        else return $this->filter($filters->getUserType(), $filters->getAvailability(), $filters->getDeviceType(), $filters->getSearch(), $filters->getDate(), $query);
     }
-
-
 
     /**
      * Modifies a query results
@@ -244,10 +174,10 @@ class VasterUserRepository extends EntityRepository
      * @return QueryBuilder
      */
     public function filter($types = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
-
+        //dump($types);
         /* and ( type1 or type2 ) */
-        $ors = []; // put inside
         if($types != null){
+            $ors = [];
             foreach ($types as $key => $type) {
                 $temp = $query->expr()->eq('user.accounttype', ':filter_type' . $key);
                 $query->setParameter('filter_type' . $key, $type);
@@ -257,13 +187,11 @@ class VasterUserRepository extends EntityRepository
             $query->andWhere(call_user_func_array([$temp, "orX"], $ors));
         }
 
-
-        if($availability !== null) $query->andWhere('profession.available = :filter_availability')->setParameter('filter_availability', $availability);
+        if($availability != null) $query->andWhere('profession.available = :filter_availability')->setParameter('filter_availability', $availability);
 
         /* and ( device1 or device 2 ) */
-        $ors = []; // put inside
         if($devices != null){
-            //$query->leftJoin('user.account', 'account');
+            $ors = [];
             foreach ($devices as $key => $device) {
                 $temp = $query->expr()->eq('account.devicetype', ':filter_device' . $key);
                 $query->setParameter('filter_device' . $key, $device);
@@ -275,33 +203,29 @@ class VasterUserRepository extends EntityRepository
 
 
         if($searches != null) {
-
             $outer = [];
+            /** @var Search $search */
             foreach ($searches as $key => $search) {
-                $search = (array) $search;
-
                 $expressions = [];
-                foreach ( $search['columns'] as $column ){
+                foreach ( $search->getColumns() as $column ){
 
-                    if( $search['negate'] ) $temp = $query->expr()->notLike($column, ':filter_value' . $key);
+                    if( $search->isNegate() ){
+                        $temp = $query->expr()->notLike($column, ':filter_value' . $key);
+
+                        if( $search->getColumnOperator() == 'and' ) $search->setColumnOperator('or');
+                        else if( $search->getColumnOperator() == 'or' ) $search->setColumnOperator('and');
+
+                        if( $search->getExpressionOperator() == 'and' ) $search->setExpressionOperator('or');
+                        else if( $search->getExpressionOperator() == 'or' ) $search->setExpressionOperator('and');
+
+                    }
                     else $temp = $query->expr()->like($column, ':filter_value' . $key);
 
-                    $query->setParameter('filter_value' . $key, $search['keyword']);
+                    $query->setParameter('filter_value' . $key, $search->getKeyword());
                     $expressions[] = $temp;
                 }
 
-                if( $search['negate'] ) {
-
-                    if( $search['columnOperator'] == 'and' ) $search['columnOperator'] = 'or';
-                    else if( $search['columnOperator'] == 'or' ) $search['columnOperator'] = 'and';
-
-                    if( $search['expressionOperator'] == 'and' ) $search['expressionOperator'] = 'or';
-                    else if( $search['expressionOperator'] == 'or' ) $search['expressionOperator'] = 'and';
-
-                }
-
-                $temp = $query->expr();
-                $outer[] = ['expression' => call_user_func_array([$temp, $search['columnOperator'] . "X"], $expressions), 'operator' => $search['expressionOperator']]; //expressionOperator columnOperator
+                $outer[] = ['expression' => call_user_func_array([$query->expr(), $search->getColumnOperator() . "X"], $expressions), 'operator' => $search->getExpressionOperator()]; //expressionOperator columnOperator
             }
 
             $full = null;
@@ -330,37 +254,33 @@ class VasterUserRepository extends EntityRepository
         }
 
 
-        //$date['from']
-        //$date['to']
-        //$date['negate']
-        //$date['operator']
-        //$date['column']
         if($dates != null) {
             $full = null;
             $temp = null;
             $expressions = new ArrayCollection();
 
+            /** @var DateRange $date */
             foreach ($dates as $key => $date) {
-                $date = (array) $date;
+                //$date = (array) $date;
 
-                if( $date['negate'] ){ //switch from and to, remove equal
+                if( $date->isNegate() ){ //switch from and to, remove equal
                     $temp = $query->expr()->orX(
-                        $query->expr()->gt($date['column'], ':filter_dateTo' . $key),
-                        $query->expr()->lt($date['column'], ':filter_dateFrom' . $key)
+                        $query->expr()->gt($date->getColumn(), ':filter_dateTo' . $key),
+                        $query->expr()->lt($date->getColumn(), ':filter_dateFrom' . $key)
                     );
                 }else {
                     $temp = $query->expr()->andX(
-                        $query->expr()->gte($date['column'], ':filter_dateFrom' . $key),
-                        $query->expr()->lte($date['column'], ':filter_dateTo' . $key)
+                        $query->expr()->gte($date->getColumn(), ':filter_dateFrom' . $key),
+                        $query->expr()->lte($date->getColumn(), ':filter_dateTo' . $key)
                     );
                 }
 
-                $adjustedDates = $this->adjustDate($date['from'], $date['to']);
+                $adjustedDates = $this->adjustDate($date->getFrom(), $date->getTo());
                 $query->setParameter('filter_dateFrom' . $key, $adjustedDates['from']);
                 $query->setParameter('filter_dateTo' . $key, $adjustedDates['to']);
 
 
-                $expressions->add(['expression' => $temp, 'operator' => $date['operator']]);
+                $expressions->add(['expression' => $temp, 'operator' => $date->getOperator()]);
             }
 
             //dump($expressions);die();
@@ -395,53 +315,23 @@ class VasterUserRepository extends EntityRepository
 
     /**
      * Modifies a query results
-     * @param mixed $types array idiot
+     * @param string|null $type
      * @param boolean $availability
-     * @param mixed $devices array idiot
+     * @param mixed $devices
      * @param string|null $searches
      * @param mixed $dates
      * @param QueryBuilder $query
-     *
      * @return QueryBuilder
      */
-    public function count($types = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
-        //if($types != null) foreach ($types as $key => $type) $query->orWhere('user.accounttype = :type' . $key)->setParameter('type' . $key, $type);
-        /* and ( type1 or type2 ) */
-        $ors = []; // put inside
-        if($types != null){
-            foreach ($types as $key => $type) {
-                $temp = $query->expr()->eq('user.accounttype', ':type' . $key);
-                $query->setParameter('type' . $key, $type);
-                $ors[] = $temp;
-            }
-            $temp = $query->expr();
-            $query->andWhere(call_user_func_array([$temp, "orX"], $ors));
-        }
+    public function count(string $type = null, bool $availability = null, $devices = null, $searches = null, $dates = null, QueryBuilder $query){
+        //dump($type);
 
-
-
-
-
-
-        /* and ( userType1 or userType2 )
-        $ors = [];
-        if($types != null){
-            //$query->leftJoin('user.account', 'account');
-            foreach ($types as $key => $type) {
-                $temp = $query->expr()->eq('user.accounttype', ':type' . $key);
-                $query->setParameter('type' . $key, $type);
-                $ors[] = $temp;
-            }
-            $temp = $query->expr();
-            $query->andWhere(call_user_func_array([$temp, "orX"], $ors));
-        }*/
-
+        if($type != null) $query->andWhere('user.accounttype = :type')->setParameter('type', $type);
         if($availability !== null) $query->andWhere('profession.available = :availability')->setParameter('availability', $availability);
 
         /* and ( device1 or device 2 ) */
-        $ors = []; // put inside
         if($devices != null){
-
+            $ors = [];
             foreach ($devices as $key => $device) {
                 $temp = $query->expr()->eq('account.devicetype', ':device' . $key);
                 $query->setParameter('device' . $key, $device);
@@ -509,11 +399,6 @@ class VasterUserRepository extends EntityRepository
         }
 
 
-        //$date['from']
-        //$date['to']
-        //$date['negate']
-        //$date['operator']
-        //$date['column']
         if($dates != null) {
             $full = null;
             $temp = null;
@@ -580,32 +465,6 @@ class VasterUserRepository extends EntityRepository
         return $query;
     }
 
-    /*
-     * Modifies a query results
-     * @param mixed $types array idiot
-     * @param boolean $availability
-     * @param mixed $devices array idiot
-     * @param string|null $keyword
-     * @param \DateTime|null $from
-     * @param \DateTime|null $to
-     * @param QueryBuilder $query
-     *
-     * @return QueryBuilder
-
-    private function modifyCount($types = null, bool $availability = null, $devices = null, $keyword = null, DateTime $from = null, DateTime $to = null, QueryBuilder $query){
-        if($types != null) foreach ($types as $key => $type) $query->orWhere('user.accounttype = :type' . $key)->setParameter('type' . $key, $type);
-        if($availability !== null) $query->leftJoin('user.profession', 'profession')->andWhere('profession.available = :availability')->setParameter('availability', $availability);
-
-        //if($devices != null) $query->leftJoin('user.account', 'account') ->andwhere('account.devicetype = :device')->setParameter('device', $devices);
-        if($devices != null){
-            $query->leftJoin('user.account', 'account');
-            foreach ($devices as $key => $device) $query->andWhere('account.devicetype = :device' . $key)->setParameter('device' . $key, $device);
-        }
-        if($keyword != null) $query->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')->setParameter('keyword', $keyword);
-        if($from != null) $query->andWhere('user.createdtime > :from')->setParameter('from', $from);
-        if($to != null) $query->andWhere('user.createdtime < :to')->setParameter('to', $to);
-        return $query;
-    }*/
 
     /**
      * Counts users who match the configuration
@@ -618,29 +477,13 @@ class VasterUserRepository extends EntityRepository
      * @internal param mixed $dates
      *
      */
-    public function generalCount($filters = null){
+    public function generalCount(Filters $filters = null){
         $query = $this->createQueryBuilder('user')->select('COUNT(user)');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->applyFilters($filters, $query);
         return $query->getQuery()->getSingleScalarResult();
     }
-
-    /*
-     * Counts users
-     * @param string $type
-     * @param string|null $keyword
-     * @param \DateTime|null $from
-     * @param \DateTime|null $to
-     *
-     * @return integer
-
-    public function count(string $type, string $keyword = null, DateTime $from = null, DateTime $to = null){
-        $query = $this->createQueryBuilder('user')->select('COUNT(user)');
-        return $this->modifyCount($type, null, null, $keyword, $from,$to, $query)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }*/
 
     public function adjustDate($fromDate, $toDate){
         $yesterday = new \DateTime('2000-01-01');
@@ -669,55 +512,5 @@ class VasterUserRepository extends EntityRepository
         return ['from' => $fromDate, 'to' => $toDate];
     }
 
-
-    public function registrationNumber($type, $keyword, \DateTime $from,\DateTime $to,\DateInterval $interval)
-    {
-        // if from > to throw expection
-        // from / inreval should reach to
-
-        $from = clone $from;
-        $to = clone $to;
-
-        $column = $this->createQueryBuilder('user')
-            ->select('user.createdtime, user.accounttype')
-            ->orderBy('user.createdtime', 'DESC');
-        if($keyword != null) {
-            $column = $column->andWhere('user.firstname LIKE :keyword or user.lastname LIKE :keyword or user.email LIKE :keyword or user.phone LIKE :keyword')
-                ->setParameter('keyword', $keyword);
-        }
-        if($type != 'all') {
-            $column = $column->andWhere('user.accounttype = :type')
-                ->setParameter('type', $type);
-        }
-        $column = $column->getQuery()
-            ->getArrayResult();
-
-
-        $count = 0;
-        $result = [];
-        while( !($from > $to) ){
-            $intervalEnd = clone $from;
-            $intervalEnd->add($interval);
-
-            $number = 0;
-            /** @var $item \DateTime */
-            foreach ( $column as $item ){
-                if( $from < $item['createdtime'] && $item['createdtime'] < $intervalEnd ){
-                    array_pop($column);
-                    $number++;
-                }
-            }
-
-            $result[$count] = [
-                'from' => clone $from,
-                'to' => $intervalEnd,
-                'number' => $number
-            ];
-            $count++;
-            $from->add($interval);
-        }
-
-        return $result;
-    }
 
 }

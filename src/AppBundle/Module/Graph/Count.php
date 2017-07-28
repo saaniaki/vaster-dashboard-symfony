@@ -10,6 +10,8 @@ namespace AppBundle\Module\Graph;
 
 
 use AppBundle\Entity\Module;
+use AppBundle\Module\AbstractModule;
+use AppBundle\Module\Combination;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\ModuleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,112 +20,25 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\QueryBuilder;
 
-class Count implements ModuleInterface
+class Count extends AbstractModule
 {
-    /**
-     * @var Module
-     */
-    private $module;
-    private $userRep;
-
-    private $title;
-    private $type;
-    private $size;
-    private $color = ['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'];
-    private $xTitle;
-    private $yTitle;
-    private $xValues;
-    private $yValues;
-    private $interval;
-
-    private $footer;
-
-    private $currentlyShowing = 0;
-
-    private $tooltip_shared = 1; //true
-    private $all_data = [];
-
-
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
-        $this->module = $module;
-        $em = $managerRegistry->getManager('vaster');
-        $this->userRep = $em->getRepository("VasterBundle:User");
+        parent::__construct($module, $managerRegistry);
+
+        $this->setTitle('User Count');
         $this->type = 'pie';
         $this->size = 200;
         $this->tooltip_shared = 0; // false but false is null so 0
     }
 
-    /**
-     * @param Configuration|ArrayCollection $configuration
-     * @return array
-     */
-    public function render(Configuration $configuration)
-    {
-
-        $presentation = $configuration->getPresentation(); //this value should be valued!!
-
-        $filters = (array) $configuration->getFilters();
-        $removeZeros = $configuration->isRemoveZeros();
-
-        /*
-         * getting all the possible categories
-         */
-        $categories = [];
-        $singleCategories = $configuration->getCategories()->getSingle();
-        $multiCategories = new ArrayCollection((array) $configuration->getCategories()->getMulti());
-
-        foreach ($singleCategories as $cat){
-            $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
-        }
-
-
-        foreach ($multiCategories as $type => $cat){
-            foreach ($cat as $catName => $value) {
-                $categories[$catName] = [
-                    '0' => ['match' => false, 'value' => $value, 'type' => $type],
-                    '1' => ['match' => true, 'value' => $value, 'type' => $type]
-                ];
-            }
-        }
-
-        //dump($presentation,$categories, $filters, $removeZeros);die();
-
-        /*if(  in_array($analytics, $this->module->getModuleInfo()->getAvailableAnalytics()) )
-            call_user_func_array([$this, $analytics], [$userType, $keyword, $deviceType, $availability]);
-        else die('bad configuration');*/
-
-
-
-
-        $this->makeNames($presentation, $this->combinations($categories), $filters, $removeZeros);
-        $this->title = 'Users Count';
-        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
-        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
-
-        return get_object_vars($this);
-    }
-
-    private function combinations($data){
-        $combinations = [[]];
-        $comKeys = array_keys($data);
-
-        for ($count = 0; $count < count($comKeys); $count++) {
-            $tmp = [];
-            foreach ($combinations as $v1) {
-                foreach ($data[$comKeys[$count]] as $v2)
-                    $tmp[] = $v1 + [$comKeys[$count] => $v2];
-
-            }
-            $combinations = $tmp;
-        }
-
-        return $combinations;
-    }
-
-    private function makeNames($presentation, $combinations, $filters, $removeZeros){
+    protected function feedData($presentation, $combinations, $filters, $removeZeros){
         $data = [];
+        /** @var Combination $combo */
         foreach( $combinations as $combo){
+
+            //dump($combo);
+
             $query = null;
             if( $presentation == 'User Count' ){
                 $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
@@ -137,12 +52,10 @@ class Count implements ModuleInterface
             $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
             $query = $this->userRep->applyFilters($filters, $query);
-            $catArray = $this->userRep->applyCategories($combo, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
 
-            $name = $catArray['name'];
+            $name = $combo->getName();
             if( $name == null ) $name .= "All Users";
-            /** @var $query QueryBuilder */
-            $query = $catArray['query'];
 
             $number = $query->getQuery()->getSingleScalarResult();
             //process
@@ -168,39 +81,3 @@ class Count implements ModuleInterface
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

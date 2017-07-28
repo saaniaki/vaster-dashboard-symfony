@@ -4,8 +4,8 @@
 
 {% block body %}
     <div class="container-fluid" style="margin-top: 50px;" id="dashboard">
-        <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("page_modules", {'id': 'page_id'}) }}" data-page-id-first-load="{{ currentPage.id }}">
-            <div id="modules" data-module-render-url="{{ path('render_module', {'id': 'module_id'}) }}">
+        <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("page_modules", {'id': 'page_id'}) }}" data-set-module-conf="{{ path("set_module_conf", {'id': 'module_id'}) }}" data-page-id-first-load="{{ currentPage.id }}">
+            <div id="modules" data-module-render-url="{{ path('render_module', {'id': 'module_id'}) }}" data-module-search-url="{{ path('get_module_search', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}" data-module-date-url="{{ path('get_module_date', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}">
                 <!-- modules -->
             </div>
         </div>

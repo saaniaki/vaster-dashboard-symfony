@@ -7,13 +7,19 @@ function renderModule(id) {
         url: path,
         success: function (data) {
             $("#renderModule-" + id).html(data);
-            $('#module-' + id + ' .module-title').text($('#module-' + id + ' .highcharts-title').text());
+            //$('#module-' + id + ' .module-title').text($('#module-' + id + ' .highcharts-title').text());
 
 
             $('#filter-search-' + id + '-add').on( "click", function() {
                 var index = $('#option-module-'+ id + '-search').attr('data-number');
+
+                var path = $("#modules").attr('data-module-search-url');
+                path = path.replace("module_id", id);
+                path = path.replace("module_section", 'filter');
+                path = path.replace("module_index", index);
+
                 $.ajax({
-                    url: "/web/app_dev.php/module/" + id + "/search/filter/" + index,
+                    url: path,
                     success: function (data) {
                         $('#option-module-'+ id + '-search').append(data).attr('data-number', ++index);
                     }
@@ -22,8 +28,14 @@ function renderModule(id) {
 
             $('#cat-search-' + id + '-add').on( "click", function() {
                 var index = $('#option-module-'+ id + '-category-search').attr('data-number');
+
+                var path = $("#modules").attr('data-module-search-url');
+                path = path.replace("module_id", id);
+                path = path.replace("module_section", 'cat');
+                path = path.replace("module_index", index);
+
                 $.ajax({
-                    url: "/web/app_dev.php/module/" + id + "/search/cat/" + index,
+                    url: path,
                     success: function (data) {
                         $('#option-module-'+ id + '-category-search').append(data).attr('data-number', ++index);
                     }
@@ -32,8 +44,14 @@ function renderModule(id) {
 
             $('#filter-date-' + id + '-add').on( "click", function() {
                 var index = $('#option-module-'+ id + '-date').attr('data-number');
+
+                var path = $("#modules").attr('data-module-date-url');
+                path = path.replace("module_id", id);
+                path = path.replace("module_section", 'filter');
+                path = path.replace("module_index", index);
+
                 $.ajax({
-                    url: "/web/app_dev.php/module/" + id + "/date/filter/" + index,
+                    url: path,
                     success: function (data) {
                         $('#option-module-'+ id + '-date').append(data).attr('data-number', ++index);
 
@@ -72,8 +90,14 @@ function renderModule(id) {
 
             $('#cat-date-' + id + '-add').on( "click", function() {
                 var index = $('#option-module-'+ id + '-category-date').attr('data-number');
+
+                var path = $("#modules").attr('data-module-date-url');
+                path = path.replace("module_id", id);
+                path = path.replace("module_section", 'cat');
+                path = path.replace("module_index", index);
+
                 $.ajax({
-                    url: "/web/app_dev.php/module/" + id + "/date/cat/" + index,
+                    url: path,
                     success: function (data) {
                         $('#option-module-'+ id + '-category-date').append(data).attr('data-number', ++index);
 
@@ -319,8 +343,11 @@ function setDefaultOptions(id) {
 }
 
 function configModule(id, data) {
+    var path = $("#renderPage").attr('data-set-module-conf');
+    path = path.replace("module_id", id);
+
     $.ajax({
-        url: 'api/module/' + id,
+        url: path,
         type: 'post',
         data: data,
         success: function (data) {
@@ -381,8 +408,12 @@ $("#renderPage").on( "click", ".option-module-save", function() {
     };
 
 
-    //  Filters
+
     var presentation = $(inputSelectorStr('presentation') + ":checked").val();
+    var module_title = $("#option-module-" + id + "-title").val();
+    var module_size = $("#option-module-" + id + "-size").val();
+
+    //  Filters
     var filter_userType = getMultipleSection('userType');
     var filter_availability = getMultipleSection('availability');
     var filter_deviceType = getMultipleSection('deviceType');
@@ -465,6 +496,10 @@ $("#renderPage").on( "click", ".option-module-save", function() {
             'device_type' : filter_deviceType,
             'search' : filter_search,
             'date' : filter_date
+        },
+        'layout' : {
+            'title' : module_title,
+            'size' : module_size
         },
         'presentation' : presentation,
         'remove_zeros' : true

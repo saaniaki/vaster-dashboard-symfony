@@ -260,7 +260,6 @@ function loadTable(searchedWord) {
     var ajaxPath = '';
     if( searchedWord === undefined || searchedWord === null) {
         ajaxPath = path + '/' + limit + '/' + offset + '/' + sort + '/' + order + '/' + internal;
-
         if( internal ){
             $.when(count('all'), count('internal')).done(function(a1, a2){
                 adjust(a1, ajaxPath);
