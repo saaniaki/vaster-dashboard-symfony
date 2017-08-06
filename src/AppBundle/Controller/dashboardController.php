@@ -18,6 +18,8 @@ use AppBundle\Form\NewPage;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\DateRange;
 use AppBundle\Module\Configuration\Filters;
+use AppBundle\Module\Configuration\Layout;
+use AppBundle\Module\Configuration\Presentation;
 use AppBundle\Module\Configuration\Search;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -305,9 +307,16 @@ class dashboardController extends Controller
 
             $configuration = new Configuration();
             $infoName = $moduleToBeAdded->getModuleInfo()->getName();
-            if( $infoName == "Count" ) $configuration->setPresentation('User Count');
+            if( $infoName == "Count" ) {
+                $presentation = new Presentation();
+                $presentation->setData('User Count');
+                $configuration->setPresentation($presentation);
+            }
             elseif ( $infoName == "Registration" ) {
-                $configuration->setPresentation('Weekly');
+                $presentation = new Presentation();
+                $presentation->setData('Registration');
+                $presentation->setInterval('Weekly');
+                $configuration->setPresentation($presentation);
                 $filters = new Filters();
                 $date = new DateRange();
                 //$date->setColumn('user.createdtime');
@@ -316,6 +325,11 @@ class dashboardController extends Controller
                 $filters->addDate('period', $date);
                 $configuration->setFilters($filters);
             }
+
+            $layout = new Layout();
+            $layout->setSize($moduleToBeAdded->getPostedSize());
+            $configuration->setLayout($layout);
+
             $moduleToBeAdded->setConfiguration($configuration->extract());
 
 

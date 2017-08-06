@@ -254,7 +254,7 @@ $( "#doEditModule" ).click(function() {
         'info' : $("#editModuleModal #app_bundle_new_module_moduleInfo option[value='" + $('#app_bundle_new_module_moduleInfo').val() + "']").attr('data-info-id'),
         'rank' : $('#editModuleModal #app_bundle_new_module_rank').val(),
         'layout': {
-            'title' : null,
+            'title' : $("#modules_ajaxTbody").find("span.module-id").filter(function() { return $(this).text() == id; }).next().text(),
             'size' : $('#editModuleModal #app_bundle_new_module_size').val()
         }
     });

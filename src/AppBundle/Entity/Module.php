@@ -52,6 +52,15 @@ class Module
     }
 
     /**
+     * REMOVE THIS IN NEXT VERSION
+     * @return mixed
+     */
+    public function getPostedSize()
+    {
+        return $this->size;
+    }
+
+    /**
      * @param mixed $size
      */
     public function setSize($size)

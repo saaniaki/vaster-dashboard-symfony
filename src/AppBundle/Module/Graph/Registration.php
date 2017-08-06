@@ -13,6 +13,7 @@ use AppBundle\Module\AbstractModule;
 use AppBundle\Module\Combination;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\Filters;
+use AppBundle\Module\Configuration\Presentation;
 use AppBundle\Module\ModuleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -33,12 +34,22 @@ class Registration extends AbstractModule
     {
         parent::__construct($module, $managerRegistry);
 
-        $this->setTitle('Registration Over Time');
+        $data_source = $module->getConfiguration()->getPresentation()->getData();
+        if( $data_source == "Registration" ) {
+            $this->setTitle('Registration Over Time');
+            $this->yTitle = 'Registration';
+            $this->y1Title = 'Registration Cumulative';
+        }
+        else if( $data_source == "Search" ) {
+            $this->setTitle('Search Number Over Time');
+            $this->yTitle = 'Search';
+            $this->y1Title = 'Search Cumulative';
+            $this->color = new ArrayCollection(['#c42525', '#0d233a', '#f28f43', '#8bbc21', '#1aadce', '#492970', '#910000', '#77a1e5', '#2f7ed8', '#a6c96a']);
+        }
+
         $this->size = 200; //useless but no validation
         $this->xAxisType = 'datetime';
         $this->xTitle = 'Time';
-        $this->yTitle = 'Registration';
-        $this->y1Title = 'Registration Cumulative';
         //$this->data1_yAxis = 1;
         $this->y1Format = '{value}'; //'{value}%'
         //$this->yMax = 10;
@@ -50,18 +61,18 @@ class Registration extends AbstractModule
         $this->y1AllowDecimals = false;
     }
 
+
     protected function feedData($presentation, $combinations, $filters, $removeZeros){
+        $data_source = $presentation->getData();
+
         /** @var Combination $combo */
         foreach( $combinations as $combo){
+            $name = $combo->getName();
+            if( $data_source == "Registration" && $name == null) $name .= "All Users";
+            else if( $data_source == "Search" && $name == null) $name .= "All Searches";
 
-            $query = $this->userRep->createQueryBuilder('user')->select('user.createdtime, user.accounttype')
-                ->orderBy('user.createdtime', 'DESC');
-            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-            $query = $this->userRep->applyFilters($filters, $query);
-            $query = $this->userRep->applyCategories($combo, $query);
-            $column = $query->getQuery()->getArrayResult();
 
+            $column = $this->getColumn($data_source, $combo, $filters);
 
             $from = $filters->getDate()['period']->getFrom();
             $to = $filters->getDate()['period']->getTo();
@@ -76,44 +87,23 @@ class Registration extends AbstractModule
                 'day' => $from->format('d'),
             ];
 
+            $startNumber = $this->getStartingNumber($data_source, $from, $combo, $filters);
 
-            //Calculating the starting number
-            $newFilters = clone $filters;
-            $temp = clone $newFilters->getDate()['period']; //error key 'period' is not there
-            $temp->setFrom(null);
-            $temp->setTo($from->format('Y-m-d'));
-            //$newFilters['date']['period'] = $temp;
-            $newFilters->addDate('period', $temp);
-
-            $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
-                ->orderBy('user.createdtime', 'DESC');
-            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-            $query = $this->userRep->applyFilters($newFilters, $query);
-            $query = $this->userRep->applyCategories($combo, $query);
-
-
-            $name = $combo->getName();
-            if( $name == null ) $name .= "All Users";
-
-            $startNumber = $query->getQuery()->getSingleScalarResult();
-
-
-
-
-            if( $presentation == 'Hourly' ){
+            $PR_interval = $presentation->getInterval();
+            if( $PR_interval == 'Hourly' ){
                 $interval = new \DateInterval('PT1H');
                 $this->xInterval = 3600 * 1000;
-            } elseif( $presentation == 'Daily' ){
+            } elseif( $PR_interval == 'Daily' ){
                 $interval = new \DateInterval('P1D');
                 $this->xInterval = 24 * 3600 * 1000;
-            } elseif( $presentation == 'Weekly' ){
+            } elseif( $PR_interval == 'Weekly' ){
                 $interval = new \DateInterval('P7D');
                 $this->xInterval = 7 * 24 * 3600 * 1000;
             } else { // default is daily
                 $interval = new \DateInterval('P7D');
                 $this->xInterval = 7 * 24 * 3600 * 1000;
             }
+
 
 
             $count = 0;
@@ -143,12 +133,70 @@ class Registration extends AbstractModule
 
             $this->process($result, $startNumber, $name, $removeZeros);
 
+            if( $data_source == "Registration" ) {
+                $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
+                $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
+            }
+            else if( $data_source == "Search" ) {
+                $totalUsers = $this->searchRep->createQueryBuilder('search')->leftJoin('search.user', 'user')->select('COUNT(user)')
+                    ->getQuery()->getSingleScalarResult();
+                $this->footer = "Total Searches: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
+            }
+
         }
 
         return $combinations;
     }
 
+    private function getColumn(string $dataSource, Combination $combo = null, Filters $filters = null){
+        if( $dataSource == "Registration" ){
+            $query = $this->userRep->createQueryBuilder('user')->select('user.createdtime, user.accounttype')
+                ->orderBy('user.createdtime', 'DESC');
+            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query = $this->userRep->applyFilters($filters, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
+            return $query->getQuery()->getArrayResult();
+        }else if ( $dataSource == "Search" ){
+            $query = $this->searchRep->createQueryBuilder('search')
+                ->leftJoin('search.user', 'user')
+                ->select('search.createdtime')
+                ->orderBy('search.createdtime', 'DESC');
+            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query = $this->userRep->applyFilters($filters, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
+            return $query->getQuery()->getArrayResult();
+        }
+    }
 
+    private function getStartingNumber(string $dataSource, $from, Combination $combo = null, Filters $filters = null){
+        $newFilters = clone $filters;
+        $temp = clone $newFilters->getDate()['period']; //error key 'period' is not there
+        $temp->setFrom(null);
+        $temp->setTo($from->format('Y-m-d'));
+        $newFilters->addDate('period', $temp);
+
+        if( $dataSource == "Registration" ){
+            $query = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')
+                ->orderBy('user.createdtime', 'DESC');
+            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query = $this->userRep->applyFilters($newFilters, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
+            return $query->getQuery()->getSingleScalarResult();
+        }else if ( $dataSource == "Search" ){
+            $query = $this->searchRep->createQueryBuilder('search')
+                ->leftJoin('search.user', 'user')
+                ->select('COUNT(user)')
+                ->orderBy('search.createdtime', 'DESC');
+            $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+            $query = $this->userRep->applyFilters($newFilters, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
+            return $query->getQuery()->getSingleScalarResult();
+        }
+    }
 
     private function process($rawData, $startNumber, $name, $removeZeros)
     {

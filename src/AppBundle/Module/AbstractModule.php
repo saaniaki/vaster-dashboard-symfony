@@ -12,6 +12,7 @@ namespace AppBundle\Module;
 use AppBundle\Entity\Module;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\Filters;
+use AppBundle\Module\Configuration\Presentation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -22,6 +23,7 @@ abstract class AbstractModule implements ModuleInterface
      */
     protected $module;
     protected $userRep;
+    protected $searchRep;
 
 
     protected $title;
@@ -58,6 +60,7 @@ abstract class AbstractModule implements ModuleInterface
         $this->module = $module;
         $em = $managerRegistry->getManager('vaster');
         $this->userRep = $em->getRepository("VasterBundle:User");
+        $this->searchRep = $em->getRepository("VasterBundle:Search");
         $this->color = new ArrayCollection(['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a']);
     }
 
@@ -99,8 +102,7 @@ abstract class AbstractModule implements ModuleInterface
 
 
         $this->feedData($presentation, $this->combinations($categories), $filters, $removeZeros);
-        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
-        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
+
 
         return get_object_vars($this);
     }
@@ -136,7 +138,7 @@ abstract class AbstractModule implements ModuleInterface
     }
 
     /**
-     * @param $presentation
+     * @param Presentation $presentation
      * @param $combinations
      * @param $filters Filters
      * @param $removeZeros

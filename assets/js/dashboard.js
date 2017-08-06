@@ -53,10 +53,11 @@ function renderModule(id) {
                 $.ajax({
                     url: path,
                     success: function (data) {
+                        var curr = '#filter-date-' + id + '-' + index;
                         $('#option-module-'+ id + '-date').append(data).attr('data-number', ++index);
-
-                        var fromDateSelector = $('#option-module-' + id + '-date .fromDatetimepicker');
-                        var toDateSelector = $('#option-module-' + id + '-date .toDatetimepicker');
+                        var fieldset = $(curr);
+                        var fromDateSelector = fieldset.find('.fromDatetimepicker');
+                        var toDateSelector = fieldset.find('.toDatetimepicker');
 
                         fromDateSelector.datetimepicker({
                             format: "YYYY-MM-DD HH:mm",
@@ -99,10 +100,12 @@ function renderModule(id) {
                 $.ajax({
                     url: path,
                     success: function (data) {
+                        var curr = '#cat-date-' + id + '-' + index;
                         $('#option-module-'+ id + '-category-date').append(data).attr('data-number', ++index);
+                        var fieldset = $(curr);
+                        var fromDateSelector = fieldset.find('.fromDatetimepicker');
+                        var toDateSelector = fieldset.find('.toDatetimepicker');
 
-                        var fromDateSelector = $('#option-module-' + id + '-category-date .fromDatetimepicker');
-                        var toDateSelector = $('#option-module-' + id + '-category-date .toDatetimepicker');
 
                         fromDateSelector.datetimepicker({
                             format: "YYYY-MM-DD HH:mm",
@@ -148,8 +151,11 @@ function renderModule(id) {
 
 function setDefaultOptions(id) {
     // presentation
-    var presentationSelector = $("#option-module-" + id + "-presentation");
-    presentationSelector.find("input[value='" + presentationSelector.attr('data-default') + "']").attr("checked", "checked");
+    var presentation = "#option-module-" + id + "-presentation";
+    var presentationDataSelector = $(presentation + "-data");
+    var presentationIntervalSelector = $(presentation + "-interval");
+    presentationDataSelector.find("input[value='" + presentationDataSelector.attr('data-default') + "']").attr("checked", "checked");
+    presentationIntervalSelector.find("input[value='" + presentationIntervalSelector.attr('data-default') + "']").attr("checked", "checked");
     // user type
     var userTypeSelector = $("#option-module-" + id + "-userType");
     userTypeSelector.find("input").each( function() {
@@ -186,16 +192,41 @@ function setDefaultOptions(id) {
     // filter date
     var dateSelector = $("#option-module-" + id + "-date");
     dateSelector.find("input").each( function() {
-        $(this).val( $(this).attr('data-default'));
+        var value = $(this).attr('data-default');
+        var parent = $(this).parent();
+
+        if($(this).parent().hasClass('date')){
+            value = $(this).parent().attr('data-default');
+            if( value === '2000-01-01' ){
+                value = "Yesterday";
+                if(parent.hasClass('fromDatetimepicker')) dateSelector.find('.from button.day').addClass('active');
+                else if(parent.hasClass('toDatetimepicker')) dateSelector.find('.to button.day').addClass('active');
+            }
+            else if( value === '2000-01-07' ){
+                value = "A week ago";
+                if(parent.hasClass('fromDatetimepicker')) dateSelector.find('.from button.week').addClass('active');
+                else if(parent.hasClass('toDatetimepicker')) dateSelector.find('.to button.week').addClass('active');
+            }
+            else if( value === '2000-02-01' ){
+                value = "A month ago";
+                if(parent.hasClass('fromDatetimepicker')) dateSelector.find('.from button.month').addClass('active');
+                else if(parent.hasClass('toDatetimepicker')) dateSelector.find('.to button.month').addClass('active');
+            }
+            //else fromDateSelector.data("DateTimePicker").date(fromDateSelector.attr('data-default'));
+        }
+        var thisInput = $(this);
+        $('#option-module-' + id).on('show.bs.modal', function () {
+            thisInput.val(value);
+        });
     });
     dateSelector.find(".fromDatetimepicker").each( function() {
         var fromDateSelector = $(this);
         var toDateSelector = $(this).closest(".row").find(".toDatetimepicker");
 
         var fromDefault = fromDateSelector.attr('data-default');
-        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
+        if(fromDefault === "" || fromDefault === '2000-01-01' || fromDefault === '2000-01-07' || fromDefault === '2000-02-01') fromDefault = new Date(2016, 11, 9);
         var toDefault = toDateSelector.attr('data-default');
-        if(toDefault === "") toDefault = null;
+        if(toDefault === "" || toDefault === '2000-01-01' || toDefault === '2000-01-07' || toDefault === '2000-02-01') toDefault = null;
 
         fromDateSelector.datetimepicker({
             format: "YYYY-MM-DD HH:mm",
@@ -311,32 +342,25 @@ function setDefaultOptions(id) {
             $(".dateButton.to button[data-module-id='" + id +"']").removeClass('active');
         });
     });
-
 /*
     //set default values
     var fromDateSelector = $('#option-module-' + id + ' .fromDatetimepicker');
     var toDateSelector = $('#option-module-' + id + ' .toDatetimepicker');
-
     $('#option-module-' + id).on('show.bs.modal', function () {
-        $("#option-module-" + id + "-analytics" + " input[value='" + $("#option-module-" + id + "-analytics").attr('data-default') + "']").prop("checked", true);
-        $("#option-module-" + id + "-userType" + " input[value='" + $("#option-module-" + id + "-userType").attr('data-default') + "']").prop("checked", true);
-        $("#option-module-" + id + "-keyword").val($("#option-module-" + id + "-keyword").attr('data-default'));
 
         if( fromDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .fromDatetimepicker input').val('2016-12-09 00:00');
-        else if( fromDateSelector.attr('data-default') === '2000-01-01 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("Yesterday"); $('.from button.day').addClass('active'); }
-        else if( fromDateSelector.attr('data-default') === '2000-01-07 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A week ago"); $('.from button.week').addClass('active'); }
-        else if( fromDateSelector.attr('data-default') === '2000-02-01 00:00:00.000000' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A month ago"); $('.from button.month').addClass('active'); }
+        else if( fromDateSelector.attr('data-default') === '2000-01-01' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("Yesterday"); $('.from button.day').addClass('active'); }
+        else if( fromDateSelector.attr('data-default') === '2000-01-07' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A week ago"); $('.from button.week').addClass('active'); }
+        else if( fromDateSelector.attr('data-default') === '2000-02-01' ){ $('#option-module-' + id + ' .fromDatetimepicker input').val("A month ago"); $('.from button.month').addClass('active'); }
         else fromDateSelector.data("DateTimePicker").date(fromDateSelector.attr('data-default'));
 
         if( toDateSelector.attr('data-default') === 'notSet' ) $('#option-module-' + id + ' .toDatetimepicker input').val(); // turn real-time light on!
-        else if( toDateSelector.attr('data-default') === '2000-01-01 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("Yesterday"); $('.to button.day').addClass('active'); }
-        else if( toDateSelector.attr('data-default') === '2000-01-07 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A week ago"); $('.to button.day').addClass('active'); }
-        else if( toDateSelector.attr('data-default') === '2000-02-01 00:00:00.000000' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A month ago"); $('.to button.day').addClass('active'); }
+        else if( toDateSelector.attr('data-default') === '2000-01-01' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("Yesterday"); $('.to button.day').addClass('active'); }
+        else if( toDateSelector.attr('data-default') === '2000-01-07' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A week ago"); $('.to button.day').addClass('active'); }
+        else if( toDateSelector.attr('data-default') === '2000-02-01' ){ $('#option-module-' + id + ' .toDatetimepicker input').val("A month ago"); $('.to button.day').addClass('active'); }
         else toDateSelector.data("DateTimePicker").date(toDateSelector.attr('data-default'));
-
     });
 */
-
     $('#loading-' + id).hide();
     $('#module-' + id + '-container').show();
 
@@ -397,7 +421,6 @@ $("#renderPage").on( "click", ".option-module-save", function() {
     var id = $(this).attr('data-module-id');
     var inputSelectorStr = function(fieldName){return "#option-module-" + id + "-" + fieldName + " input[name='" + fieldName + "-" + id + "']";};
     var searchSelectorNew = function(section, fieldName, index){return $("#" + section + "-search-" + id + "-" + fieldName + "-" + index)};
-    var dateSelector = function(section, fieldName){return $("#" + section + "-date-" + id + "-" + fieldName)};
     var dateSelectorNew = function(section, fieldName, index){return $("#" + section + "-date-" + id + "-" + fieldName + "-" + index)};
 
     var getMultipleSection = function(fieldName){
@@ -408,8 +431,9 @@ $("#renderPage").on( "click", ".option-module-save", function() {
     };
 
 
-
-    var presentation = $(inputSelectorStr('presentation') + ":checked").val();
+    var presentation = {};
+    presentation.data = $(inputSelectorStr('presentation-data') + ":checked").val();
+    presentation.interval = $(inputSelectorStr('presentation-interval') + ":checked").val();
     var module_title = $("#option-module-" + id + "-title").val();
     var module_size = $("#option-module-" + id + "-size").val();
 
@@ -517,12 +541,14 @@ $("#renderPage").on( "click", ".option-module-save", function() {
 }).on( "click", '.dateButton button', function() {
 
     var id = $(this).attr('data-module-id');
+    var fieldset = $(this).closest('fieldset');
 
-    var fromDateSelector = $('#option-module-' + id + ' .fromDatetimepicker').data("DateTimePicker");
-    var fromInputSelector = $('#option-module-' + id + ' .fromDatetimepicker input');
 
-    var toDateSelector = $('#option-module-' + id + ' .toDatetimepicker').data("DateTimePicker");
-    var toInputSelector = $('#option-module-' + id + ' .toDatetimepicker input');
+    var fromDateSelector = fieldset.find('.fromDatetimepicker').data("DateTimePicker");
+    var fromInputSelector = fieldset.find('.fromDatetimepicker input');
+
+    var toDateSelector = fieldset.find('.toDatetimepicker').data("DateTimePicker");
+    var toInputSelector = fieldset.find('.toDatetimepicker input');
 
 
     if($(this).parent().hasClass('from')){

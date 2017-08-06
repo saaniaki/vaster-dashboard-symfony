@@ -34,6 +34,7 @@ class Configuration
             $this->filters = new Filters();
             $this->categories = new Categories();
             $this->layout = new Layout();
+            $this->presentation = new Presentation();
         }
 
     }
@@ -94,20 +95,21 @@ class Configuration
     }
 
     /**
-     * @return string
+     * @return Presentation
      */
-    public function getPresentation(): string
+    public function getPresentation(): ?Presentation
     {
         return $this->presentation;
     }
 
     /**
-     * @param string $presentation
+     * @param Presentation $presentation
      */
-    public function setPresentation(string $presentation)
+    public function setPresentation(Presentation $presentation = null)
     {
         $this->presentation = $presentation;
     }
+
 
     /**
      * @return bool
@@ -237,12 +239,20 @@ class Configuration
             if( isset($layout['size']) && $layout['size'] != null )$layoutObj->setSize($layout['size']);
         }
 
+        ////////////////////////////////////////////////////////////////////////// Presentation: creating $presentationObj
+
+        if( $presentation != null ){
+            $presentationObj = new Presentation();
+            if( isset($presentation['data']) && $presentation['data'] != null )$presentationObj->setData($presentation['data']);
+            if( isset($presentation['interval']) && $presentation['interval'] != null )$presentationObj->setInterval($presentation['interval']);
+        }
+
         ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
-        if( isset($removeZeros) && $removeZeros != null )       $this->setRemoveZeros($removeZeros);
-        if( isset($presentation) && $presentation != null )     $this->setPresentation($presentation);
-        if( isset($filtersObj) && $filtersObj != null )       $this->setFilters($filtersObj);
-        if( isset($categoriesObj) && $categoriesObj != null )    $this->setCategories($categoriesObj);
-        if( isset($layoutObj) && $layoutObj != null )    $this->setLayout($layoutObj);
+        if( isset($removeZeros) && $removeZeros != null )           $this->setRemoveZeros($removeZeros);
+        if( isset($filtersObj) && $filtersObj != null )             $this->setFilters($filtersObj);
+        if( isset($categoriesObj) && $categoriesObj != null )       $this->setCategories($categoriesObj);
+        if( isset($layoutObj) && $layoutObj != null )               $this->setLayout($layoutObj);
+        if( isset($presentationObj) && $presentationObj != null )   $this->setPresentation($presentationObj);
 
     }
 

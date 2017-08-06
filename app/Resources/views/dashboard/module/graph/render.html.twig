@@ -105,14 +105,14 @@
                                 </div>
                             </div>
 
-                            <p class="bg-info" style="padding: 15px;">Please select the right presentation fo this module:</p>
+                            <p class="bg-info" style="padding: 15px;">Please select the right data source for this module:</p>
 
                             <div class="row">
-                                <div id="option-module-{{ result.module.id }}-presentation"  data-default="{{ conf.presentation }}" class="col-md-6">
-                                    {% for presentation in presentations %}
+                                <div id="option-module-{{ result.module.id }}-presentation-data"  data-default="{{ conf.presentation.data }}" class="col-md-6">
+                                    {% for presentation in presentations['data'] %}
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="presentation-{{ result.module.id }}" value="{{ presentation }}" {# if option == result.module.analytics %} checked="checked"{% endif #}>
+                                                <input type="radio" name="presentation-data-{{ result.module.id }}" value="{{ presentation }}" {# if option == result.module.analytics %} checked="checked"{% endif #}>
                                                 {{ presentation }}
                                             </label>
                                         </div>
@@ -120,6 +120,23 @@
                                 </div>
                             </div>
 
+
+                            {% if presentations['interval'] is defined %}
+                                <p class="bg-info" style="padding: 15px;">Please select the right interval for this module:</p>
+
+                                <div class="row">
+                                    <div id="option-module-{{ result.module.id }}-presentation-interval"  data-default="{{ conf.presentation.interval }}" class="col-md-6">
+                                        {% for presentation in presentations['interval'] %}
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="presentation-interval-{{ result.module.id }}" value="{{ presentation }}" {# if option == result.module.analytics %} checked="checked"{% endif #}>
+                                                    {{ presentation }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
 
                         </div>
 
@@ -262,7 +279,7 @@
 
                                     {% for name, date in conf.filters.date %}
 
-                                    <fieldset data-index="{{ index }}" id="filter-date-{{ index }}">
+                                    <fieldset data-index="{{ index }}" id="filter-date-{{ result.module.id }}-{{ index }}">
                                     <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
 
                                     <div class="container-fluid">

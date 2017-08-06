@@ -76,6 +76,9 @@ class Count extends AbstractModule
             'type' => 'pie'
         ];
 
+        $totalUsers = $this->userRep->createQueryBuilder('user')->select('COUNT(user)')->getQuery()->getSingleScalarResult();
+        $this->footer = "Total Users: " . $totalUsers . " / Currently showing: " . $this->currentlyShowing;
+
         return $combinations;
     }
 

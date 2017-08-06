@@ -490,6 +490,7 @@ class VasterUserRepository extends EntityRepository
         $aWeekAgo = new \DateTime('2000-01-07');
         $aMonthAgo = new \DateTime('2000-02-01');
 
+        //dump($fromDate, $toDate);die();
 
         if( $fromDate == null ) $fromDate = new \DateTime('2016-12-09');
         else $fromDate = new \DateTime($fromDate);
