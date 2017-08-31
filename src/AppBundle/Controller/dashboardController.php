@@ -324,6 +324,22 @@ class dashboardController extends Controller
                 //$date->setTo(null);
                 $filters->addDate('period', $date);
                 $configuration->setFilters($filters);
+            }elseif ( $infoName == "Bar Chart" ) {
+                $presentation = new Presentation();
+                $presentation->setData('Registration');
+                $presentation->setInterval('Weekly');
+                $configuration->setPresentation($presentation);
+                $filters = new Filters();
+                $date = new DateRange();
+                //$date->setColumn('user.createdtime');
+                //$date->setFrom(null);
+                //$date->setTo(null);
+                $filters->addDate('period', $date);
+                $configuration->setFilters($filters);
+            }elseif ( $infoName == "Pie Chart" ) {
+                $presentation = new Presentation();
+                $presentation->setData('Registration');
+                $configuration->setPresentation($presentation);
             }
 
             $layout = new Layout();

@@ -275,7 +275,8 @@ class VasterUserRepository extends EntityRepository
                     );
                 }
 
-                $adjustedDates = $this->adjustDate($date->getFrom(), $date->getTo());
+
+                $adjustedDates = $this->adjustDate($date->getFrom(), $date->getTo(), $date->getColumn() == 'lastSeen.seconds');
                 $query->setParameter('filter_dateFrom' . $key, $adjustedDates['from']);
                 $query->setParameter('filter_dateTo' . $key, $adjustedDates['to']);
 
@@ -400,6 +401,7 @@ class VasterUserRepository extends EntityRepository
 
 
         if($dates != null) {
+            //dump($dates);
             $full = null;
             $temp = null;
             $expressions = new ArrayCollection();
@@ -424,7 +426,9 @@ class VasterUserRepository extends EntityRepository
                 }
 
 
-                $adjustedDates = $this->adjustDate($date['from'], $date['to']);
+
+
+                $adjustedDates = $this->adjustDate($date['from'], $date['to'], $date['column'] == 'lastSeen.seconds');
                 $query->setParameter('dateFrom' . $key, $adjustedDates['from']);
                 $query->setParameter('dateTo' . $key, $adjustedDates['to']);
 
@@ -468,14 +472,13 @@ class VasterUserRepository extends EntityRepository
 
     /**
      * Counts users who match the configuration
-     * @param $filters
+     * @param Filters $filters
      * @return int
      * @internal param mixed $types
      * @internal param bool $availability
      * @internal param mixed $devices
      * @internal param null|string $searches
      * @internal param mixed $dates
-     *
      */
     public function generalCount(Filters $filters = null){
         $query = $this->createQueryBuilder('user')->select('COUNT(user)');
@@ -485,7 +488,7 @@ class VasterUserRepository extends EntityRepository
         return $query->getQuery()->getSingleScalarResult();
     }
 
-    public function adjustDate($fromDate, $toDate){
+    public function adjustDate($fromDate, $toDate, bool $timestamp = false){
         $yesterday = new \DateTime('2000-01-01');
         $aWeekAgo = new \DateTime('2000-01-07');
         $aMonthAgo = new \DateTime('2000-02-01');
@@ -509,6 +512,11 @@ class VasterUserRepository extends EntityRepository
         elseif ( $toDate == $aMonthAgo ) $toDate = new \DateTime('midnight last month');
         //elseif( $toDate == null ) $toDate = new \DateTime('now');
 
+
+        if( $timestamp){
+            $fromDate = $fromDate->getTimestamp();
+            $toDate = $toDate->getTimestamp();
+        }
 
         return ['from' => $fromDate, 'to' => $toDate];
     }

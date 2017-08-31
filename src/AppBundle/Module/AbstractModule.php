@@ -22,13 +22,12 @@ abstract class AbstractModule implements ModuleInterface
      * @var Module
      */
     protected $module;
-    protected $userRep;
-    protected $searchRep;
+
 
 
     protected $title;
     protected $footer;
-    protected $color;
+    public $color;
     protected $type;
     protected $size;
 
@@ -45,23 +44,40 @@ abstract class AbstractModule implements ModuleInterface
     ];
 
 
-    protected $yTitle;
+    public $yTitle;
     protected $yAllowDecimals;
 
 
-    protected $y1Title;
+    public $y1Title;
     protected $y1Format;
     protected $y1AllowDecimals;
     /** @var  $xInterval integer */
     protected $xInterval;
 
+    /** @var $subModule SubModuleInterface */
+    protected $subModule;
+
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
         $this->module = $module;
         $em = $managerRegistry->getManager('vaster');
-        $this->userRep = $em->getRepository("VasterBundle:User");
-        $this->searchRep = $em->getRepository("VasterBundle:Search");
         $this->color = new ArrayCollection(['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a']);
+
+
+        ////////////////////////
+        $available_data_sources = $this->module->getModuleInfo()->getAvailableConfiguration()["presentation"]["data"];
+        $data_source = $module->getConfiguration()->getPresentation()->getData();
+
+
+        //dump($available_data_sources, $data_source);die();
+
+        if(  in_array($data_source, $available_data_sources) )
+        {
+            $data_source = "AppBundle\Module\Graph\SubModule\\" . $data_source;
+            $this->subModule = new $data_source($this, $em);
+        }
+
+        else die('Data source does not exists!');
     }
 
     /**
@@ -100,6 +116,8 @@ abstract class AbstractModule implements ModuleInterface
             $categories[$catName][] = $value;
         }
 
+        dump($categories, $this->combinations($categories));
+
 
         $this->feedData($presentation, $this->combinations($categories), $filters, $removeZeros);
 
@@ -131,10 +149,39 @@ abstract class AbstractModule implements ModuleInterface
         return $combinationsObj;
     }
 
-    protected function setTitle($default){
+    public function setTitle($default){
         $title = $this->module->getConfiguration()->getLayout()->getTitle();
         if($title == null) $this->title = $default;
         else $this->title = $title;
+    }
+
+    //create a utility class and move this function there
+    public function adjustDate($fromDate, $toDate){
+        $yesterday = new \DateTime('2000-01-01');
+        $aWeekAgo = new \DateTime('2000-01-07');
+        $aMonthAgo = new \DateTime('2000-02-01');
+
+        //dump($fromDate, $toDate);die();
+
+        if( $fromDate == null ) $fromDate = new \DateTime('2016-12-09');
+        else $fromDate = new \DateTime($fromDate);
+
+        if( $fromDate == $yesterday ) $fromDate = new \DateTime('midnight yesterday');
+        elseif ( $fromDate == $aWeekAgo ) $fromDate = new \DateTime('midnight last week');
+        elseif ( $fromDate == $aMonthAgo ) $fromDate = new \DateTime('midnight last month');
+        //elseif( $fromDate == null ) $fromDate = new \DateTime('2016-12-09');
+
+
+        if( $toDate == null ) $toDate = new \DateTime('now');
+        else $toDate = new \DateTime($toDate);
+
+        if( $toDate == $yesterday ) $toDate = new \DateTime('midnight yesterday');
+        elseif ( $toDate == $aWeekAgo ) $toDate = new \DateTime('midnight last week');
+        elseif ( $toDate == $aMonthAgo ) $toDate = new \DateTime('midnight last month');
+        //elseif( $toDate == null ) $toDate = new \DateTime('now');
+
+
+        return ['from' => $fromDate, 'to' => $toDate];
     }
 
     /**

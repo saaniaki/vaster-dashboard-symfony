@@ -17,7 +17,7 @@ class DateRange
     private static $operators_available;
 
     /** @var $singleCategories ArrayCollection */
-    public static $columns_available = ['user.createdtime'];
+    public static $columns_available = ['user.createdtime' , 'lastSeen.seconds'];
 
     public $from;
     public $to;
