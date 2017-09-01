@@ -143,6 +143,17 @@ function renderModule(id) {
 
 
             setDefaultOptions(id);
+
+
+            $( "#option-module-" + id + "-category-date " ).sortable({
+                placeholder: "ui-state-highlight",
+                forcePlaceholderSize: true
+            }).disableSelection();
+
+            $( "#option-module-" + id + "-category-search" ).sortable({
+                placeholder: "ui-state-highlight",
+                forcePlaceholderSize: true
+            }).disableSelection();
         }
     });
 }
@@ -219,6 +230,9 @@ function setDefaultOptions(id) {
             thisInput.val(value);
         });
     });
+    dateSelector.find("select").each( function() {
+        $(this).val( $(this).attr('data-default'));
+    });
     dateSelector.find(".fromDatetimepicker").each( function() {
         var fromDateSelector = $(this);
         var toDateSelector = $(this).closest(".row").find(".toDatetimepicker");
@@ -248,9 +262,9 @@ function setDefaultOptions(id) {
         var toDateSelector = $(this);
 
         var fromDefault = fromDateSelector.attr('data-default');
-        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
+        if(fromDefault === "" || fromDefault === '2000-01-01' || fromDefault === '2000-01-07' || fromDefault === '2000-02-01') fromDefault = new Date(2016, 11, 9);
         var toDefault = toDateSelector.attr('data-default');
-        if(toDefault === "") toDefault = null;
+        if(toDefault === "" || toDefault === '2000-01-01' || toDefault === '2000-01-07' || toDefault === '2000-02-01') toDefault = null;
 
         toDateSelector.datetimepicker({
             format: "YYYY-MM-DD HH:mm",
@@ -290,9 +304,37 @@ function setDefaultOptions(id) {
         else if(!this.id.includes('columns')) $(this).val( $(this).attr('data-default'));
     });
 
-    // filter date
+    // cat date
     var dateCatSelector = $("#option-module-" + id + "-category-date");
     dateCatSelector.find("input").each( function() {
+        var value = $(this).attr('data-default');
+        var parent = $(this).parent();
+
+        if($(this).parent().hasClass('date')){
+            value = $(this).parent().attr('data-default');
+            if( value === '2000-01-01' ){
+                value = "Yesterday";
+                if(parent.hasClass('fromDatetimepicker')) dateCatSelector.find('.from button.day').addClass('active');
+                else if(parent.hasClass('toDatetimepicker')) dateCatSelector.find('.to button.day').addClass('active');
+            }
+            else if( value === '2000-01-07' ){
+                value = "A week ago";
+                if(parent.hasClass('fromDatetimepicker')) dateCatSelector.find('.from button.week').addClass('active');
+                else if(parent.hasClass('toDatetimepicker')) dateCatSelector.find('.to button.week').addClass('active');
+            }
+            else if( value === '2000-02-01' ){
+                value = "A month ago";
+                if(parent.hasClass('fromDatetimepicker')) dateCatSelector.find('.from button.month').addClass('active');
+                else if(parent.hasClass('toDatetimepicker')) dateCatSelector.find('.to button.month').addClass('active');
+            }
+            //else fromDateSelector.data("DateTimePicker").date(fromDateSelector.attr('data-default'));
+        }
+        var thisInput = $(this);
+        $('#option-module-' + id).on('show.bs.modal', function () {
+            thisInput.val(value);
+        });
+    });
+    dateCatSelector.find("select").each( function() {
         $(this).val( $(this).attr('data-default'));
     });
     dateCatSelector.find(".fromDatetimepicker").each( function() {
@@ -300,9 +342,9 @@ function setDefaultOptions(id) {
         var toDateSelector = $(this).closest(".row").find(".toDatetimepicker");
 
         var fromDefault = fromDateSelector.attr('data-default');
-        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
+        if(fromDefault === "" || fromDefault === '2000-01-01' || fromDefault === '2000-01-07' || fromDefault === '2000-02-01') fromDefault = new Date(2016, 11, 9);
         var toDefault = toDateSelector.attr('data-default');
-        if(toDefault === "") toDefault = null;
+        if(toDefault === "" || toDefault === '2000-01-01' || toDefault === '2000-01-07' || toDefault === '2000-02-01') toDefault = null;
 
         fromDateSelector.datetimepicker({
             format: "YYYY-MM-DD HH:mm",
@@ -324,9 +366,9 @@ function setDefaultOptions(id) {
         var toDateSelector = $(this);
 
         var fromDefault = fromDateSelector.attr('data-default');
-        if(fromDefault === "") fromDefault = new Date(2016, 11, 9);
+        if(fromDefault === "" || fromDefault === '2000-01-01' || fromDefault === '2000-01-07' || fromDefault === '2000-02-01') fromDefault = new Date(2016, 11, 9);
         var toDefault = toDateSelector.attr('data-default');
-        if(toDefault === "") toDefault = null;
+        if(toDefault === "" || toDefault === '2000-01-01' || toDefault === '2000-01-07' || toDefault === '2000-02-01') toDefault = null;
 
         toDateSelector.datetimepicker({
             format: "YYYY-MM-DD HH:mm",
@@ -599,6 +641,21 @@ $('.js_page_render').click(function() {
     renderPage($(this).attr('data-pageid'));
 });
 
+function clock() {
+    $.ajax({
+        type: 'POST',
+        url: './clock',
+        timeout: 15000,
+        success: function(data) {
+            $("#clock").html("Server Time (UTC): " + data.month + "/" + data.day + "/" +  data.year + " @ " + data.hour + ":" + data.minute);
+            window.setTimeout(clock, 15000);
+        }
+    });
+}
+
+
 $(document).ready(function() {
     renderPage($("#renderPage").attr('data-page-id-first-load'));
+    clock();
+    $("#clock").show({ effect: "fade", easing: 'easeOutQuint', duration: 1000});
 });

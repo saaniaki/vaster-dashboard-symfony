@@ -50,6 +50,7 @@ class Search implements SubModuleInterface
             ->orderBy('search.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->userRep->applyFilters($filters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();
@@ -62,6 +63,7 @@ class Search implements SubModuleInterface
             ->orderBy('search.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->userRep->applyFilters($filters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
         return $query->getQuery()->getArrayResult();
@@ -80,6 +82,7 @@ class Search implements SubModuleInterface
             ->orderBy('search.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->userRep->applyFilters($newFilters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();

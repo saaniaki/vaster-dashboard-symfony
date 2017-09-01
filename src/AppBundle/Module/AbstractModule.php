@@ -98,28 +98,42 @@ abstract class AbstractModule implements ModuleInterface
         $searchCategories = $configuration->getCategories()->getSearches();
         $dateCategories = $configuration->getCategories()->getDates();
 
+        $improved_combinations = [];
+
         foreach ($singleCategories as $cat){
             $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
         }
 
         foreach ($searchCategories as $catName => $value){
-            $categories[$catName][] = $value;
-            $value = clone $value;
-            $value->setNegate(!$value->isNegate());
-            $categories[$catName][] = $value;
+            //$categories[$catName][] = $value;
+            //$value = clone $value;
+            //$value->setNegate(!$value->isNegate());
+            //$categories[$catName][] = $value;
+            $temp = $categories;
+            $temp[$catName][] = $value;
+            foreach ($this->combinations($temp) as $combo)
+                $improved_combinations[] = $combo;
         }
+
 
         foreach ($dateCategories as $catName => $value){
-            $categories[$catName][] = $value;
-            $value = clone $value;
-            $value->setNegate(!$value->isNegate());
-            $categories[$catName][] = $value;
+            //$categories[$catName][] = $value;
+            //$value = clone $value;
+            //$value->setNegate(!$value->isNegate());
+            //$categories[$catName][] = $value;
+            $temp = $categories;
+            $temp[$catName][] = $value;
+            foreach ($this->combinations($temp) as $combo)
+                $improved_combinations[] = $combo;
         }
 
-        dump($categories, $this->combinations($categories));
+        if( $improved_combinations == null ){
+            $improved_combinations = $this->combinations($categories);
+        }
 
 
-        $this->feedData($presentation, $this->combinations($categories), $filters, $removeZeros);
+        $this->feedData($presentation, $improved_combinations, $filters, $removeZeros);
+
 
 
         return get_object_vars($this);

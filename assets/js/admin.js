@@ -122,7 +122,7 @@ function renderTable(ajaxPath){
             $('#loading').hide();
 
             if(data.users.length === 0)
-                alert('No result founded! :(');
+                alert('No result found! :(');
 
             $.each( data.users, function( key, user ) {
 

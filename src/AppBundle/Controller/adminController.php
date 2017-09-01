@@ -196,6 +196,8 @@ class adminController extends Controller
 
             $searches = $searchRep->findHistory($user);
 
+            //if($profession == null) {dump($user->getUserId());die();}
+
             $result[] = [ //just send the user!
                 'id' => $user->getUserId(),
                 'firstName' => $user->getFirstname(),

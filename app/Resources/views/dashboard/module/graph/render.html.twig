@@ -88,6 +88,7 @@
                         <li role="presentation"><a href="#date-filters-{{ result.module.id }}" aria-controls="date-filters" role="tab" data-toggle="tab">Date Filters</a></li>
                         <li role="presentation"><a href="#categories-{{ result.module.id }}" aria-controls="categories" role="tab" data-toggle="tab">Categories</a></li>
                         <li role="presentation"><a href="#date_categories-{{ result.module.id }}" aria-controls="date_categories" role="tab" data-toggle="tab">Date Categories</a></li>
+                        <!--<li role="presentation"><a href="#advance-{{ result.module.id }}" aria-controls="advance" role="tab" data-toggle="tab">Advance</a></li>-->
                     </ul>
 
                     <!-- Tab panes -->
@@ -188,7 +189,7 @@
                                 <div id="option-module-{{ result.module.id }}-search" class="col-md-12" data-number="{% if conf.filters is not null %}{{ conf.filters.search|length }}{% else %}0{% endif %}">
                                     <p class="bg-info" style="padding: 15px;">You can search on the result by making a search request:</p>
 
-                                    <div class="container-fluid" style="text-align: center;">
+                                    <div class="container-fluid" style="text-align: center;    margin-bottom: 15px;">
                                         <button class='btn btn-success' id="filter-search-{{ result.module.id }}-add">Add a search filter</button>
                                     </div>
 
@@ -267,7 +268,7 @@
                                 You can also select a dynamic day.
                             </p>
 
-                            <div class="container-fluid" style="text-align: center;">
+                            <div class="container-fluid" style="text-align: center;    margin-bottom: 15px;">
                                 <button class='btn btn-success' id="filter-date-{{ result.module.id }}-add">Add a date range filter</button>
                             </div>
 
@@ -279,7 +280,7 @@
 
                                     {% for name, date in conf.filters.date %}
 
-                                    <fieldset data-index="{{ index }}" id="filter-date-{{ result.module.id }}-{{ index }}">
+                                    <fieldset data-index="{{ index }}" id="filter-date-{{ result.module.id }}-{{ index }}" style="background-color: white;">
                                     <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
 
                                     <div class="container-fluid">
@@ -396,12 +397,14 @@
                             </div>
 
                             <div class="row">
-                                <div id="option-module-{{ result.module.id }}-category-search" class="col-md-12" data-number="{% if conf.categories.multi.search is not null %}{{ conf.categories.multi.search|length }}{% else %}0{% endif %}">
-                                    <p class="bg-info" style="padding: 15px;">If you perform a search category, you would end up with adding two categories; matching and not matching the search.</p>
+                                <p class="bg-info" style="padding: 15px; margin: 0 15px 10px 15px;">If you perform a search category, you would end up with adding two categories; matching and not matching the search.</p>
 
-                                    <div class="container-fluid" style="text-align: center;">
-                                        <button class='btn btn-success' id="cat-search-{{ result.module.id }}-add">Add a search category</button>
-                                    </div>
+                                <div class="container-fluid" style="text-align: center;    margin-bottom: 15px;">
+                                    <button class='btn btn-success' id="cat-search-{{ result.module.id }}-add">Add a search category</button>
+                                </div>
+
+                                <div id="option-module-{{ result.module.id }}-category-search" class="col-md-12" data-number="{% if conf.categories.multi.search is not null %}{{ conf.categories.multi.search|length }}{% else %}0{% endif %}">
+
 
                                     {% set index = 0 %}
 
@@ -473,7 +476,7 @@
                                     </p>
 
 
-                                    <div class="container-fluid" style="text-align: center;">
+                                    <div class="container-fluid" style="text-align: center;    margin-bottom: 15px;">
                                         <button class='btn btn-success' id="cat-date-{{ result.module.id }}-add">Add a date range category</button>
                                     </div>
 
@@ -484,7 +487,7 @@
                                         {% if conf.categories.multi.date is not null %}
 
                                             {% for name, date in conf.categories.multi.date %}
-                                        <fieldset data-index="{{ index }}" id="cat-date-{{ index }}">
+                                        <fieldset data-index="{{ index }}" id="cat-date-{{ index }}" style="background-color: white;">
                                             <legend>{{ name }}<span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span></legend>
 
 
@@ -568,7 +571,33 @@
 
 
                         </div>
+<!--
+                        <div role="tabpanel" class="tab-pane" id="advance-{ result.module.id }}">
 
+
+                            <p class="bg-info" style="padding: 15px;">
+                                More! More! More Customization!!!
+                            </p>
+
+
+                            <div id="option-module-{ result.module.id }}-advance">
+
+                                <div class="row">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" id="{ section }}-search-{ module.id }}-negate-{ index }}" value="negate">
+                                            Remove categories which have no result!
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+-->
                     </div>
 
                 </div>

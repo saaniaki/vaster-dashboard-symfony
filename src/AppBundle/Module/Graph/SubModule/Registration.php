@@ -43,6 +43,7 @@ class Registration implements SubModuleInterface
         $query = $this->dbRepository->createQueryBuilder('user')->select('COUNT(user)')->orderBy('user.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->dbRepository->applyFilters($filters, $query);
         $query = $this->dbRepository->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();
@@ -53,6 +54,7 @@ class Registration implements SubModuleInterface
             ->orderBy('user.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->dbRepository->applyFilters($filters, $query);
         $query = $this->dbRepository->applyCategories($combo, $query);
         return $query->getQuery()->getArrayResult();
@@ -69,6 +71,7 @@ class Registration implements SubModuleInterface
             ->orderBy('user.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->dbRepository->applyFilters($newFilters, $query);
         $query = $this->dbRepository->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();

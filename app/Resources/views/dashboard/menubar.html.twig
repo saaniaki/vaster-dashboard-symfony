@@ -27,7 +27,7 @@
                     <!--<li class="" ><a href="#">Settings</a></li>-->
                     <li class {% if app.request.get('_route') == 'manage_pages' %} ="active" {% else %} ="dropdown" {% endif %}>
                         <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" id="pageList">
                             {% for page in pages %}
                                 <li><a data-pageid="{{ page.id }}" href="{% if app.request.get('_route') != 'dashboard' and app.request.get('_route') != 'dashboard_alter' %}{{ path('dashboard') ~ "/" ~ page.id }}{% else %}#{% endif %}" class="js_page_render">{{ page.name }}</a></li>
                             {% endfor %}
@@ -46,6 +46,7 @@
                 </form>
                 -->
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" id="clock" style="font-size: 16px;color: aliceblue;font-weight: bold; display: none;">Server Time (UTC): 00/00/0000 @ 00:00</a></li>
                     <li><a href="#">VDP{{ version }}</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ vasterUser.firstname ~ " " ~ vasterUser.lastname }}<span class="caret"></span></a>

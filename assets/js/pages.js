@@ -1,6 +1,34 @@
 var beingEddited = "";
 var pendingModuleRemove = "";
 
+function clock() {
+    $.ajax({
+        type: 'POST',
+        url: '../clock',
+        timeout: 15000,
+        success: function(data) {
+            $("#clock").html("Server Time (UTC): " + data.month + "/" + data.day + "/" +  data.year + " @ " + data.hour + ":" + data.minute);
+            window.setTimeout(clock, 15000);
+        }
+    });
+}
+
+function updatePageList() {
+    $.ajax({
+        type: 'POST',
+        url: './pages/list',
+        success: function(data) {
+            $("#pageList li").each(function() {
+                if($(this).hasClass('divider')) return false;
+                else $(this).remove();
+            });
+            data.forEach(function(entry) {
+                $('#pageList .divider').before("<li><a href='" + entry.id + "' class='js_page_render'>" + entry.name + "</a></li>");
+            });
+        }
+    });
+}
+
 function removeButton(id){
     return  "<div class='btn-group btn-group-lg' role='group' style='float: right'>" +
         "<button id='remove' class='btn btn-danger' data-removeLink=" +
@@ -84,6 +112,7 @@ $('#editPanel').on('submit', '#update', function (e) {
         success: function () {
             loadTable();
             loadEdit( beingEddited );
+            updatePageList();
         }
     });
 
@@ -100,6 +129,7 @@ $( "#doRemove" ).click(function() {
         success: function (data) {
             loadTable();
             loadNew();
+            updatePageList();
             $('#confirm').modal('hide');
         }
     });
@@ -116,9 +146,9 @@ $('#newPanel').on('submit', '#add', function (e) {
         url: 'new',
         data: $('#add').serialize(),
         success: function () {
-            console.log("here");
             loadTable();
             loadNew();
+            updatePageList();
         }
     });
 
@@ -140,7 +170,7 @@ function loadEditCallback(id, rank) {
                 data: $('#update').serialize(),
                 success: function () {
                     loadTable();
-                    //loadNew();
+                    updatePageList();
                 }
             });
         }
@@ -200,7 +230,8 @@ $( document ).ready(function() {
 
 
 
-
+    clock();
+    $("#clock").show({ effect: "fade", easing: 'easeOutQuint', duration: 1000});
 
 
 });

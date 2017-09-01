@@ -37,34 +37,29 @@ use GoogleBundle\Analytics\tst;
 
 class dashboardController extends Controller
 {
-    //dashboard/users       ADMIN
-
     /**
      * @Route("/dashboard", name="dashboard")
      */
     public function showAction(){
-/*        $configuration = new Configuration();
-        $configuration->getCategories()->setSingle(['device_type']); // ['device_type', 'user_type', 'availability']
-
-        $dateRanges = [];
-        $range1 = new DateRange();
-
-        $dateRanges[] = $range1;
-
-
-        $configuration->getCategories()->setDate(['period' => $dateRanges]);
-
-        dump($configuration->extract());die();
-*/
-
         return $this->renderDashboard();
+    }
 
-        /*$tst = new tst();
+    /**
+     * @Route("/clock", name="clock")
+     */
+    public function showClock(){
+        $time = new \DateTime();
 
+        $date = [
+            'year' => $time->format('Y'),
+            'month' => $time->format('m'),
+            'day' => $time->format('d'),
+            'hour' => $time->format('H'),
+            'minute' => $time->format('i'),
+            'second' => $time->format('s')
+        ];
 
-        dump($tst->printResults($tst->getReport()));die();
-
-        return new Response($tst);*/
+        return new JsonResponse($date);
     }
 
     /**
@@ -72,6 +67,7 @@ class dashboardController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function renderDashboard(Page $curPage = null){
+        // should be be private
         $version = $this->getParameter('version');
         /** @var $appUser AppUser */
         $appUser = $this->getUser();
@@ -128,6 +124,27 @@ class dashboardController extends Controller
             'version' => $version,
             'pages' => $pages
         ]);
+    }
+
+    /**
+     * @Route("/dashboard/pages/list", name="pages_list")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listPages(Request $request){
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+
+        $pages = [];
+        foreach ($appUser->getPages() as $page) {
+            $pages[] = [
+                'id' => $page->getID(),
+                'name' => $page->getName(),
+                'rank' => $page->getRank()
+            ];
+        }
+
+        return new JsonResponse($pages);
     }
 
     /**
@@ -307,24 +324,7 @@ class dashboardController extends Controller
 
             $configuration = new Configuration();
             $infoName = $moduleToBeAdded->getModuleInfo()->getName();
-            if( $infoName == "Count" ) {
-                $presentation = new Presentation();
-                $presentation->setData('User Count');
-                $configuration->setPresentation($presentation);
-            }
-            elseif ( $infoName == "Registration" ) {
-                $presentation = new Presentation();
-                $presentation->setData('Registration');
-                $presentation->setInterval('Weekly');
-                $configuration->setPresentation($presentation);
-                $filters = new Filters();
-                $date = new DateRange();
-                //$date->setColumn('user.createdtime');
-                //$date->setFrom(null);
-                //$date->setTo(null);
-                $filters->addDate('period', $date);
-                $configuration->setFilters($filters);
-            }elseif ( $infoName == "Bar Chart" ) {
+            if ( $infoName == "Bar Chart" ) {
                 $presentation = new Presentation();
                 $presentation->setData('Registration');
                 $presentation->setInterval('Weekly');
