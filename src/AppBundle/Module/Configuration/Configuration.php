@@ -169,7 +169,7 @@ class Configuration
 
         ////////////////////////////////////////////////////////////////////////// Filters: creating $filtersObj
 
-        if( $filters != null ){
+        //if( $filters != null ){
             $filtersObj = new Filters();
             if( isset($filters['user_type']) && $filters['user_type'] != null )$filtersObj->setUserType($filters['user_type']);
             if( isset($filters['availability']) && $filters['availability'] != null )$filtersObj->setAvailability($filters['availability']);
@@ -199,11 +199,11 @@ class Configuration
                 }
             }
 
-        }
+        //}
 
         ////////////////////////////////////////////////////////////////////////// Categories: creating $categoriesObj
 
-        if( $categories != null ){
+        //if( $categories != null ){
             $categoriesObj = new Categories();
             if( isset($categories['single']) && $categories['single'] != null )$categoriesObj->setSingle($categories['single']);
 
@@ -230,7 +230,8 @@ class Configuration
                     $categoriesObj->addDate($name, $range);
                 }
             }
-        }
+            dump($categoriesObj);
+        //}
 
         ////////////////////////////////////////////////////////////////////////// Layout: creating $layoutObj
 
@@ -242,13 +243,13 @@ class Configuration
 
         ////////////////////////////////////////////////////////////////////////// Presentation: creating $presentationObj
 
-        if( $presentation != null ){
+        if( $presentation != null){
             $presentationObj = new Presentation();
             if( isset($presentation['data']) && $presentation['data'] != null )$presentationObj->setData($presentation['data']);
             if( isset($presentation['interval']) && $presentation['interval'] != null )$presentationObj->setInterval($presentation['interval']);
             if( isset($presentation['zero'])){$presentationObj->setZero($presentation['zero']);}
         }
-
+        dump("here");
         ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
         //if( isset($removeZeros) && $removeZeros != null )           $this->setRemoveZeros($removeZeros);
         if( isset($filtersObj) && $filtersObj != null )             $this->setFilters($filtersObj);

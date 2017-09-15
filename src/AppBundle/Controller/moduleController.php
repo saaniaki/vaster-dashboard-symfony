@@ -114,6 +114,7 @@ class moduleController extends Controller
         //$data->set('remove_zeros', $request->get('remove_zeros'));
 
         $configuration = $module->getConfiguration();           // To keep the old useful configuration
+        dump($data);
         $configuration->load($data);                            // To rewrite the new configuration
         $module->setConfiguration($configuration->extract());
 

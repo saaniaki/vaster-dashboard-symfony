@@ -12,8 +12,8 @@ namespace AppBundle\Module\Configuration;
 class Presentation
 {
     public $data;
-    public $interval;
-    public $zero;
+    public $interval = 'Daily';
+    public $zero = false;
 
     /**
      * @return string
@@ -60,7 +60,6 @@ class Presentation
      */
     public function setZero($zero)
     {
-        dump($zero);
         if($zero === "false") $zero = false;
         $this->zero = $zero;
     }
