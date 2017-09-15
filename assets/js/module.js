@@ -865,6 +865,7 @@ function applyDynamicDate(picker, rawValue) {
     else if( rawValue === 'One year ago' ) buttonDiv.find('.year').trigger('click');
 }
 
+/*
 $(document).ready(function() {
     var moduleOptions = $('.mod-options');
 
@@ -878,5 +879,4 @@ $(document).ready(function() {
 
 
 });
-
-// take out all selectors!!!
+*/

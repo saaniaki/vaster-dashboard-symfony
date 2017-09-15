@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container-fluid" style="margin-top: 50px;" id="dashboard">
         <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("page_modules", {'id': 'page_id'}) }}" data-set-module-conf="{{ path("set_module_conf", {'id': 'module_id'}) }}" data-page-id-first-load="{{ currentPage.id }}">
-            <div id="modules" data-module-render-url="{{ path('render_module', {'id': 'module_id'}) }}" data-module-search-url="{{ path('get_module_search', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}" data-module-date-url="{{ path('get_module_date', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}">
+            <div id="modules" data-module-render-url="{{ path('render_module', {'id': 'module_id'}) }}" data-module-search-url="{{ path('get_module_search', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}" data-module-date-url="{{ path('get_module_date', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}" data-module-edit-url="{{ path('module_edit', {'id': 'module_id'}) }}">
                 <!-- modules -->
             </div>
         </div>
@@ -30,7 +30,7 @@
         }
         th, td{
             width: 100px;
-            border-left: 1px solid #ddd;
+            /*border-left: 1px solid #ddd;*/
         }
         .sk-folding-cube {
             margin: 20px auto;

@@ -1,10 +1,5 @@
-{% extends 'dashboard/menubar.html.twig' %}
 
-{% block title %}VDP{{ version }} - new page{% endblock %}
-
-{% block body %}
-
-<div class="container-fluid mod-options" style="margin-top: 60px;"
+<div class="container-fluid mod-options"
     {% if module is defined %}
         data-url-module_tabs="{{ path("module_get_tabs", {'moduleInfo_id': 'moduleInfo_id', 'id' : 'module_id'}) }}"
         data-module_id="{{ module.id }}"
@@ -76,9 +71,3 @@
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7b7b7', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     }
 </style>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('build/module.js') }}"></script>
-{% endblock %}

@@ -165,7 +165,7 @@ class Configuration
         $filters = $data->get('filters');
         $layout = $data->get('layout');
         $presentation = $data->get('presentation');
-        $removeZeros = $data->get('remove_zeros');
+        //$removeZeros = $data->get('remove_zeros');
 
         ////////////////////////////////////////////////////////////////////////// Filters: creating $filtersObj
 
@@ -246,10 +246,11 @@ class Configuration
             $presentationObj = new Presentation();
             if( isset($presentation['data']) && $presentation['data'] != null )$presentationObj->setData($presentation['data']);
             if( isset($presentation['interval']) && $presentation['interval'] != null )$presentationObj->setInterval($presentation['interval']);
+            if( isset($presentation['zero'])){$presentationObj->setZero($presentation['zero']);}
         }
 
         ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
-        if( isset($removeZeros) && $removeZeros != null )           $this->setRemoveZeros($removeZeros);
+        //if( isset($removeZeros) && $removeZeros != null )           $this->setRemoveZeros($removeZeros);
         if( isset($filtersObj) && $filtersObj != null )             $this->setFilters($filtersObj);
         if( isset($categoriesObj) && $categoriesObj != null )       $this->setCategories($categoriesObj);
         if( isset($layoutObj) && $layoutObj != null )               $this->setLayout($layoutObj);

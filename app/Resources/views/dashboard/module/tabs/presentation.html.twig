@@ -46,7 +46,7 @@
     <div class="col-md-6 mod-zero">
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="remove" name="mod-zero" {% if module is defined and module.configuration.removeZeros == false %}data-default="checked"{% endif %}>
+                <input type="checkbox" value="remove" name="mod-zero" {% if module is defined and module.configuration.presentation.zero == true %}data-default="checked"{% endif %}>
                 Include Zeros
             </label>
         </div>

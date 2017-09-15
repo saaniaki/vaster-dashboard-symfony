@@ -111,7 +111,7 @@ class moduleController extends Controller
         $data->set('filters', $request->get('filters'));
         $data->set('layout', $request->get('layout'));
         $data->set('presentation', $request->get('presentation'));
-        $data->set('remove_zeros', $request->get('remove_zeros'));
+        //$data->set('remove_zeros', $request->get('remove_zeros'));
 
         $configuration = $module->getConfiguration();           // To keep the old useful configuration
         $configuration->load($data);                            // To rewrite the new configuration
@@ -264,7 +264,7 @@ class moduleController extends Controller
         $device_types = $conf['filters']['device_type'];
 
 
-        return $this->render('dashboard/module/edit.html.twig', [ //edit?! on render route?!
+        return $this->render('dashboard/module/edit.html.twig', [
             "vasterUser" => $vasterUser,
             "version" => $version,
             'pages' => $pages,

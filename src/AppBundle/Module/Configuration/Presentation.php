@@ -13,6 +13,7 @@ class Presentation
 {
     public $data;
     public $interval;
+    public $zero;
 
     /**
      * @return string
@@ -46,5 +47,21 @@ class Presentation
         $this->interval = $interval;
     }
 
+    /**
+     * @return bool
+     */
+    public function isZero(): bool
+    {
+        return $this->zero;
+    }
 
+    /**
+     * @param $zero
+     */
+    public function setZero($zero)
+    {
+        dump($zero);
+        if($zero === "false") $zero = false;
+        $this->zero = $zero;
+    }
 }

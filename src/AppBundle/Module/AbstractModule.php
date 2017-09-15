@@ -88,7 +88,7 @@ abstract class AbstractModule implements ModuleInterface
         $configuration = $this->module->getConfiguration();
         $presentation = $configuration->getPresentation(); //this value should be valued!!
         $filters = $configuration->getFilters();
-        $removeZeros = $configuration->isRemoveZeros();
+        //$removeZeros = $configuration->isRemoveZeros();
 
         /*
          * getting all the possible categories
@@ -132,7 +132,7 @@ abstract class AbstractModule implements ModuleInterface
         }
 
 
-        $this->feedData($presentation, $improved_combinations, $filters, $removeZeros);
+        $this->feedData($presentation, $improved_combinations, $filters);
 
 
 
@@ -202,8 +202,7 @@ abstract class AbstractModule implements ModuleInterface
      * @param Presentation $presentation
      * @param $combinations
      * @param $filters Filters
-     * @param $removeZeros
      * @return mixed
      */
-    abstract protected function feedData($presentation, $combinations, $filters, $removeZeros);
+    abstract protected function feedData($presentation, $combinations, $filters);
 }
