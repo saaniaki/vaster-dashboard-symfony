@@ -1,0 +1,53 @@
+<p class="bg-info" style="padding: 15px;">
+    In layout tab, you can select the primary properties of this module; All of these settings can be changed after adding the module as well.
+    <br>
+    NOTE: Changing the Module Type or Graph Type would cause the other tabs to reload.
+</p>
+
+<div class="row">
+    <div class="col-md-6 mod-module-type">
+        Module Type:
+        <select class="form-control" name="mod-module-type" title="" data-default="" disabled>
+            {% for type in module_types %}
+                <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-6 mod-graph-type">
+        Graph Type:
+        <select class="form-control" name="mod-graph-type" title="" {% if module is defined %}data-default="{{ module.moduleInfo.name }}"{% endif %}>
+            {% for type in graph_types %}
+                <option value="{{ type.name }}" data-info-index="{{ type.id }}">{{ type.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6 mod-name">
+        Title:
+        <input type="text" name="mod-name" class="form-control" title="" style="margin-bottom: 10px;" {% if module is defined %}data-default="{{ module.configuration.layout.title }}"{% endif %}>
+    </div>
+    <div class="col-md-2 mod-size">
+        Size:
+        <select class="form-control" name="mod-size" title="" {% if module is defined %}data-default="{{ module.configuration.layout.size }}"{% endif %}>
+            {% for size in module_sizes %}
+                <option value="{{ size }}">{{ size }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2 mod-color">
+        Color:
+        <select class="form-control" name="mod-color" title="" {% if module is defined %}data-default="Red"{% endif %}>
+            {% for color in module_colors %}
+                <option value="{{ color }}">{{ color }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2 mod-rank">
+        Rank:
+        <input type="text" name="mod-rank" class="form-control" title="" style="margin-bottom: 10px;" {% if module is defined %}data-default="{{ module.rank }}"{% endif %}>
+    </div>
+</div>

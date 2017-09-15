@@ -1,0 +1,54 @@
+<p class="bg-info" style="padding: 15px;">
+    Here you can select the data source of this module and the way you need them to be processed.
+</p>
+
+
+{% if presentations['data'] is defined %}
+    <p class="bg-warning" style="padding: 5px;">Please select what kind of data you want to visualise:</p>
+
+    <div class="row">
+        <div class="col-md-6 mod-data" {% if module is defined %}data-default="{{ module.configuration.presentation.data }}"{% endif %}>
+            {% for dataSource in presentations['data'] %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" value="{{ dataSource }}" name="mod-data">
+                        {{ dataSource }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+
+{% if presentations['interval'] is defined %}
+    <p class="bg-warning" style="padding: 5px;">Interval of counting the results:</p>
+
+    <div class="row">
+        <div class="col-md-6 mod-interval" {% if module is defined %}data-default="{{ module.configuration.presentation.interval }}"{% endif %}>
+            {% for interval in presentations['interval'] %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" value="{{ interval }}" name="mod-interval">
+                        {{ interval }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+
+
+<p class="bg-warning" style="padding: 5px;">With this option you are able to exclude or include categories with zero results.</p>
+
+<div class="row">
+    <div class="col-md-6 mod-zero">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remove" name="mod-zero" {% if module is defined and module.configuration.removeZeros == false %}data-default="checked"{% endif %}>
+                Include Zeros
+            </label>
+        </div>
+    </div>
+</div>

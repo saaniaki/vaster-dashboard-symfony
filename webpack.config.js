@@ -16,6 +16,7 @@ Encore
     .addEntry('dashboard', ['./assets/js/main.js', './assets/js/dashboard.js'])
     .addEntry('pages', ['./assets/js/main.js', './assets/js/pages.js'])
     .addEntry('admin', ['./assets/js/main.js', './assets/js/admin.js'])
+    .addEntry('module', ['./assets/js/main.js', './assets/js/module.js'])
 
     // will output as web/build/global.css
     .addStyleEntry('global', './assets/css/global.scss')
@@ -25,6 +26,10 @@ Encore
 
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()
+
+    .autoProvideVariables({
+        Moment: 'moment'
+    })
 
     .enableSourceMaps(!Encore.isProduction())
 
@@ -36,5 +41,3 @@ Encore
 
 // export the final configuration
 module.exports = Encore.getWebpackConfig();
-
-

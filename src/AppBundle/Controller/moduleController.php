@@ -25,43 +25,37 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\User as AppUser;
+use VasterBundle\Entity\User as VasterUser;
 
 class moduleController extends Controller
 {
     /**
-     * @param $module Module
      * @param $index integer
      * @param $section string
-     * @Route("/module/{id}/search/{section}/{index}", name="get_module_search")
+     * @Route("api/module/getsearch/{section}/{index}", name="get_module_search")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getSearchFilter(Module $module, $section, $index){
+    public function getSearchFilter($section, $index){
 
-        return $this->render('dashboard/module/graph/searchFilter.html.twig', [
-            'module' => $module,
-            'conf' => $module->getConfiguration(),
+        return $this->render('dashboard/module/dynamicFields/search.html.twig', [
             'section' => $section,
             'index' => $index,
             'searchColumns' => Search::$columns_available,
-            'dateColumns' => DateRange::$columns_available
         ]);
     }
 
     /**
-     * @param $module Module
      * @param $section string
      * @param $index integer
-     * @Route("/module/{id}/date/{section}/{index}", name="get_module_date")
+     * @Route("api/module/getdate/{section}/{index}", name="get_module_date")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getDateFilter(Module $module, $section, $index){
+    public function getDateFilter($section, $index){
 
-        return $this->render('dashboard/module/graph/dateFilter.html.twig', [
-            'module' => $module,
-            'conf' => $module->getConfiguration(),
+        return $this->render('dashboard/module/dynamicFields/date.html.twig', [
             'section' => $section,
             'index' => $index,
-            'searchColumns' => Search::$columns_available,
             'dateColumns' => DateRange::$columns_available
         ]);
     }
@@ -145,15 +139,158 @@ class moduleController extends Controller
 
 
 
-
-
-
-
-    /*
-     * @Route("api/module/new/{id}", name="module_add")
+    /**
+     * @Route("api/module/add/start", name="module_add_start")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
-     *
+     */
+    public function add(Request $request){
+        $version = $this->getParameter('version');
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
+            ->findOneBy([ 'email' => $appUser->getEmail()]);
+        $pages = $appUser->getPages()->toArray();
+
+        $em = $this->getDoctrine()->getManager();
+        $modules_info = $em->getRepository("AppBundle:ModuleInfo")->findAll();
+
+        $module_types =['Graph'];
+        //$module_names = [];
+        //foreach ($modules_info as $info) $module_names[] = $info->getName();
+
+        $sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $colors = ['Green', 'Blue', 'Red'];
+
+
+        return $this->render('dashboard/module/edit.html.twig', [
+            "vasterUser" => $vasterUser,
+            "version" => $version,
+            'pages' => $pages,
+            'module_types' => $module_types,
+            'graph_types' => $modules_info,
+            'module_sizes' => $sizes,
+            'module_colors' => $colors
+        ]);
+    }
+
+    /**
+     * @Route("api/module/add/{moduleInfo_id}", name="module_add_tabs")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addTabs(Request $request, int $moduleInfo_id){
+        $em = $this->getDoctrine()->getManager();
+        $module_info = $em->getRepository("AppBundle:ModuleInfo")->findOneBy(["id" => $moduleInfo_id]);
+
+        $conf = $module_info->getAvailableConfiguration();
+        $presentations = $conf['presentation'];
+        $userType = $conf['filters']['user_type'];
+        $availabilities = $conf['filters']['availability'];
+        $device_types = $conf['filters']['device_type'];
+
+        return $this->render('dashboard/module/tabs.html.twig', [
+            'presentations' => $presentations,
+            'user_types' => $userType,
+            'availabilities' => $availabilities,
+            'device_types' => $device_types,
+            'conf' => ['filters' => null, 'categories' => null]
+        ]);
+    }
+
+    /**
+     * @Route("api/module/tabs/{moduleInfo_id}/{id}", name="module_get_tabs",  defaults={"id" = null})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getTabs(Request $request, int $moduleInfo_id, Module $module = null){
+        $em = $this->getDoctrine()->getManager();
+        $module_info = $em->getRepository("AppBundle:ModuleInfo")->findOneBy(["id" => $moduleInfo_id]);
+
+        $conf = $module_info->getAvailableConfiguration();
+        $presentations = $conf['presentation'];
+        $userType = $conf['filters']['user_type'];
+        $availabilities = $conf['filters']['availability'];
+        $device_types = $conf['filters']['device_type'];
+
+        $parameters = [
+            'presentations' => $presentations,
+            'user_types' => $userType,
+            'availabilities' => $availabilities,
+            'device_types' => $device_types,
+            'conf' => ['filters' => null, 'categories' => null]
+        ];
+
+
+        if($module != null){
+            $parameters['searchColumns'] = Search::$columns_available;
+            $parameters['dateColumns'] = DateRange::$columns_available;
+            $parameters['conf'] = $module->getConfiguration();
+            $parameters['module'] = $module;
+        }
+
+
+        return $this->render('dashboard/module/tabs.html.twig', $parameters);
+    }
+
+    /**
+     * @param $module Module
+     * @Route("api/module/edit/{id}", name="module_edit")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function tstRender(Module $module){
+        $version = $this->getParameter('version');
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
+            ->findOneBy([ 'email' => $appUser->getEmail()]);
+        $pages = $appUser->getPages()->toArray();
+
+        $em = $this->getDoctrine()->getManager();
+        $modules_info = $em->getRepository("AppBundle:ModuleInfo")->findAll();
+
+        $module_types =['Graph'];
+
+
+        $sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $colors = ['Green', 'Blue', 'Red'];
+
+
+        // IMPORTANT $available conf
+        $conf = $module->getModuleInfo()->getAvailableConfiguration();
+        $presentations = $conf['presentation'];
+        $userType = $conf['filters']['user_type'];
+        $availabilities = $conf['filters']['availability'];
+        $device_types = $conf['filters']['device_type'];
+
+
+        return $this->render('dashboard/module/edit.html.twig', [ //edit?! on render route?!
+            "vasterUser" => $vasterUser,
+            "version" => $version,
+            'pages' => $pages,
+            'module_types' => $module_types,
+            'graph_types' => $modules_info,
+            'module_sizes' => $sizes,
+            'module_colors' => $colors,
+
+
+            'module' => $module,
+            'presentations' => $presentations,
+            'user_types' => $userType,
+            'availabilities' => $availabilities,
+            'device_types' => $device_types,
+            'conf' => $module->getConfiguration(),
+            'searchColumns' => Search::$columns_available,
+            'dateColumns' => DateRange::$columns_available
+        ]);
+    }
+
+
+    /**
+     * @Route("api/module/add/{id}", name="module_add")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function newModule(Request $request, Page $page){
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(NewModule::class, null,  array(
@@ -165,7 +302,7 @@ class moduleController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            /** @var $moduleToBeAdded Module*
+            /** @var $moduleToBeAdded Module*/
             $moduleToBeAdded = $form->getData();
 
 
@@ -219,7 +356,7 @@ class moduleController extends Controller
         ]);
     }
 
-    /**
+    /*
      * @Route("api/module/edit/{id}", name="module_edit")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response

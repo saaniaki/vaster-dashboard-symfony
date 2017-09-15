@@ -1,0 +1,55 @@
+<fieldset data-index="{{ index }}" id="{{ section }}-search-{{ index }}" style="background-color: white;">
+    <legend>
+        <span class="dynamicTitle">{% if name is defined %}{{ name }}{% else %}New Search{% endif %}</span>
+        <span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span>
+    </legend>
+
+    <div class="col-md-4">
+        Title:
+        <input name="title" type="text" class="form-control title" placeholder="Title" data-default="{% if name is defined %}{{ name }}{% endif %}" style="margin-bottom: 10px;">
+        Keyword:
+        <input name="keyword" type="text" class="form-control keyword" placeholder="Keyword" data-default="{% if search is defined %}{{ search.keyword }}{% endif %}" style="margin-bottom: 10px;">
+    </div>
+
+    <div class="col-md-4">
+        <!-- load columns dynamically -->
+        <!-- set defualts -->
+        <!-- don't use the actual fields' names -->
+        Columns:
+        <select multiple class="form-control" name="columns" title="">
+            {% for column in searchColumns %}
+                <option value="{{ column }}" {% if search is defined and column in search.columns %}data-default="checked"{% endif %}>{{ column }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <div class="row">
+            Columns Operator:
+            <select class="form-control" name="col-op" title="" data-default="{% if search is defined %}{{ search.columnOperator }}{% endif %}">
+                <option value="and">AND</option>
+                <option value="or">OR</option>
+            </select>
+        </div>
+
+        {% if section == 'filter' %}
+            <div class="row">
+                Expression Operator:
+                <select class="form-control" name="expr-op" title="" data-default="{% if search is defined %}{{ search.expressionOperator }}{% endif %}">
+                    <option value="and">AND</option>
+                    <option value="or">OR</option>
+                </select>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="negate" value="negate" {% if search is defined and search.negate == true %}data-default="checked"{% endif %}>
+                    Negate this search
+                </label>
+            </div>
+        </div>
+    </div>
+
+</fieldset>

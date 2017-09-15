@@ -1,0 +1,91 @@
+<p class="bg-info" style="padding: 15px;">
+    In this tab, you can categorise the data which is grabbed from the database.
+</p>
+
+<div class="row">
+
+    <div class="col-md-4 mod-splittingCat">
+        <p class="bg-warning" style="padding: 5px;">Splitting Categories</p>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="mod-splittingCat" value="user_type" {% if conf.categories is not null and conf.categories.single is not null and "user_type" in conf.categories.single %}data-default="checked"{% endif %}>
+                User Type
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="mod-splittingCat" value="availability" {% if conf.categories is not null and conf.categories.single is not null and "availability" in conf.categories.single %}data-default="checked"{% endif %}>
+                Availability
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="mod-splittingCat" value="device_type" {% if conf.categories is not null and conf.categories.single is not null and "device_type" in conf.categories.single %}data-default="checked"{% endif %}>
+                Device Type
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <p class="bg-warning" style="padding: 5px;">
+            You can search on the result by making a search request.
+            <br>
+            NOTE: Each category must have a title.
+            <br>
+            NOTE: Titles must be unique.
+        </p>
+
+        <div class="container-fluid" style="text-align: center; margin-bottom: 15px;">
+            <button class='btn btn-success js_search-add'>Add a search category</button>
+        </div>
+
+        <div class="mod-category-search js_search-init" data-number="{% if conf.categories is not null and conf.categories.multi.search is not null %}{{ conf.categories.multi.search|length }}{% else %}0{% endif %}">
+
+
+            {% set index = 0 %}
+            {% if  conf.categories is not null and conf.categories.multi.search is not null %}
+                {% for name, search in conf.categories.multi.search %}
+                    {% include 'dashboard/module/dynamicFields/search.html.twig' with {'index' : index, 'name' : name, 'search' : search, 'id' : module.id, 'section' : 'category'} %}
+                    {% set index = index + 1 %}
+                {% endfor %}
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="col-md-6">
+
+        <p class="bg-warning" style="padding: 5px;">
+            Leave the left box to start from 2016/12/09! Leave the right box to have a real-time graph!
+            <br>
+            NOTE: Each category must have a title.
+            <br>
+            NOTE: Titles must be unique.
+        </p>
+
+        <div class="container-fluid" style="text-align: center;    margin-bottom: 15px;">
+            <button class='btn btn-success js_date-add'>Add a date range category</button>
+        </div>
+
+        <div class="mod-category-date js_date-init" data-number="{% if  conf.categories is not null and conf.categories.multi.date is not null %}{{ conf.categories.multi.date|length }}{% else %}0{% endif %}">
+
+
+
+        {% set index = 0 %}
+        {% if  conf.categories is not null and conf.categories.multi.date is not null %}
+            {% for name, date in conf.categories.multi.date %}
+                {% include 'dashboard/module/dynamicFields/date.html.twig' with {'index' : index, 'name' : name, 'date' : date, 'id' : module.id, 'section' : 'category'} %}
+                {% set index = index + 1 %}
+            {% endfor %}
+        {% endif %}
+
+        </div>
+    </div>
+
+</div>

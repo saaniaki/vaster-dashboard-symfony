@@ -1,3 +1,16 @@
+function clock() {
+    $.ajax({
+        type: 'POST',
+        url: '../clock',
+        timeout: 15000,
+        success: function(data) {
+            $("#clock").html("Server Time (UTC): " + data.month + "/" + data.day + "/" +  data.year + " @ " + data.hour + ":" + data.minute);
+            window.setTimeout(clock, 15000);
+        }
+    });
+}
+
+
 var cancelSearch = "<div class='input-group-btn dropup' id='cancelSearch' >" +
     "<button type='button' class='btn btn-default' style='height: 33px; width: 20px; padding: 2px;'><span class='glyphicon glyphicon-remove'></span></button>" +
     "</div>";
@@ -943,5 +956,8 @@ $( document ).ready(function() {
     });
 
 
+
+    clock();
+    $("#clock").show({ effect: "fade", easing: 'easeOutQuint', duration: 1000});
 
 });

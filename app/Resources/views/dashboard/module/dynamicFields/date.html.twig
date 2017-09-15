@@ -1,0 +1,85 @@
+<fieldset data-index="{{ index }}" id="{{ section }}-date-{{ index }}" style="background-color: white;">
+    <legend>
+        <span class="dynamicTitle">{% if name is defined %}{{ name }}{% else %}New Date{% endif %}</span>
+        <span class="multi-remove" style="color: #da0000;float: right;cursor: pointer;">X</span>
+    </legend>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-4">
+                Title:
+                <input name="title" type="text" class="form-control title" placeholder="Title" data-default="{% if name is defined %}{{ name }}{% else %}New Search{% endif %}" style="margin-bottom: 10px;">
+            </div>
+            <div class="col-md-4">
+                <!-- load columns dynamically -->
+                <!-- don't use the actual fields' names -->
+                Column:
+                <select class="form-control" name="column" title="" data-default="{% if date is defined %}{{ date.column }}{% endif %}">
+                    {% for column in dateColumns %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if section == 'filter' %}
+                <div class="col-md-4">
+                    <div class="row">
+                        Expression Operator:
+                        <select class="form-control" name="expr-op" title="" data-default="{% if date is defined %}{{ date.operator }}{% endif %}">
+                            <option value="and">AND</option>
+                            <option value="or">OR</option>
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="form-group col-sm-5 date">
+                <div class="input-group fromDatetimepicker">
+                    <input type="text" class="form-control" name="from" readonly="readonly" data-default="{% if date is defined and date.from is not null %}{{ date.from }}{% endif %}">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+
+                <div class="row" style="text-align: center">
+                    <div class="btn-group btn-group-xs dateButton from" role="group" style="margin-top: 10px">
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="One year ago" class="btn btn-info year">1 y</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="3 months ago" class="btn btn-info months">3 m</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="A month ago" class="btn btn-info month">1 m</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="A week ago" class="btn btn-info week">1 w</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="Yesterday" class="btn btn-info day">1 d</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-2" style="text-align: center;margin-top: 5px;font-weight: bold;">To</div>
+
+            <div class="form-group col-sm-5 date">
+                <div class="input-group toDatetimepicker">
+                    <input type="text" class="form-control" name="to" readonly="readonly" data-default="{% if date is defined and date.to is not null %}{{ date.to }}{% endif %}">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+
+                <span class="now">Now</span>
+
+                <div class="row" style="text-align: center">
+                    <div class="btn-group btn-group-xs dateButton to" role="group" style="margin-top: 10px">
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="One year ago" class="btn btn-info year">1 y</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="3 months ago" class="btn btn-info months">3 m</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="A month ago" class="btn btn-info month">1 m</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="A week ago" class="btn btn-info week">1 w</button>
+                        <button type="button" data-toggle="tooltip" data-placement="bottom" title="Yesterday" class="btn btn-info day">1 d</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</fieldset>

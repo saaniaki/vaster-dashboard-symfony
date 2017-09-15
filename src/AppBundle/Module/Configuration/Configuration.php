@@ -182,7 +182,7 @@ class Configuration
                     $search->setColumnOperator($SearchArray['columnOperator']);
                     $search->setExpressionOperator($SearchArray['expressionOperator']);
                     $search->setColumns($SearchArray['columns']);
-                    $search->setNegate($SearchArray['negate'] === 'true'? true: false);
+                    $search->setNegate($SearchArray['negate'] === true? true: false);
                     $filtersObj->addSearch($name, $search);
                 }
             }
@@ -194,10 +194,11 @@ class Configuration
                     $range->setTo($rangeArray['to']);
                     $range->setColumn($rangeArray['column']);
                     $range->setOperator($rangeArray['operator']);
-                    $range->setNegate($rangeArray['negate'] === 'true'? true: false);
+                    $range->setNegate($rangeArray['negate'] === true? true: false);
                     $filtersObj->addDate($name, $range);
                 }
             }
+
         }
 
         ////////////////////////////////////////////////////////////////////////// Categories: creating $categoriesObj
@@ -213,7 +214,7 @@ class Configuration
                     $search->setColumnOperator($SearchArray['columnOperator']);
                     $search->setExpressionOperator($SearchArray['expressionOperator']);
                     $search->setColumns($SearchArray['columns']);
-                    $search->setNegate($SearchArray['negate'] === 'true'? true: false);
+                    $search->setNegate($SearchArray['negate'] === true? true: false);
                     $categoriesObj->addSearch($name, $search);
                 }
             }
@@ -225,7 +226,7 @@ class Configuration
                     $range->setTo($rangeArray['to']);
                     $range->setColumn($rangeArray['column']);
                     $range->setOperator($rangeArray['operator']);
-                    $range->setNegate($rangeArray['negate'] === 'true'? true: false);
+                    $range->setNegate($rangeArray['negate'] === true? true: false);
                     $categoriesObj->addDate($name, $range);
                 }
             }

@@ -1,0 +1,93 @@
+<p class="bg-info" style="padding: 15px;">
+    In this tab, you can filter the data which is grabbed from the database.
+</p>
+
+<div class="row">
+
+    <div class="col-md-4 mod-filter-userType">
+        <p class="bg-warning" style="padding: 5px;">User Type</p>
+        {% for type in user_types %}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="{{ type }}" name="mod-filter-userType" {% if conf.filters is not null and type in conf.filters.user_type %}data-default="checked"{% endif %}>
+                    {{ type }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-4 mod-filter-availability">
+        <p class="bg-warning" style="padding: 5px;">Availability</p>
+        {% for availability in availabilities %}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="{{ availability }}" name="mod-filter-availability" {% if conf.filters is not null and availability in conf.filters.availability %}data-default="checked"{% endif %}>
+                    {{ availability }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-4 mod-filter-deviceType">
+        <p class="bg-warning" style="padding: 5px;">Device Type</p>
+        {% for type in device_types %}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="{{ type }}" name="mod-filter-deviceType" {% if conf.filters is not null and type in conf.filters.device_type %}data-default="checked"{% endif %}>
+                    {{ type }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6 mod-filter-search js_search-init" data-number="{% if conf.filters is not null %}{{ conf.filters.search|length }}{% else %}0{% endif %}">
+        <p class="bg-warning" style="padding: 5px;">
+            You can search on the result by making a search request.
+            <br>
+            NOTE: Each filter must have a title.
+            <br>
+            NOTE: Titles must be unique.
+        </p>
+
+        <div class="container-fluid" style="text-align: center; margin-bottom: 15px;">
+            <button class='btn btn-success js_search-add'>Add a search filter</button>
+        </div>
+
+        {% set index = 0 %}
+        {% if conf.filters is not null %}
+            {% for name, search in conf.filters.search %}
+                {% include 'dashboard/module/dynamicFields/search.html.twig' with {'index' : index, 'name' : name, 'search' : search, 'id' : module.id, 'section' : 'filter'} %}
+                {% set index = index + 1 %}
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <div class="col-md-6 mod-filter-date js_date-init" data-number="{% if conf.filters is not null %}{{ conf.filters.date|length }}{% else %}0{% endif %}">
+
+        <p class="bg-warning" style="padding: 5px;">
+            Leave the left box to start from 2016/12/09! Leave the right box to have a real-time graph!
+            <br>
+            NOTE: Each filter must have a title.
+            <br>
+            NOTE: Titles must be unique.
+        </p>
+
+        <div class="container-fluid" style="text-align: center;    margin-bottom: 15px;">
+            <button class='btn btn-success js_date-add'>Add a date range filter</button>
+        </div>
+
+        {% set index = 0 %}
+        {% if conf.filters is not null %}
+            {% for name, date in conf.filters.date %}
+                {% include 'dashboard/module/dynamicFields/date.html.twig' with {'index' : index, 'name' : name, 'date' : date, 'id' : module.id, 'section' : 'filter'} %}
+                {% set index = index + 1 %}
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+</div>

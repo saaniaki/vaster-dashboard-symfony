@@ -1,0 +1,84 @@
+{% extends 'dashboard/menubar.html.twig' %}
+
+{% block title %}VDP{{ version }} - new page{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid mod-options" style="margin-top: 60px;"
+    {% if module is defined %}
+        data-url-module_tabs="{{ path("module_get_tabs", {'moduleInfo_id': 'moduleInfo_id', 'id' : 'module_id'}) }}"
+        data-module_id="{{ module.id }}"
+    {% else %}
+        data-url-module_tabs="{{ path("module_get_tabs", {'moduleInfo_id': 'moduleInfo_id'}) }}"
+    {% endif %}>
+
+    <div class="mod-tabs">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#tab-layout{% if module is defined %}-{{ module.id }}{% endif %}" aria-controls="layout" role="tab" data-toggle="tab">Layout</a></li>
+            <li role="presentation"><a href="#tab-presentation{% if module is defined %}-{{ module.id }}{% endif %}" aria-controls="presentation" role="tab" data-toggle="tab">Presentation</a></li>
+            <li role="presentation"><a href="#tab-filters{% if module is defined %}-{{ module.id }}{% endif %}" aria-controls="tab-filters" role="tab" data-toggle="tab">Filters</a></li>
+            <li role="presentation"><a href="#tab-categories{% if module is defined %}-{{ module.id }}{% endif %}" aria-controls="tab-categories" role="tab" data-toggle="tab">Categories</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tab-layout{% if module is defined %}-{{ module.id }}{% endif %}">{% include 'dashboard/module/tabs/layout.html.twig' %}</div>
+            <!-- Other tabs will be loaded here -->
+        </div>
+    </div>
+
+
+</div>
+
+<style>
+    .date span.input-group-addon{
+        cursor: pointer;
+    }
+    .date span.input-group-addon:hover{
+        background-color: #e0e0e0;
+        color: #000000;
+    }
+    .now{
+        float: left;
+        margin-top: 11.5px;
+        margin-left: 20px;
+        font-size: 11px;
+        color: #70c134;
+        cursor: auto;
+    }
+    .now:before{
+        content: '';
+        left: 21px;
+        top: 48px;
+        display: block;
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        box-shadow: 0 0 14px 1px #6dff00;
+        background: #69ef02; /* Old browsers */
+        /*background: -moz-radial-gradient(center, ellipse cover, #69ef02 0%, #61c419 87%, #61c419 87%, #58d300 100%); /* FF3.6-15 *
+        background: -webkit-radial-gradient(center, ellipse cover, #69ef02 0%,#61c419 87%,#61c419 87%,#58d300 100%); /* Chrome10-25,Safari5.1-6 */
+        background: radial-gradient(ellipse at center, #69ef02 0%,#61c419 87%,#61c419 87%,#58d300 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#69ef02', endColorstr='#58d300',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    }
+    .off{
+        color: #cecece;
+        cursor: pointer;
+    }
+    .off:before{
+        box-shadow: none;
+        background: #69ef02; /* Old browsers */
+        /*background: -moz-radial-gradient(center, ellipse cover, #dcdcdc 0%, #b7b7b7 87%, #424242 87%, #000000 100%); /* FF3.6-15 *
+        background: -webkit-radial-gradient(center, ellipse cover, #dcdcdc 0%,#b7b7b7 87%,#424242 87%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+        background: radial-gradient(ellipse at center, #dcdcdc 0%,#b7b7b7 87%,#424242 87%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7b7b7', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/module.js') }}"></script>
+{% endblock %}

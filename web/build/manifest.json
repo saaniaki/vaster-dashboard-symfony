@@ -9,6 +9,8 @@
   "build/fonts/glyphicons-halflings-regular.woff2": "/build/fonts/glyphicons-halflings-regular.woff2",
   "build/global.css": "/build/global.css",
   "build/images/glyphicons-halflings-regular.svg": "/build/images/glyphicons-halflings-regular.svg",
+  "build/module.css": "/build/module.css",
+  "build/module.js": "/build/module.js",
   "build/pages.css": "/build/pages.css",
   "build/pages.js": "/build/pages.js"
 }
