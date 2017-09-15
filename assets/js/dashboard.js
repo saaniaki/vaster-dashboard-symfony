@@ -1084,7 +1084,7 @@ $("#renderPage").on( "click", ".option-module-save", function() {
 
     $('#module-' + id + '-container').hide();
     $('#loading-' + id).show();
-    console.log(data);
+    //console.log(data);
     configModule(id, data);
 
 
