@@ -230,7 +230,7 @@ class Configuration
                     $categoriesObj->addDate($name, $range);
                 }
             }
-            dump($categoriesObj);
+
         //}
 
         ////////////////////////////////////////////////////////////////////////// Layout: creating $layoutObj
@@ -249,7 +249,7 @@ class Configuration
             if( isset($presentation['interval']) && $presentation['interval'] != null )$presentationObj->setInterval($presentation['interval']);
             if( isset($presentation['zero'])){$presentationObj->setZero($presentation['zero']);}
         }
-        dump("here");
+
         ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
         //if( isset($removeZeros) && $removeZeros != null )           $this->setRemoveZeros($removeZeros);
         if( isset($filtersObj) && $filtersObj != null )             $this->setFilters($filtersObj);
