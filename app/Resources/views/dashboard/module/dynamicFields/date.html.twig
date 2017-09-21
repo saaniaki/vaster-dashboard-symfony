@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-4">
                 Title:
-                <input name="title" type="text" class="form-control title" placeholder="Title" data-default="{% if name is defined %}{{ name }}{% else %}New Search{% endif %}" style="margin-bottom: 10px;">
+                <input name="title" type="text" class="form-control title" placeholder="Title" {% if name is defined %}data-default="{{ name }}"{% else %} data-error-flag="true"{% endif %}" style="margin-bottom: 10px;">
             </div>
             <div class="col-md-4">
                 <!-- load columns dynamically -->

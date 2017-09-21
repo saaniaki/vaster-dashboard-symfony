@@ -54,9 +54,9 @@ class dashboardController extends Controller
             'year' => $time->format('Y'),
             'month' => $time->format('m'),
             'day' => $time->format('d'),
-            'hour' => $time->format('H'),
-            'minute' => $time->format('i'),
-            'second' => $time->format('s')
+            'hours' => $time->format('H'),
+            'minutes' => $time->format('i'),
+            'seconds' => $time->format('s')
         ];
 
         return new JsonResponse($date);

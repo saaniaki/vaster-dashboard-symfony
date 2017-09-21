@@ -171,29 +171,37 @@ abstract class AbstractModule implements ModuleInterface
 
     //create a utility class and move this function there
     public function adjustDate($fromDate, $toDate){
+        $NOW = new \DateTime('now');            // now time
+        $BEG = new \DateTime('now');            // beginning
+
         $yesterday = new \DateTime('2000-01-01');
         $aWeekAgo = new \DateTime('2000-01-07');
         $aMonthAgo = new \DateTime('2000-02-01');
+        $threeMonthAgo = new \DateTime('2000-03-01');
+        $oneYearAgo = new \DateTime('2001-01-01');
 
         //dump($fromDate, $toDate);die();
 
-        if( $fromDate == null ) $fromDate = new \DateTime('2016-12-09');
+        if( $fromDate == null ) $fromDate = $BEG;
         else $fromDate = new \DateTime($fromDate);
 
-        if( $fromDate == $yesterday ) $fromDate = new \DateTime('midnight yesterday');
-        elseif ( $fromDate == $aWeekAgo ) $fromDate = new \DateTime('midnight last week');
-        elseif ( $fromDate == $aMonthAgo ) $fromDate = new \DateTime('midnight last month');
+        if( $fromDate == $yesterday ) $fromDate = (new \DateTime($NOW->format('Y-m-d H:00:00')))->modify('-23 hours');
+        elseif ( $fromDate == $aWeekAgo ) $fromDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-6 days');
+        elseif ( $fromDate == $aMonthAgo ) $fromDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-29 days');
+        elseif ( $fromDate == $threeMonthAgo ) $fromDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-89 days');
+        elseif ( $fromDate == $oneYearAgo ) $fromDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-364 days');
         //elseif( $fromDate == null ) $fromDate = new \DateTime('2016-12-09');
 
 
-        if( $toDate == null ) $toDate = new \DateTime('now');
+        if( $toDate == null ) $toDate = $NOW;
         else $toDate = new \DateTime($toDate);
 
-        if( $toDate == $yesterday ) $toDate = new \DateTime('midnight yesterday');
-        elseif ( $toDate == $aWeekAgo ) $toDate = new \DateTime('midnight last week');
-        elseif ( $toDate == $aMonthAgo ) $toDate = new \DateTime('midnight last month');
+        if( $toDate == $yesterday ) $toDate = (new \DateTime($NOW->format('Y-m-d H:00:00')))->modify('-23 hours');
+        elseif ( $toDate == $aWeekAgo ) $toDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-6 days');
+        elseif ( $toDate == $aMonthAgo ) $toDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-29 days');
+        elseif ( $toDate == $threeMonthAgo ) $toDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-89 days');
+        elseif ( $toDate == $oneYearAgo ) $toDate = (new \DateTime($NOW->format('Y-m-d 00:00:00')))->modify('-364 days');
         //elseif( $toDate == null ) $toDate = new \DateTime('now');
-
 
         return ['from' => $fromDate, 'to' => $toDate];
     }

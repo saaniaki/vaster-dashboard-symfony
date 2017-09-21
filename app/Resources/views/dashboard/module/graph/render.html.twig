@@ -214,13 +214,12 @@
 
         {% if result.xAxisType is defined and result.xAxisType == 'datetime' %}
         ,
-        pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}),  //set to module!!
+        pointStart: Date.UTC({{ result.start.year }}, {{ result.start.month }}, {{ result.start.day }}, {{ result.start.hour }}, {{ result.start.minute }}),  //set to module!!
         pointInterval: {{ result.xInterval }}
         {% endif %}
     });
 
     {% endfor %}
-
 
 
     Highcharts.getOptions().plotOptions.pie.colors = (function () {

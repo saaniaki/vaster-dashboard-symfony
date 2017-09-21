@@ -2,15 +2,15 @@ var beingEddited = "";
 var pendingModuleRemove = "";
 
 function clock() {
-    $.ajax({
-        type: 'POST',
-        url: '../clock',
-        timeout: 15000,
-        success: function(data) {
-            $("#clock").html("Server Time (UTC): " + data.month + "/" + data.day + "/" +  data.year + " @ " + data.hour + ":" + data.minute);
-            window.setTimeout(clock, 15000);
-        }
-    });
+    var dateTime = new Date();
+    var year = dateTime.getUTCFullYear();
+    var month = ("0" + dateTime.getUTCMonth()).slice(-2);
+    var day = ("0" + dateTime.getUTCDate()).slice(-2);
+    var hours = ("0" + dateTime.getUTCHours()).slice(-2);
+    var minutes = ("0" + dateTime.getUTCMinutes()).slice(-2);
+    var seconds = ("0" + dateTime.getUTCSeconds()).slice(-2);
+    $("#clock").html("Server Time (UTC): " + month + "/" + day + "/" + year + " @ " + hours + ":" + minutes + ":" + seconds);
+    window.setTimeout(clock, 1000);
 }
 
 function updatePageList() {
@@ -231,9 +231,7 @@ $( document ).ready(function() {
 
 
     clock();
-    $("#clock").show({ effect: "fade", easing: 'easeOutQuint', duration: 1000});
-
-
+    $("#clock").show({ effect: "fade", easing: 'easeOutQuint', duration: 1000 });
 });
 
 

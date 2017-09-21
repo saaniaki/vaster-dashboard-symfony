@@ -58,11 +58,9 @@ class Bar extends AbstractModule
             $from = $adjustedDates['from'];
             $to = $adjustedDates['to'];
 
-            $this->start = [
-                'year' => $from->format('Y'),
-                'month' => $from->format('m') - 1,
-                'day' => $from->format('d'),
-            ];
+
+
+
 
             $startNumber = $this->subModule->getStartingNumber($from, $combo, $filters);
 
@@ -76,11 +74,21 @@ class Bar extends AbstractModule
             } elseif( $PR_interval == 'Weekly' ){
                 $interval = new \DateInterval('P7D');
                 $this->xInterval = 7 * 24 * 3600 * 1000;
-            } else { // default is daily
-                $interval = new \DateInterval('P7D');
-                $this->xInterval = 7 * 24 * 3600 * 1000;
+                //$from->modify('last week monday');
+                $lastMonday = date('Y-m-d H:00', strtotime('previous monday', strtotime($from->format('Y-m-d H:00'))));
+                $from = new \DateTime($lastMonday);
+            } else {
+                throw new \Exception("Bad module configuration: Interval is not defined properly.");
             }
 
+
+            $this->start = [
+                'year' => $from->format('Y'),
+                'month' => $from->format('m') - 1,
+                'day' => $from->format('d'),
+                'hour' => $from->format('H'),
+                'minute' => $from->format('i')
+            ];
 
 
             $count = 0;
