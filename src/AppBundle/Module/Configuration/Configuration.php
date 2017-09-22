@@ -182,7 +182,7 @@ class Configuration
                     $search->setColumnOperator($SearchArray['columnOperator']);
                     $search->setExpressionOperator($SearchArray['expressionOperator']);
                     $search->setColumns($SearchArray['columns']);
-                    $search->setNegate($SearchArray['negate'] === true? true: false);
+                    $search->setNegate($SearchArray['negate'] === true || $SearchArray['negate'] === 'true' ? true: false);
                     $filtersObj->addSearch($name, $search);
                 }
             }
@@ -214,7 +214,7 @@ class Configuration
                     $search->setColumnOperator($SearchArray['columnOperator']);
                     $search->setExpressionOperator($SearchArray['expressionOperator']);
                     $search->setColumns($SearchArray['columns']);
-                    $search->setNegate($SearchArray['negate'] === true? true: false);
+                    $search->setNegate($SearchArray['negate'] === true || $SearchArray['negate'] === 'true' ? true: false);
                     $categoriesObj->addSearch($name, $search);
                 }
             }

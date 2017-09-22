@@ -23,6 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\User as AppUser;
@@ -92,6 +93,59 @@ class moduleController extends Controller
 
 
 
+
+    /**
+     * @param $module Module
+     * @Route("api/module/edit/{id}", name="module_edit")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function tstRender(Module $module){
+        $version = $this->getParameter('version');
+        /** @var $appUser AppUser */
+        $appUser = $this->getUser();
+        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
+            ->findOneBy([ 'email' => $appUser->getEmail()]);
+        $pages = $appUser->getPages()->toArray();
+
+        $em = $this->getDoctrine()->getManager();
+        $modules_info = $em->getRepository("AppBundle:ModuleInfo")->findAll();
+
+        $module_types =['Graph'];
+
+
+        $sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $colors = ['Green', 'Blue', 'Red'];
+
+
+        // IMPORTANT $available conf
+        $conf = $module->getModuleInfo()->getAvailableConfiguration();
+        $presentations = $conf['presentation'];
+        $userType = $conf['filters']['user_type'];
+        $availabilities = $conf['filters']['availability'];
+        $device_types = $conf['filters']['device_type'];
+
+
+        return $this->render('dashboard/module/edit.html.twig', [
+            "vasterUser" => $vasterUser,
+            "version" => $version,
+            'pages' => $pages,
+            'module_types' => $module_types,
+            'graph_types' => $modules_info,
+            'module_sizes' => $sizes,
+            'module_colors' => $colors,
+
+
+            'module' => $module,
+            'presentations' => $presentations,
+            'user_types' => $userType,
+            'availabilities' => $availabilities,
+            'device_types' => $device_types,
+            'conf' => $module->getConfiguration(),
+            'searchColumns' => Search::$columns_available,
+            'dateColumns' => DateRange::$columns_available
+        ]);
+    }
+
     /**
      * accepts JSON and configures the module with module_id of {id}
      * @param $module Module
@@ -116,6 +170,7 @@ class moduleController extends Controller
         $configuration = $module->getConfiguration();           // To keep the old useful configuration
 
         $configuration->load($data);                            // To rewrite the new configuration
+        dump($configuration);
         $module->setConfiguration($configuration->extract());
 
         /*
@@ -176,27 +231,62 @@ class moduleController extends Controller
     }
 
     /**
-     * @Route("api/module/add/{moduleInfo_id}", name="module_add_tabs")
+     * @Route("api/module/add/{id}", name="module_add")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addTabs(Request $request, int $moduleInfo_id){
+    public function newModule(Request $request, Page $page){
+        /*
+         * Getting the new json data by $request and parsing it to a Configuration object.
+         * This will override all the configurations that are requested to change and keeps
+         * the old parameters if they are not provided in $request.
+         */
+        $data = new ArrayCollection();
+        $data->set('categories', $request->get('categories'));
+        $data->set('filters', $request->get('filters'));
+        $data->set('layout', $request->get('layout'));
+        $data->set('presentation', $request->get('presentation'));
+
+
+        $module = new Module();
+        $configuration = new Configuration($data);
+
+        /*
+         * These are basic information about each module, and they are not
+         * stored in configuration. Therefore, they should be handled separately.
+         */
+        $info = $request->get('info');
+        $rank = $request->get('rank');
+
+        $lastModule = $page->getModules()->last();
+
+        if($info != null) {
+            $moduleInfo = $this->getDoctrine()->getRepository("AppBundle:ModuleInfo")->findOneBy(['id' => $info]);
+            $module->setModuleInfo($moduleInfo);
+            if( $info == $moduleInfo->getId() ){
+                $filters = new Filters();
+                $filters->addDate('period', new DateRange());
+                $configuration->setFilters($filters);
+            }
+        }
+
+        if($rank != null) $module->setRank($rank);
+        else {
+            if($lastModule != null) $module->setRank($lastModule->getRank() + 100);
+            else $module->setRank(100);
+        }
+
+        $module->setConfiguration($configuration->extract());
+        $module->setPage($page);
+
         $em = $this->getDoctrine()->getManager();
-        $module_info = $em->getRepository("AppBundle:ModuleInfo")->findOneBy(["id" => $moduleInfo_id]);
+        $em->persist($module);
+        $em->flush();
 
-        $conf = $module_info->getAvailableConfiguration();
-        $presentations = $conf['presentation'];
-        $userType = $conf['filters']['user_type'];
-        $availabilities = $conf['filters']['availability'];
-        $device_types = $conf['filters']['device_type'];
-
-        return $this->render('dashboard/module/tabs.html.twig', [
-            'presentations' => $presentations,
-            'user_types' => $userType,
-            'availabilities' => $availabilities,
-            'device_types' => $device_types,
-            'conf' => ['filters' => null, 'categories' => null]
-        ]);
+        $data = [
+            'id' => $module->getId()
+        ];
+        return new JsonResponse($data);
     }
 
     /**
@@ -235,156 +325,9 @@ class moduleController extends Controller
     }
 
     /**
-     * @param $module Module
-     * @Route("api/module/edit/{id}", name="module_edit")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function tstRender(Module $module){
-        $version = $this->getParameter('version');
-        /** @var $appUser AppUser */
-        $appUser = $this->getUser();
-        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-            ->findOneBy([ 'email' => $appUser->getEmail()]);
-        $pages = $appUser->getPages()->toArray();
-
-        $em = $this->getDoctrine()->getManager();
-        $modules_info = $em->getRepository("AppBundle:ModuleInfo")->findAll();
-
-        $module_types =['Graph'];
-
-
-        $sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        $colors = ['Green', 'Blue', 'Red'];
-
-
-        // IMPORTANT $available conf
-        $conf = $module->getModuleInfo()->getAvailableConfiguration();
-        $presentations = $conf['presentation'];
-        $userType = $conf['filters']['user_type'];
-        $availabilities = $conf['filters']['availability'];
-        $device_types = $conf['filters']['device_type'];
-
-
-        return $this->render('dashboard/module/edit.html.twig', [
-            "vasterUser" => $vasterUser,
-            "version" => $version,
-            'pages' => $pages,
-            'module_types' => $module_types,
-            'graph_types' => $modules_info,
-            'module_sizes' => $sizes,
-            'module_colors' => $colors,
-
-
-            'module' => $module,
-            'presentations' => $presentations,
-            'user_types' => $userType,
-            'availabilities' => $availabilities,
-            'device_types' => $device_types,
-            'conf' => $module->getConfiguration(),
-            'searchColumns' => Search::$columns_available,
-            'dateColumns' => DateRange::$columns_available
-        ]);
-    }
-
-
-    /**
-     * @Route("api/module/add/{id}", name="module_add")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function newModule(Request $request, Page $page){
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(NewModule::class, null,  array(
-            'entity_manager' => $em
-            //'page' => $page
-        ));
-
-
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            /** @var $moduleToBeAdded Module*/
-            $moduleToBeAdded = $form->getData();
-
-
-            $lastModule = $page->getModules()->last();
-
-            if( $moduleToBeAdded->getRank() === null ){
-                if($lastModule != null)
-                    $moduleToBeAdded->setRank($lastModule->getRank() + 100);
-                else
-                    $moduleToBeAdded->setRank(100);
-            }
-
-            $moduleToBeAdded->setPage($page);
-
-
-            $configuration = new Configuration();
-            $infoName = $moduleToBeAdded->getModuleInfo()->getName();
-            if ( $infoName == "Bar Chart" ) {
-                $presentation = new Presentation();
-                $presentation->setData('Registration');
-                $presentation->setInterval('Weekly');
-                $configuration->setPresentation($presentation);
-                $filters = new Filters();
-                $date = new DateRange();
-                //$date->setColumn('user.createdtime');
-                //$date->setFrom(null);
-                //$date->setTo(null);
-                $filters->addDate('period', $date);
-                $configuration->setFilters($filters);
-            }elseif ( $infoName == "Pie Chart" ) {
-                $presentation = new Presentation();
-                $presentation->setData('Registration');
-                $configuration->setPresentation($presentation);
-            }
-
-            $layout = new Layout();
-            $layout->setSize($moduleToBeAdded->getPostedSize());
-            $configuration->setLayout($layout);
-
-            $moduleToBeAdded->setConfiguration($configuration->extract());
-
-
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($moduleToBeAdded);
-            $em->flush();
-        }
-
-        return $this->render('dashboard/module/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /*
-     * @Route("api/module/edit/{id}", name="module_edit")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-    public function editModule(Request $request, Module $module){
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(NewModule::class, $module,  array(
-            'entity_manager' => $em
-        ));
-
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($form->getData());
-            $em->flush();
-        }
-
-        return $this->render('dashboard/module/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("api/module/remove/{id}", name="module_remove")
      * @return \Symfony\Component\HttpFoundation\Response
-     *
+     */
     public function removeModule(Module $module){
 
         // must check if the record belongs to this user
@@ -395,5 +338,5 @@ class moduleController extends Controller
 
         return new Response("Module has been removed!");
     }
-    */
+
 }

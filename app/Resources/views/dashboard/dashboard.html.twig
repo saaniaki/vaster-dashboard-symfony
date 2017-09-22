@@ -4,9 +4,55 @@
 
 {% block body %}
     <div class="container-fluid" style="margin-top: 50px;" id="dashboard">
-        <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("page_modules", {'id': 'page_id'}) }}" data-set-module-conf="{{ path("set_module_conf", {'id': 'module_id'}) }}" data-page-id-first-load="{{ currentPage.id }}">
+        <div id="renderPage" style="margin-top: 10px;" data-page-render-url="{{ path("page_modules", {'id': 'page_id'}) }}" data-set-module-conf="{{ path("set_module_conf", {'id': 'module_id'}) }}" data-id-module_current="{{ currentPage.id }}" data-url-module_add="{{ path("module_add", {'id': 'page_id'}) }}" data-url-module_remove="{{ path("module_remove", {'id': 'module_id'}) }}">
             <div id="modules" data-module-render-url="{{ path('render_module', {'id': 'module_id'}) }}" data-module-search-url="{{ path('get_module_search', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}" data-module-date-url="{{ path('get_module_date', {'id': 'module_id', 'section' : 'module_section', 'index' : 'module_index'}) }}" data-module-edit-url="{{ path('module_edit', {'id': 'module_id'}) }}">
                 <!-- modules -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Add New Module Modal -->
+    <div class="modal fade" id="js_modal_new_module" tabindex="-1" role="dialog" aria-labelledby="AddNewModule" data-url-module_add="{{ path("module_add_start") }}">
+        <div class="modal-dialog" role="document" style="width: 70%;">
+            <div class="modal-content">
+                <div class="modal-header ">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                    <h4 class="modal-title">Adding new module to {{ currentPage.name }}</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <p class="bg-primary" style="padding: 15px;">
+                        Adding a new module...
+                    </p>
+
+
+                    <div class="js_init"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success option-module-save">Add</button> <!-- make it js_button_add_module -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModuleRemoval" tabindex="-1" role="dialog" aria-labelledby="confirmModuleRemoval">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header ">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Remove Module</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove this module from this page?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+                    <button type="button" class="btn btn-danger" id="doRemoveModule">Remove</button>
+                </div>
             </div>
         </div>
     </div>

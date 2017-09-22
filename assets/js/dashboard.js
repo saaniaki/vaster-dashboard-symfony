@@ -413,6 +413,7 @@ function initSearchDate(tab) {
                 var toDateSelector = fieldSet.find('.toDatetimepicker');
                 initPicker(fromDateSelector, new Date(2016, 11, 9), new Date(2016, 11, 9), today, toDateSelector, 'setMin');
                 initPicker(toDateSelector, null, new Date(2016, 11, 9), today, fromDateSelector, 'setMax');
+                section.find('.dateButton .btn').tooltip({container: 'body'});
             }
         });
     });
@@ -430,31 +431,31 @@ function initSearchDate(tab) {
 
 /**
  * Loads wizard tabs using ajax
- * @param infoID    > The module type ID
- * @param moduleID  > The module ID
- * @param cacheObj  > The cache object
+ * @param infoID            > The module type ID
+ * @param moduleID          > The module ID
+ * @param cacheObj          > The cache object
+ * @param moduleOptions     > The .moduleOptions div
  */
-function loadTabs(infoID, moduleID, cacheObj) {
-    var path = $(".mod-options").attr('data-url-module_tabs');
+function loadTabs(infoID, moduleID, cacheObj, moduleOptions) {
+    var path = moduleOptions.attr('data-url-module_tabs');
     path = path.replace("moduleInfo_id", infoID);
-    if (path.includes('module_id')) path = path.replace("module_id", moduleID);
+    if (path.includes('module_id') && moduleID !== null) path = path.replace("module_id", moduleID);
 
     $.ajax({
         type: 'POST',
         url: path,
         cache: cacheObj,
         success: function success(data) {
-            var base = $('#option-module-' + moduleID);
-            base.find(".js_dynamic-tab").remove();
-            base.find(".mod-options div.tab-content").append(data);
-            if (this.cache !== undefined) loadCacheToDefault(this.cache, moduleID);
-            setDefaultOptions(moduleID); //if module is not undefiend
+            moduleOptions.find(".js_dynamic-tab").remove();
+            moduleOptions.find(".tab-content").append(data);
+            if (this.cache !== null) loadCacheToDefault(this.cache);
+            setDefaultOptions(moduleID);
             initializeOptions(moduleID);
-            if (this.cache !== undefined) {
+            if( moduleID !== null && this.cache !== null){
                 var newType = $('#tab-layout-' + moduleID + ' .mod-graph-type').find("option[data-info-index='" + infoID + "']").val();
                 $('#tab-layout-' + moduleID + ' .mod-graph-type select').val(newType);
             }
-            base.find('.dateButton .btn').tooltip({ container: 'body' });
+            moduleOptions.find('.dateButton .btn').tooltip({container: 'body'});
         }
     });
 }
@@ -689,6 +690,7 @@ function loadCacheToDefault(cacheObj, id) {
                                 makeTwoWayTitle(section.find("fieldset[data-index='" + this.index + "'] .title"), 'New Date');
                                 section.attr('data-number', ++index);
                                 loadCacheToDefaultAfterAajx_date($('.mod-filter-date').find('fieldset').last(), this.title, this.values, true);
+                                section.find('.dateButton .btn').tooltip({container: 'body'});
                             }
                         });
                     }
@@ -910,11 +912,11 @@ function renderModule(id) {
 
                         var value = moduleOptions.find('.mod-graph-type select').attr('data-default');
 
-                        loadTabs(moduleOptions.find('.mod-graph-type select').find("option[value='" + value + "']").attr('data-info-index'), moduleOptions.attr('data-module_id'));
+                        loadTabs(moduleOptions.find('.mod-graph-type select').find("option[value='" + value + "']").attr('data-info-index'), moduleOptions.attr('data-module_id'), null, moduleOptions);
 
                         moduleOptions.on('change', '.mod-graph-type select', function () {
                             var id = moduleOptions.attr('data-module_id');
-                            loadTabs($(this).find('option:selected').attr('data-info-index'), id, cacheChanges(id));
+                            loadTabs($(this).find('option:selected').attr('data-info-index'), id, cacheChanges(id), moduleOptions);
                         });
 
                         //select the tab
@@ -926,6 +928,7 @@ function renderModule(id) {
     });
 }
 
+// id => module id
 function configModule(id, data) {
     var path = $("#renderPage").attr('data-set-module-conf');
     path = path.replace("module_id", id);
@@ -942,6 +945,28 @@ function configModule(id, data) {
     });
 }
 
+// id => page id
+function addModule(id, data) {
+    var path = $("#renderPage").attr('data-url-module_add');
+    path = path.replace("page_id", id);
+
+    $.ajax({
+        url: path,
+        type: 'post',
+        data: data,
+        success: function success(data) {
+            //alert(data);
+            //console.log(data);
+            /*
+                var moduleID = data.id;
+                $('#modules').append("<div id='renderModule-" + moduleID + "'></div>");
+                renderModule(moduleID);
+            */
+            renderPage(id);
+        }
+    });
+}
+
 function renderPage(id) {
     var path = $("#renderPage").attr('data-page-render-url');
     path = path.replace("page_id", id);
@@ -953,7 +978,7 @@ function renderPage(id) {
         success: function success(data) {
             $('#modules').html("");
 
-            if (data.modules.length === 0) alert('No modules founded! :( please add modules to this page!');
+            if (data.modules.length === 0) alert('No modules found! :( please add modules to this page!');
 
             var used = 0;
             var lastRow = 0;
@@ -1005,9 +1030,7 @@ function grabDataMultiFields(section) {
     return { 'search': search, 'date': date };
 }
 
-$("#renderPage").on("click", ".option-module-save", function () {
-    var id = $(this).attr('data-module-id');
-
+function extractData(id) {
     var temp;
 
     var data = {};
@@ -1082,6 +1105,14 @@ $("#renderPage").on("click", ".option-module-save", function () {
         }
     };
 
+    return data;
+}
+
+
+$("#renderPage").on("click", ".option-module-save", function () {
+    var id = $(this).attr('data-module-id');
+    var data = extractData(id);
+
     $('#module-' + id + '-container').hide();
     $('#loading-' + id).show();
     //console.log(data);
@@ -1090,8 +1121,65 @@ $("#renderPage").on("click", ".option-module-save", function () {
     $('#option-module-' + id).modal('hide');
 });
 
+
+
+
+
+$('#js_modal_new_module').on('show.bs.modal', function () {
+    var modal = $("#js_modal_new_module"); // this?
+    var path = modal.attr('data-url-module_add');
+
+    $.ajax({
+        url: path,
+        success: function success(data) {
+            modal.find('.js_init').html(data);
+            var moduleOptions = modal.find('.mod-options');
+
+            loadTabs(moduleOptions.find('.mod-graph-type option:selected').attr('data-info-index'), null, null, moduleOptions);
+
+            moduleOptions.on('change', '.mod-graph-type select', function () {
+                loadTabs($(this).find('option:selected').attr('data-info-index'), null, cacheChanges(), moduleOptions);
+            });
+
+            //select the tab
+            moduleOptions.find(".nav-tabs a:first").tab('show');
+
+        }
+    });
+
+
+}).on("click", ".option-module-save", function () {
+    var data = extractData();
+    var id = $("#renderPage").attr('data-id-module_current');
+    addModule(id, data);
+    $('#js_modal_new_module').modal('hide');
+});
+
+
+var pendingModuleRemove = null;
+
+$(document).on("click", '.module-remove', function () {
+    var path = $("#renderPage").attr('data-url-module_remove');
+    var id = $(this).closest('.panel-default').attr('id').split('-')[1];
+    pendingModuleRemove = path.replace("module_id", id);
+    $('#confirmModuleRemoval').modal();
+});
+
+$( "#doRemoveModule" ).click(function() {
+    $.ajax({
+        url: pendingModuleRemove,
+        success: function (data) {
+            renderPage($("#renderPage").attr('data-id-module_current'));
+            $('#confirmModuleRemoval').modal('hide');
+        }
+    });
+});
+
+
 $('.js_page_render').click(function () {
-    renderPage($(this).attr('data-pageid'));
+    var id = $(this).attr('data-pageid');
+    $("#renderPage").attr('data-id-module_current', id);
+    renderPage(id);
 });
 
 /*
@@ -1156,7 +1244,7 @@ function clock() {
 }
 
 $(document).ready(function () {
-    renderPage($("#renderPage").attr('data-page-id-first-load'));
+    renderPage($("#renderPage").attr('data-id-module_current'));
     clock();
     $("#clock").show({ effect: "fade", easing: 'easeOutQuint', duration: 1000 });
 });

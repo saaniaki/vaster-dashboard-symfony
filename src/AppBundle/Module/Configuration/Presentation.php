@@ -11,7 +11,7 @@ namespace AppBundle\Module\Configuration;
 
 class Presentation
 {
-    public $data;
+    public $data = 'Registration';
     public $interval = 'Daily';
     public $zero = false;
 

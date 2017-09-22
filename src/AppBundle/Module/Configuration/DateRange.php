@@ -43,6 +43,7 @@ class DateRange
             self::$aMonthAgo = '2000-02-01';
         }
 
+        $this->setFrom('2016-12-09 00:00');
         $this->setColumn('user.createdtime');
         $this->setOperator('or');
     }

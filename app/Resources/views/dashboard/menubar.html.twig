@@ -23,8 +23,21 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li {% if app.request.get('_route') == 'dashboard' %} class="active" {% endif %} ><a href="{{ path('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a></li>
+
+                    <li {% if app.request.get('_route') == 'dashboard' or app.request.get('_route') == 'dashboard_alter' %} class="active" {% endif %} ><a href="{{ path('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a></li>
                     <!--<li class="" ><a href="#">Settings</a></li>-->
+
+                    {% if app.request.get('_route') == 'dashboard' or app.request.get('_route') == 'dashboard_alter' %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Edit <span class="caret"></span></a>
+                        <ul class="dropdown-menu" id="editList">
+                            <li><a href="#" class="js_link_add_module" data-toggle="modal" data-target="#js_modal_new_module" >Add Module</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Manage Modules</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+
                     <li class {% if app.request.get('_route') == 'manage_pages' %} ="active" {% else %} ="dropdown" {% endif %}>
                         <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
                         <ul class="dropdown-menu" id="pageList">
@@ -35,6 +48,9 @@
                             <li><a href="{{ path('manage_pages') }}">Manage Pages</a></li>
                         </ul>
                     </li>
+
+
+
                     <li class="" ><a href="{{ path('user_management') }}">Administration</a></li>
                 </ul>
                 <!-- search form
