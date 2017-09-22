@@ -357,9 +357,9 @@ function initSearchDate(tab) {
     tab.find('.js_search-init .title').each(function () {
         makeTwoWayTitle($(this), 'New Search');
     });
-    tab.find('.js_search-init .keyword').each(function () {
+    /*tab.find('.js_search-init .keyword').each(function () {
         makeRequire($(this));
-    });
+    });*/
     tab.find('.js_date-init .title').each(function () {
         makeTwoWayTitle($(this), 'New Date');
     });
@@ -388,7 +388,7 @@ function initSearchDate(tab) {
                 var section = tab.find('.js_search-init');
                 section.append(data);
                 makeTwoWayTitle(section.find("fieldset[data-index='" + index + "'] .title"), 'New Search');
-                makeRequire($("fieldset[data-index='" + index + "'] .keyword"));
+                //makeRequire($("fieldset[data-index='" + index + "'] .keyword"));
                 section.attr('data-number', ++index);
             }
         });
@@ -583,7 +583,7 @@ function cacheMultiFields(section) {
     var date = [];
 
     section.find('.js_search-init fieldset').each(function () {
-        if ($(this).find('input[name="title"]').val() !== "" && $(this).find('input[name="keyword"]').val() !== "") {
+        if ($(this).find('input[name="title"]').val() !== "") {
             //columns should not be null too
             search[$(this).find('input[name="title"]').val()] = {
                 "columnOperator": $(this).find('select[name="col-op"]').val(),
@@ -664,7 +664,7 @@ function loadCacheToDefault(cacheObj, id) {
                                 var section = filters.find('.js_search-init');
                                 section.append(data);
                                 makeTwoWayTitle(section.find("fieldset[data-index='" + this.index + "'] .title"), 'New Search');
-                                makeRequire($("fieldset[data-index='" + this.index + "'] .keyword"));
+                                //makeRequire($("fieldset[data-index='" + this.index + "'] .keyword"));
                                 section.attr('data-number', ++index);
                                 loadCacheToDefaultAfterAajx_search($('.mod-filter-search').find('fieldset').last(), this.title, this.values, true);
                             }
@@ -738,7 +738,7 @@ function loadCacheToDefault(cacheObj, id) {
                                 var section = categories.find('.js_search-init');
                                 section.append(data);
                                 makeTwoWayTitle(section.find("fieldset[data-index='" + this.index + "'] .title"), 'New Search');
-                                makeRequire($("fieldset[data-index='" + this.index + "'] .keyword"));
+                                //makeRequire($("fieldset[data-index='" + this.index + "'] .keyword"));
                                 section.attr('data-number', ++index);
                                 loadCacheToDefaultAfterAajx_search($('.mod-category-search').find('fieldset').last(), this.title, this.values, true);
                             }
@@ -1003,7 +1003,7 @@ function grabDataMultiFields(section) {
     var date = {};
 
     section.find('.js_search-init fieldset').each(function () {
-        if ($(this).find('input[name="title"]').val() !== "" && $(this).find('input[name="keyword"]').val() !== "") {
+        if ($(this).find('input[name="title"]').val() !== "") {
             //columns should not be null too
             search[$(this).find('input[name="title"]').val()] = {
                 "columnOperator": $(this).find('select[name="col-op"]').val(),

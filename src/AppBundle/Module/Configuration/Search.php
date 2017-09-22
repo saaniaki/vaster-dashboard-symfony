@@ -16,7 +16,7 @@ class Search
     private static $operators_available;
 
     /** @var $singleCategories ArrayCollection */
-    public static $columns_available = ['user.firstname', 'user.lastname', 'user.email', 'user.phone'];
+    public static $columns_available = ['user.firstname', 'user.lastname', 'user.email', 'user.phone', 'searches.searchquery'];
 
     public $keyword;
     public $columns = [];
@@ -48,7 +48,7 @@ class Search
      * @param string $keyword
      * @throws \Exception
      */
-    public function setKeyword(string $keyword)
+    public function setKeyword(string $keyword = null)
     {
         $this->keyword = $keyword;
     }

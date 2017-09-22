@@ -172,7 +172,7 @@ abstract class AbstractModule implements ModuleInterface
     //create a utility class and move this function there
     public function adjustDate($fromDate, $toDate){
         $NOW = new \DateTime('now');            // now time
-        $BEG = new \DateTime('now');            // beginning
+        $BEG = new \DateTime('2016-12-09');     // beginning
 
         $yesterday = new \DateTime('2000-01-01');
         $aWeekAgo = new \DateTime('2000-01-07');

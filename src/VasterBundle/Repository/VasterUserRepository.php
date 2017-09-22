@@ -352,10 +352,18 @@ class VasterUserRepository extends EntityRepository
                 $expressions = [];
                 foreach ( $search['columns'] as $column ){
 
-                    if( $search['negate'] ) $temp = $query->expr()->notLike($column, ':value' . $key);
-                    else $temp = $query->expr()->like($column, ':value' . $key);
+                    if( $search['keyword'] == null ){
+                        if( $search['negate'] ) $temp = $query->expr()->isNotNull($column);
+                        else $temp = $query->expr()->isNull($column);
 
-                    $query->setParameter('value' . $key, $search['keyword']);
+                    }else{
+                        if( $search['negate'] ) $temp = $query->expr()->notLike($column, ':value' . $key);
+                        else $temp = $query->expr()->like($column, ':value' . $key);
+
+                        $query->setParameter('value' . $key, $search['keyword']);
+                    }
+
+
                     $expressions[] = $temp;
                 }
 
