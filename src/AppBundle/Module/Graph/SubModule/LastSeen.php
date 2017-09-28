@@ -37,9 +37,11 @@ class LastSeen implements SubModuleInterface
     public function count(Combination $combo = null, Filters $filters = null){
         $query = $this->dbRepository->createQueryBuilder('lastSeen')
             ->leftJoin('lastSeen.user', 'user')
-            ->select('COUNT(user)');
+            ->select('COUNT(DISTINCT user.userid)');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        //$query->groupBy('lastSeen.user');
         $query = $this->userRep->applyFilters($filters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();
@@ -52,6 +54,8 @@ class LastSeen implements SubModuleInterface
             ->orderBy('lastSeen.seconds', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->groupBy('lastSeen.user');
         $query = $this->userRep->applyFilters($filters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
 
@@ -75,10 +79,12 @@ class LastSeen implements SubModuleInterface
 
         $query = $this->dbRepository->createQueryBuilder('lastSeen')
             ->leftJoin('lastSeen.user', 'user')
-            ->select('COUNT(user)')
+            ->select('COUNT(DISTINCT user.userid)')
             ->orderBy('lastSeen.seconds', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        //$query->groupBy('user.userid');
         $query = $this->userRep->applyFilters($newFilters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();

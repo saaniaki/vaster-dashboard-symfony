@@ -91,7 +91,6 @@ class Bar extends AbstractModule
             ];
 
 
-            $count = 0;
             $result = [];
             while( !($from > $to) ){
                 $intervalEnd = clone $from;
@@ -105,15 +104,13 @@ class Bar extends AbstractModule
                     }
                 }
 
-                $result[$count] = [
+                $result[] = [
                     'from' => clone $from,
                     'to' => $intervalEnd,
                     'number' => $number
                 ];
-                $count++;
                 $from->add($interval);
             }
-
 
             $this->process($result, $startNumber, $name, $removeZeros);
 

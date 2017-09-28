@@ -40,25 +40,30 @@ class Registration implements SubModuleInterface
     }
 
     public function count(Combination $combo = null, Filters $filters = null){
-        $query = $this->dbRepository->createQueryBuilder('user')->select('COUNT(user)')->orderBy('user.createdtime', 'DESC');
-        $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        $query->leftJoin('user.lastseen', 'lastSeen');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        //$query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        $query = $this->dbRepository->applyFilters($filters, $query);
-        $query = $this->dbRepository->applyCategories($combo, $query);
-        return $query->getQuery()->getSingleScalarResult();
-    }
-
-    public function getColumn(Combination $combo = null, Filters $filters = null){
-        $query = $this->dbRepository->createQueryBuilder('user')->select('user.createdtime as time, user.accounttype')
+        $query = $this->dbRepository->createQueryBuilder('user')->select('COUNT(DISTINCT user.userid)')
             ->orderBy('user.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.lastseen', 'lastSeen');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        //$query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        //$query->groupBy('user.userid');
         $query = $this->dbRepository->applyFilters($filters, $query);
         $query = $this->dbRepository->applyCategories($combo, $query);
+        //dump($query->getQuery()->getSingleScalarResult());die();
+        return $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function getColumn(Combination $combo = null, Filters $filters = null){
+        $query = $this->dbRepository->createQueryBuilder('user')->select('user.createdtime as time, user.userid')
+            ->orderBy('user.createdtime', 'DESC');
+        $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.lastseen', 'lastSeen');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->groupBy('user.userid');
+        $query = $this->dbRepository->applyFilters($filters, $query);
+        $query = $this->dbRepository->applyCategories($combo, $query);
+        //dump($query->getQuery()->getArrayResult());
         return $query->getQuery()->getArrayResult();
     }
 
@@ -69,12 +74,13 @@ class Registration implements SubModuleInterface
         $temp->setTo($from->format('Y-m-d'));
         $newFilters->addDate('period', $temp);
 
-        $query = $this->dbRepository->createQueryBuilder('user')->select('COUNT(user)')
+        $query = $this->dbRepository->createQueryBuilder('user')->select('COUNT(DISTINCT user.userid)')
             ->orderBy('user.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.lastseen', 'lastSeen');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        //$query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
+        //$query->groupBy('user.userid');
         $query = $this->dbRepository->applyFilters($newFilters, $query);
         $query = $this->dbRepository->applyCategories($combo, $query);
         return $query->getQuery()->getSingleScalarResult();

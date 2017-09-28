@@ -9,8 +9,6 @@
 namespace VasterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-
 /**
  * @ORM\Entity(repositoryClass="VasterBundle\Repository\VasterAccountRepository")
  * @ORM\Table(name="accounts")

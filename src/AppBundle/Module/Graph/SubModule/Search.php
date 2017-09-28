@@ -44,10 +44,10 @@ class Search implements SubModuleInterface
     }
 
     public function count(Combination $combo = null, Filters $filters = null){
-        $query = $this->dbRepository->createQueryBuilder('search')
-            ->leftJoin('search.user', 'user')
+        $query = $this->dbRepository->createQueryBuilder('searches')
+            ->leftJoin('searches.user', 'user')
             ->select('COUNT(user)')
-            ->orderBy('search.createdtime', 'DESC');
+            ->orderBy('searches.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
@@ -57,15 +57,16 @@ class Search implements SubModuleInterface
     }
 
     public function getColumn(Combination $combo = null, Filters $filters = null){
-        $query = $this->dbRepository->createQueryBuilder('search')
-            ->leftJoin('search.user', 'user')
-            ->select('search.createdtime as time')
-            ->orderBy('search.createdtime', 'DESC');
+        $query = $this->dbRepository->createQueryBuilder('searches')
+            ->join('searches.user', 'user')
+            ->select('searches.createdtime as time')
+            ->orderBy('searches.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->userRep->applyFilters($filters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
+        dump($query->getQuery());
         return $query->getQuery()->getArrayResult();
     }
 
@@ -76,10 +77,10 @@ class Search implements SubModuleInterface
         $temp->setTo($from->format('Y-m-d'));
         $newFilters->addDate('period', $temp);
 
-        $query = $this->dbRepository->createQueryBuilder('search')
-            ->leftJoin('search.user', 'user')
+        $query = $this->dbRepository->createQueryBuilder('searches')
+            ->leftJoin('searches.user', 'user')
             ->select('COUNT(user)')
-            ->orderBy('search.createdtime', 'DESC');
+            ->orderBy('searches.createdtime', 'DESC');
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
@@ -89,7 +90,7 @@ class Search implements SubModuleInterface
     }
 
     public function getFooter(int $currentlyShowing){
-        $totalUsers = $this->dbRepository->createQueryBuilder('search')->leftJoin('search.user', 'user')->select('COUNT(user)')
+        $totalUsers = $this->dbRepository->createQueryBuilder('searches')->leftJoin('searches.user', 'user')->select('COUNT(user)')
             ->getQuery()->getSingleScalarResult();
         return "Total Searches: " . $totalUsers . " / Currently showing: " . $currentlyShowing;
     }
