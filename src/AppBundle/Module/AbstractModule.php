@@ -127,15 +127,11 @@ abstract class AbstractModule implements ModuleInterface
                 $improved_combinations[] = $combo;
         }
 
-        if( $improved_combinations == null ){
-            $improved_combinations = $this->combinations($categories);
-        }
+        if( $improved_combinations == null ) $improved_combinations = $this->combinations($categories);
+
 
 
         $this->feedData($presentation, $improved_combinations, $filters);
-
-
-
         return get_object_vars($this);
     }
 

@@ -990,6 +990,7 @@ function renderPage(id) {
                 }
                 used += module.size;
                 $('#row-' + lastRow).append("<div id='renderModule-" + module.id + "'></div>");
+
                 renderModule(module.id);
             });
         }

@@ -21,7 +21,6 @@ class Configuration
     public $filters;
     public $layout;
     public $presentation;
-    public $remove_zeros = true;
 
     public function __construct(ArrayCollection $data = null)
     {
@@ -110,22 +109,6 @@ class Configuration
         $this->presentation = $presentation;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function isRemoveZeros(): bool
-    {
-        return $this->remove_zeros;
-    }
-
-    /**
-     * @param bool $remove_zeros
-     */
-    public function setRemoveZeros(bool $remove_zeros)
-    {
-        $this->remove_zeros = $remove_zeros;
-    }
 
     /**
      * @return Layout

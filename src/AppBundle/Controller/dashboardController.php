@@ -45,6 +45,7 @@ class dashboardController extends Controller
     }
 
     /**
+     * NOT BEING USED CURRENTLY
      * @Route("/clock", name="clock")
      */
     public function showClock(){
@@ -274,6 +275,10 @@ class dashboardController extends Controller
 
         return new Response("Page has been removed!");
     }
+
+
+
+
 
     /**
      * @Route("/dashboard/{id}/remove-module", name="remove_module")

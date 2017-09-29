@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Module;
+use AppBundle\Entity\ModuleInfo;
 use AppBundle\Entity\Page;
 use AppBundle\Form\NewModule;
 use AppBundle\Module\Configuration\Categories;
@@ -63,10 +64,10 @@ class moduleController extends Controller
 
     /**
      * @param $module Module
-     * @Route("/module/{id}", name="render_module")
+     * @Route("/module/{id}", name="render_module") <- it should be module_render
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showPageAction(Module $module){
+    public function renderModule(Module $module){
         $moduleService = $this->get('app.module');
         $result = $moduleService->render($module);
 
@@ -90,23 +91,12 @@ class moduleController extends Controller
         ]);
     }
 
-
-
-
-
     /**
      * @param $module Module
      * @Route("api/module/edit/{id}", name="module_edit")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function tstRender(Module $module){
-        $version = $this->getParameter('version');
-        /** @var $appUser AppUser */
-        $appUser = $this->getUser();
-        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-            ->findOneBy([ 'email' => $appUser->getEmail()]);
-        $pages = $appUser->getPages()->toArray();
-
+    public function getEditFrom(Module $module){
         $em = $this->getDoctrine()->getManager();
         $modules_info = $em->getRepository("AppBundle:ModuleInfo")->findAll();
 
@@ -126,15 +116,10 @@ class moduleController extends Controller
 
 
         return $this->render('dashboard/module/edit.html.twig', [
-            "vasterUser" => $vasterUser,
-            "version" => $version,
-            'pages' => $pages,
             'module_types' => $module_types,
             'graph_types' => $modules_info,
             'module_sizes' => $sizes,
             'module_colors' => $colors,
-
-
             'module' => $module,
             'presentations' => $presentations,
             'user_types' => $userType,
@@ -154,7 +139,7 @@ class moduleController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @Method("POST")
      */
-    public function setModuleConfAction(Request $request ,Module $module){
+    public function configModule(Request $request ,Module $module){
         /*
          * Getting the new json data by $request and parsing it to a Configuration object.
          * This will override any data that exists in the request and keeps the old parameters
@@ -170,7 +155,6 @@ class moduleController extends Controller
         $configuration = $module->getConfiguration();           // To keep the old useful configuration
 
         $configuration->load($data);                            // To rewrite the new configuration
-        dump($configuration);
         $module->setConfiguration($configuration->extract());
 
         /*
@@ -200,29 +184,15 @@ class moduleController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function add(Request $request){
-        $version = $this->getParameter('version');
-        /** @var $appUser AppUser */
-        $appUser = $this->getUser();
-        $vasterUser = $this->getDoctrine()->getRepository("VasterBundle:User", "vaster")
-            ->findOneBy([ 'email' => $appUser->getEmail()]);
-        $pages = $appUser->getPages()->toArray();
-
+    public function getAddFrom(Request $request){
         $em = $this->getDoctrine()->getManager();
         $modules_info = $em->getRepository("AppBundle:ModuleInfo")->findAll();
 
         $module_types =['Graph'];
-        //$module_names = [];
-        //foreach ($modules_info as $info) $module_names[] = $info->getName();
-
         $sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         $colors = ['Green', 'Blue', 'Red'];
 
-
         return $this->render('dashboard/module/edit.html.twig', [
-            "vasterUser" => $vasterUser,
-            "version" => $version,
-            'pages' => $pages,
             'module_types' => $module_types,
             'graph_types' => $modules_info,
             'module_sizes' => $sizes,
@@ -260,13 +230,12 @@ class moduleController extends Controller
 
         $lastModule = $page->getModules()->last();
 
-        if($info != null) {
+        if($info != null) { // should never be null at all!!!
             $moduleInfo = $this->getDoctrine()->getRepository("AppBundle:ModuleInfo")->findOneBy(['id' => $info]);
             $module->setModuleInfo($moduleInfo);
-            if( $info == $moduleInfo->getId() ){
-                $filters = new Filters();
-                $filters->addDate('period', new DateRange());
-                $configuration->setFilters($filters);
+            if( $moduleInfo->getName() == 'Bar Chart' ){
+                $filters = $configuration->getFilters();
+                if( !array_key_exists('period', $filters->getDate()) ) $filters->addDate('period', new DateRange());
             }
         }
 
@@ -294,8 +263,9 @@ class moduleController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getTabs(Request $request, int $moduleInfo_id, Module $module = null){
+    public function getEditTabs(Request $request, int $moduleInfo_id, Module $module = null){
         $em = $this->getDoctrine()->getManager();
+        /** @var $module_info ModuleInfo */
         $module_info = $em->getRepository("AppBundle:ModuleInfo")->findOneBy(["id" => $moduleInfo_id]);
 
         $conf = $module_info->getAvailableConfiguration();
@@ -312,14 +282,12 @@ class moduleController extends Controller
             'conf' => ['filters' => null, 'categories' => null]
         ];
 
-
         if($module != null){
             $parameters['searchColumns'] = Search::getAvailableColumns();
             $parameters['dateColumns'] = DateRange::getAvailableColumns();
             $parameters['conf'] = $module->getConfiguration();
             $parameters['module'] = $module;
         }
-
 
         return $this->render('dashboard/module/tabs.html.twig', $parameters);
     }
