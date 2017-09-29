@@ -42,7 +42,7 @@ class moduleController extends Controller
         return $this->render('dashboard/module/dynamicFields/search.html.twig', [
             'section' => $section,
             'index' => $index,
-            'searchColumns' => Search::$columns_available,
+            'searchColumns' => Search::getAvailableColumns(),
         ]);
     }
 
@@ -57,7 +57,7 @@ class moduleController extends Controller
         return $this->render('dashboard/module/dynamicFields/date.html.twig', [
             'section' => $section,
             'index' => $index,
-            'dateColumns' => DateRange::$columns_available
+            'dateColumns' => DateRange::getAvailableColumns()
         ]);
     }
 
@@ -85,8 +85,8 @@ class moduleController extends Controller
             'availabilities' => $availabilities,
             'device_types' => $device_types,
             'conf' => $module->getConfiguration(),
-            'searchColumns' => Search::$columns_available,
-            'dateColumns' => DateRange::$columns_available
+            'searchColumns' => Search::getAvailableColumns(),
+            'dateColumns' => DateRange::getAvailableColumns()
         ]);
     }
 
@@ -141,8 +141,8 @@ class moduleController extends Controller
             'availabilities' => $availabilities,
             'device_types' => $device_types,
             'conf' => $module->getConfiguration(),
-            'searchColumns' => Search::$columns_available,
-            'dateColumns' => DateRange::$columns_available
+            'searchColumns' => Search::getAvailableColumns(),
+            'dateColumns' => DateRange::getAvailableColumns()
         ]);
     }
 
@@ -314,8 +314,8 @@ class moduleController extends Controller
 
 
         if($module != null){
-            $parameters['searchColumns'] = Search::$columns_available;
-            $parameters['dateColumns'] = DateRange::$columns_available;
+            $parameters['searchColumns'] = Search::getAvailableColumns();
+            $parameters['dateColumns'] = DateRange::getAvailableColumns();
             $parameters['conf'] = $module->getConfiguration();
             $parameters['module'] = $module;
         }

@@ -12,11 +12,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Search
 {
-    /** @var $singleCategories ArrayCollection */
+    /** @var $operators_available ArrayCollection */
     private static $operators_available;
 
-    /** @var $singleCategories ArrayCollection */
-    public static $columns_available = ['user.firstname', 'user.lastname', 'user.email', 'user.phone', 'searches.searchquery'];
+    /** @var $columns_available ArrayCollection */
+    public static $columns_available = [
+        'User: First Name' => 'user.firstname',
+        'User: Last Name' => 'user.lastname',
+        'User: Email' => 'user.email',
+        'User: Phone' => 'user.phone',
+        'Search: Query' => 'searches.searchquery'
+    ];
+
 
     public $keyword;
     public $columns = [];
@@ -31,6 +38,8 @@ class Search
 
         if( is_array(self::$columns_available) )
             self::$columns_available = new ArrayCollection(self::$columns_available);
+
+        //getAvailableColumns()
 
         $this->setColumnOperator('or');
         $this->setExpressionOperator('or');
@@ -67,8 +76,11 @@ class Search
      */
     public function setColumns(array $columns)
     {
-        foreach ($columns as $col)
+        foreach ($columns as $col){
+            //if( self::$columns_available->contains($col) ) $col = array_search($col, self::$columns_available->toArray()); //low performance
             $this->addColumn($col);
+        }
+
     }
 
     /**
@@ -77,7 +89,7 @@ class Search
      */
     public function addColumn(string $column)
     {
-        if( !self::$columns_available->contains($column))
+        if( !self::$columns_available->containsKey($column) )
             throw new \Exception("Bad module configuration: " . $column . " is not available as a column.");
 
         $this->columns[] = $column;
@@ -137,6 +149,13 @@ class Search
     public function setNegate(bool $negate)
     {
         $this->negate = $negate;
+    }
+
+    public static function getAvailableColumns(){
+        if( is_array(self::$columns_available) )
+            self::$columns_available = new ArrayCollection(self::$columns_available);
+
+        return self::$columns_available->getKeys();
     }
 
 }

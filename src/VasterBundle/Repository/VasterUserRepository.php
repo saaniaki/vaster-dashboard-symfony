@@ -208,6 +208,7 @@ class VasterUserRepository extends EntityRepository
             foreach ($searches as $key => $search) {
                 $expressions = [];
                 foreach ( $search->getColumns() as $column ){
+                    $column = Search::$columns_available->get($column);
 
                     if( $search->isNegate() ){
                         $temp = $query->expr()->notLike($column, ':filter_value' . $key);
@@ -262,21 +263,23 @@ class VasterUserRepository extends EntityRepository
             /** @var DateRange $date */
             foreach ($dates as $key => $date) {
                 //$date = (array) $date;
+                $column = DateRange::$columns_available->get($date->getColumn());
+
 
                 if( $date->isNegate() ){ //switch from and to, remove equal
                     $temp = $query->expr()->orX(
-                        $query->expr()->gt($date->getColumn(), ':filter_dateTo' . $key),
-                        $query->expr()->lt($date->getColumn(), ':filter_dateFrom' . $key)
+                        $query->expr()->gt($column, ':filter_dateTo' . $key),
+                        $query->expr()->lt($column, ':filter_dateFrom' . $key)
                     );
                 }else {
                     $temp = $query->expr()->andX(
-                        $query->expr()->gte($date->getColumn(), ':filter_dateFrom' . $key),
-                        $query->expr()->lte($date->getColumn(), ':filter_dateTo' . $key)
+                        $query->expr()->gte($column, ':filter_dateFrom' . $key),
+                        $query->expr()->lte($column, ':filter_dateTo' . $key)
                     );
                 }
 
 
-                $adjustedDates = $this->adjustDate($date->getFrom(), $date->getTo(), $date->getColumn() == 'lastSeen.seconds');
+                $adjustedDates = $this->adjustDate($date->getFrom(), $date->getTo(), $column == 'lastSeen.seconds');
                 $query->setParameter('filter_dateFrom' . $key, $adjustedDates['from']);
                 $query->setParameter('filter_dateTo' . $key, $adjustedDates['to']);
 
@@ -351,6 +354,7 @@ class VasterUserRepository extends EntityRepository
 
                 $expressions = [];
                 foreach ( $search['columns'] as $column ){
+                    $column = Search::$columns_available->get($column);
 
                     if( $search['keyword'] == null ){
                         if( $search['negate'] ) $temp = $query->expr()->isNotNull($column);
@@ -416,11 +420,13 @@ class VasterUserRepository extends EntityRepository
 
             foreach ($dates as $key => $date) {
                 $date = (array) $date;
+                $column = DateRange::$columns_available->get($date['column']);
+
 
                 if( $date['negate'] ){ //switch from and to, remove equal
                     $temp = $query->expr()->orX(
-                        $query->expr()->gt($date['column'], ':dateTo' . $key),
-                        $query->expr()->lt($date['column'], ':dateFrom' . $key)
+                        $query->expr()->gt($column, ':dateTo' . $key),
+                        $query->expr()->lt($column, ':dateFrom' . $key)
                     );
 
                     $date['operator'] = 'and'; //overriding null, this is a category not a filter
@@ -428,15 +434,15 @@ class VasterUserRepository extends EntityRepository
                     //else if( $date['operator'] == 'or' ) $date['operator'] = 'and';
                 }else {
                     $temp = $query->expr()->andX(
-                        $query->expr()->gte($date['column'], ':dateFrom' . $key),
-                        $query->expr()->lte($date['column'], ':dateTo' . $key)
+                        $query->expr()->gte($column, ':dateFrom' . $key),
+                        $query->expr()->lte($column, ':dateTo' . $key)
                     );
                 }
 
 
 
 
-                $adjustedDates = $this->adjustDate($date['from'], $date['to'], $date['column'] == 'lastSeen.seconds');
+                $adjustedDates = $this->adjustDate($date['from'], $date['to'], $column == 'lastSeen.seconds');
                 $query->setParameter('dateFrom' . $key, $adjustedDates['from']);
                 $query->setParameter('dateTo' . $key, $adjustedDates['to']);
 

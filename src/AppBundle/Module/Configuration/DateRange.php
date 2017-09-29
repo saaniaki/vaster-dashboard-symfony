@@ -17,7 +17,13 @@ class DateRange
     private static $operators_available;
 
     /** @var $singleCategories ArrayCollection */
-    public static $columns_available = ['user.createdtime' , 'lastSeen.seconds', 'searches.createdtime'];
+    public static $columns_available = [
+        'User: Creation Time' => 'user.createdtime' ,
+        'User: Last Seen' => 'lastSeen.seconds',
+        'Search: Search Time' => 'searches.createdtime'
+    ];
+
+
 
     public $from;
     public $to;
@@ -44,7 +50,7 @@ class DateRange
         }
 
         $this->setFrom('2016-12-09 00:00');
-        $this->setColumn('user.createdtime');
+        $this->setColumn('User: Creation Time');
         $this->setOperator('or');
     }
 
@@ -114,7 +120,7 @@ class DateRange
      */
     public function setColumn($column)
     {
-        if( !self::$columns_available->contains($column) )
+        if( !self::$columns_available->containsKey($column) )
             throw new \Exception("Bad module configuration: " . $column . " is not available as a column.");
 
         $this->column = $column;
@@ -156,5 +162,10 @@ class DateRange
         $this->negate = $negate;
     }
 
+    public static function getAvailableColumns(){
+        if( is_array(self::$columns_available) )
+            self::$columns_available = new ArrayCollection(self::$columns_available);
 
+        return self::$columns_available->getKeys();
+    }
 }
