@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="http://www.vaster.com">
-                    <img alt="vaster" height="25px" src="{{ asset('images/ic_launcher-web.png') }}">
+                    <img alt="vaster" height="25px" src="{{ asset('images/ic_launcher-web.png') }}" style="border-radius: 50%;margin-top: -4px;">
                 </a>
                 <a class="navbar-brand" href="http://www.vaster.com">Vaster</a>
             </div>
@@ -89,33 +89,168 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-info">
                         <div class="panel-heading">
                             <h3 class="panel-title">VDP0.6</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-11">
-                                    <span class="label label-success" style="float: left;margin-right: 5px;">Stable</span><h3 class="panel-title">F1</h3>
-                                    <p>Something</p>
+                                <div class="col-md-12">
+                                    <h3>Wizard</h3><span class="label label-primary">Stable</span><span class="label label-warning">Needs Improvement</span>
+                                    <div class="change-log">
+                                        <p>
+                                            The wizard has been implemented to help the user add or edit a module.
+                                            VDP0.6 gives the option to user to add, edit and remove modules from the dashboard main page.
+                                            With changing the graph type in the layout tab, other tabs would be updated so the options related to that specific
+                                            graph type be accessible.
+                                        </p><p>
+                                            In addition, wizard helps both user and the system to assure that the inputs are valid and usable.
+                                            To create such a tool, API has been changed a lot and module API is now mature. However, dashboard API is still
+                                            handling some functionality related to managing modules, which should be removed from in next versions.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-11">
-                                    <span class="label label-success" style="float: left;margin-right: 5px;">Stable</span><h3 class="panel-title">F1</h3>
-                                    <p>Something</p>
+                                <div class="col-md-12">
+                                    <h3>'Search Queries' Filter and Categories data</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            Search Queries are now available to be used to filter or categorise module' data. This means adding new columns from
+                                            tables which have Many To One relationship with the users table has been made easier.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>More Date-Time Columns to Filter and Categories data</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            Last seen and search time has been added to the list of date filters and categories.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Remove Empty Results</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            This feature would allow users to hide or unhide the categories with zero results.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Columns Aliases</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            Columns in search and date filters now have a more user friendly names.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Clock: UTC time</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            A clock has been added to the top menu. This clock is in UTC but it's not the server time. It's showing the local machine time in UTC.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>New Categorizing Logic</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            As of VDP0.6, the logic of categorizing using search and date fields has been changed.
+                                        </p><p>
+                                            This means, each category would actually work like a separate graph but using the same filters as other categories.
+                                            There is no "NOT" category added to the modules anymore.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Sortable Categories</h3><span class="label label-success">Done</span>
+                                    <div class="change-log">
+                                        <p>
+                                            Categories can be sorted from now on. This would helpful in cases that the importance of some categories are more than others.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Sub Modules / Data Sources</h3><span class="label label-warning">Needs Improvement</span>
+                                    <div class="change-log">
+                                        <p>
+                                            Sub modules are designed to help make the structure of VDP simpler. They are responsible to grab the data from the database
+                                            and pass it to the module. They are implemented in a way that each graph type can use them, so the code would be reusable.
+                                        </p><p>
+                                            The interaction of sub modules and categories would create a good structure to implement the snapshots in future.
+                                        </p><p>
+                                            'Searches' and 'Last Seen' have been added as new data sources. Data sources are actually the address of the sub modules in
+                                            the system. Another way of looking at data sources is that they are the columns that grabbing the data would be started from.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Change Log</h3><span class="label label-warning">Needs Improvement</span>
+                                    <div class="change-log">
+                                        <p>
+                                            As of VDP0.6, change log has been implemented to help the users to have a better
+                                            understanding of the new functionality that have been developed for them.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
         </div>
     </div>
+
+
+    <style>
+        p {
+            text-align: justify;
+            text-indent: 10px;
+            margin-bottom: 5px;
+        }
+        p:last-child {
+            margin-bottom: 0;
+        }
+        .change-log {
+            border-bottom: 1px solid #dddddd;
+            margin-bottom: 25px;
+            margin-top: 22px;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px 5px 15px 15px;
+        }
+        #changeLog .panel-body h3 {
+            float: left;
+            margin-top: -8px;
+            margin-bottom: 0;
+            text-shadow: 0 0 3px #7b2c08;
+        }
+        #changeLog span {
+            float: left;
+            margin-left: 7px;
+            margin-top: -3px;
+        }
+    </style>
 {% endblock %}
 
 
