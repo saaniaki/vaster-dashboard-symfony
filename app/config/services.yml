@@ -54,3 +54,5 @@ services:
 
     AppBundle\Service\vdpModule:
             public: true
+
+    AppBundle\Service\DataSourceValidator: ~

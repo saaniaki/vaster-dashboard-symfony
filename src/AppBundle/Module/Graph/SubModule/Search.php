@@ -66,7 +66,6 @@ class Search implements SubModuleInterface
         $query->leftJoin('user.lastseen', 'lastSeen');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query = $this->userRep->applyFilters($filters, $query);
         $query = $this->userRep->applyCategories($combo, $query);
-        dump($query->getQuery());
         return $query->getQuery()->getArrayResult();
     }
 

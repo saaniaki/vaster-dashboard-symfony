@@ -21,6 +21,7 @@ class Combination
     private $availability;
     private $search;
     private $date;
+    private $snapShot = null; //string
 
     public function __construct($combination)
     {
@@ -56,6 +57,14 @@ class Combination
     {
         if ($pos = strrpos($className, '\\')) return substr($className, $pos + 1);
         return $pos;
+    }
+
+    /**
+     * @param bool|string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -107,4 +116,27 @@ class Combination
     }
 
 
+    /**
+     * @return bool
+     */
+    public function isSnapShot(): bool
+    {
+        return $this->snapShot !== null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSnapShot(): string
+    {
+        return $this->snapShot;
+    }
+
+    /**
+     * @param string $snapShot
+     */
+    public function setSnapShot(string $snapShot = null)
+    {
+        $this->snapShot = $snapShot;
+    }
 }

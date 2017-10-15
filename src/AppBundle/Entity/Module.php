@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Module\Configuration\Configuration;
+use AppBundle\Module\Configuration\Settings;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -85,13 +86,14 @@ class Module
     private $configuration;
 
     /**
-     * @return Configuration
+     * @return Settings
      */
     public function getConfiguration()
     {
         if( $this->configuration == null )
             return null;
-        return new Configuration(new ArrayCollection($this->configuration));
+        return new Settings(new ArrayCollection($this->configuration));
+        //return new Configuration(new ArrayCollection($this->configuration));
     }
 
     /**

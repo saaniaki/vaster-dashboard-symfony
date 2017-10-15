@@ -63,7 +63,6 @@ class Registration implements SubModuleInterface
         $query->groupBy('user.userid');
         $query = $this->dbRepository->applyFilters($filters, $query);
         $query = $this->dbRepository->applyCategories($combo, $query);
-        //dump($query->getQuery()->getArrayResult());
         return $query->getQuery()->getArrayResult();
     }
 

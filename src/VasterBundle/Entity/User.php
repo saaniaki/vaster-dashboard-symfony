@@ -161,6 +161,27 @@ class User
     }
 
     /**
+     * @ORM\OneToMany(targetEntity="VasterBundle\Entity\SnapShot", mappedBy="user")
+     */
+    private $snapshots;
+
+    /**
+     * @return mixed
+     */
+    public function getSnapshots()
+    {
+        return $this->snapshots;
+    }
+
+    /**
+     * @param mixed $snapshots
+     */
+    public function setSnapshots($snapshots)
+    {
+        $this->snapshots = $snapshots;
+    }
+
+    /**
      * @return ArrayCollection|ServiceTime[]
      */
     public function getServiceTime()

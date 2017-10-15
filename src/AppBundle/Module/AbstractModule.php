@@ -10,19 +10,22 @@ namespace AppBundle\Module;
 
 
 use AppBundle\Entity\Module;
+use AppBundle\Library\ConditionTree;
+use AppBundle\Library\SearchBinaryTree;
+use AppBundle\Library\Stack;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\Filters;
 use AppBundle\Module\Configuration\Presentation;
+use AppBundle\Module\Configuration\Settings;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 abstract class AbstractModule implements ModuleInterface
 {
-    /**
-     * @var Module
-     */
-    protected $module;
-
+    /** @var Settings */
+    protected $configuration; //needs getter and setter
+    /** @var \AppBundle\Entity\ModuleInfo */
+    protected $moduleInfo; //needs getter and setter
 
 
     protected $title;
@@ -57,27 +60,46 @@ abstract class AbstractModule implements ModuleInterface
     /** @var $subModule SubModuleInterface */
     protected $subModule;
 
+    /**
+     * AbstractModule constructor.
+     * Parsing the database data to a VDP-Module Object
+     * @param Module $module
+     * @param ManagerRegistry $managerRegistry
+     */
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
-        $this->module = $module;
-        $em = $managerRegistry->getManager('vaster');
+        //Setting up the main properties of a module
+        //Grabbing the configuration JSON from the database, validate it, parse it, and storing the Configuration Object
+        $this->configuration = $module->getConfiguration();
+        //Grabbing the ModuleInfo data from the database and parse it to a ModuleInfo Object
+        $this->moduleInfo = $module->getModuleInfo();
+
+        //Setting up the default values which are the same fore all modules
         $this->color = new ArrayCollection(['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a']);
 
-
-        ////////////////////////
-        $available_data_sources = $this->module->getModuleInfo()->getAvailableConfiguration()["presentation"]["data"];
-        $data_source = $module->getConfiguration()->getPresentation()->getData();
+        //$em = $managerRegistry->getManager('vaster');
+        //$available_data_sources = $this->graphType->getAvailableConfiguration()["presentation"]["data"];
 
 
-        //dump($available_data_sources, $data_source);die();
+        //This is the data source object which would be used to grab the data from the database
+        $data_source = $this->configuration->getDataSource();
+        //dump($data_source->initQuery());
+        //xdebug_var_dump($data_source->initQuery());
+        /*
+            if(  in_array($data_source, $available_data_sources) )
+            {
+                $data_source = "AppBundle\Module\Graph\SubModule\\" . $data_source;
+                $this->subModule = new $data_source($this, $em);
+            }
+            else die('Data source does not exists!');
+        */
 
-        if(  in_array($data_source, $available_data_sources) )
-        {
-            $data_source = "AppBundle\Module\Graph\SubModule\\" . $data_source;
-            $this->subModule = new $data_source($this, $em);
-        }
 
-        else die('Data source does not exists!');
+        dump($this->configuration->getFilters()->makeConditionTree());
+
+
+
+        dump('not ready yet');die();
     }
 
     /**
@@ -85,10 +107,10 @@ abstract class AbstractModule implements ModuleInterface
      */
     public function render()
     {
-        $configuration = $this->module->getConfiguration();
-        $presentation = $configuration->getPresentation(); //this value should be valued!!
+
+
+        $presentation = $configuration->getPresentation();
         $filters = $configuration->getFilters();
-        //$removeZeros = $configuration->isRemoveZeros();
 
         /*
          * getting all the possible categories
@@ -128,6 +150,28 @@ abstract class AbstractModule implements ModuleInterface
         }
 
         if( $improved_combinations == null ) $improved_combinations = $this->combinations($categories);
+
+        /*
+                // all categories are created by now
+                // time to check if snapshots are requested, and add them as categories
+                $snapShots = $configuration->getPresentation()->getSnapShots();
+                $snapShotsCombinations = [];
+
+
+                if( $snapShots != null ){
+                    foreach ($snapShots as $name => $date){
+                        foreach($improved_combinations as $combo  ){
+                            /** @var Combination $newCombo *
+                            $newCombo = clone $combo;
+                            $newCombo->setName($name . " " . $newCombo->getName());
+                            $newCombo->setSnapShot($date);
+                            $snapShotsCombinations[] = $newCombo;
+                        }
+                    }
+                }
+                //import all snapshots
+                foreach ($snapShotsCombinations as $combo) $improved_combinations[] = $combo;
+        */
 
 
 

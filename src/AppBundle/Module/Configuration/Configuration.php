@@ -10,6 +10,7 @@ namespace AppBundle\Module\Configuration;
 
 
 
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Configuration
@@ -17,10 +18,12 @@ class Configuration
     /** @var $singleCategories ArrayCollection */
     private static $singleCategories;
 
-    public $categories;
+    /** @var DataSource  */
+    public $data;
     public $filters;
-    public $layout;
+    public $categories;
     public $presentation;
+    public $layout;
 
     public function __construct(ArrayCollection $data = null)
     {
@@ -30,14 +33,30 @@ class Configuration
         if( $data != null )
             $this->load($data);
         else {
+            $this->data = new DataSource();
             $this->filters = new Filters();
             $this->categories = new Categories();
-            $this->layout = new Layout();
             $this->presentation = new Presentation();
+            $this->layout = new Layout();
         }
 
     }
 
+    /**
+     * @return DataSource
+     */
+    public function getDataSource(): DataSource
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param DataSource $data
+     */
+    public function setDataSource(DataSource $data)
+    {
+        $this->data = $data;
+    }
 
     /**
      * @return Categories
@@ -135,20 +154,23 @@ class Configuration
         if( $this->getFilters() != null && $this->getFilters()->isEmpty() ){
             $other = clone $this;
             $other->setFilters();
-            return ((array) $other);
+            return ((array) $other); //get_object_vars
         }
 
         return ((array) $this);
     }
 
-
-    public function load(ArrayCollection $data)
+    public function load(ArrayCollection $JSON_data)
     {
-        $categories = $data->get('categories');
-        $filters = $data->get('filters');
-        $layout = $data->get('layout');
-        $presentation = $data->get('presentation');
-        //$removeZeros = $data->get('remove_zeros');
+        $data = $JSON_data->get('data');
+        $categories = $JSON_data->get('categories');
+        $filters = $JSON_data->get('filters');
+        $layout = $JSON_data->get('layout');
+        $presentation = $JSON_data->get('presentation');
+
+        ////////////////////////////////////////////////////////////////////////// Data: creating $dataObj
+        $data['field'] = explode(": ",$data['field']);
+        $dataObj = new DataSource($data['field'][0], $data['field'][1], $data['snapShot'], $data['specific']);
 
         ////////////////////////////////////////////////////////////////////////// Filters: creating $filtersObj
 
@@ -230,11 +252,12 @@ class Configuration
             $presentationObj = new Presentation();
             if( isset($presentation['data']) && $presentation['data'] != null )$presentationObj->setData($presentation['data']);
             if( isset($presentation['interval']) && $presentation['interval'] != null )$presentationObj->setInterval($presentation['interval']);
+            if( isset($presentation['snapShots']) && $presentation['snapShots'] != null )$presentationObj->setSnapShots($presentation['snapShots']);
             if( isset($presentation['zero'])){$presentationObj->setZero($presentation['zero']);}
         }
 
         ////////////////////////////////////////////////////////////////////////// Configuration: setting up $configuration
-        //if( isset($removeZeros) && $removeZeros != null )           $this->setRemoveZeros($removeZeros);
+        if( isset($dataObj) && $dataObj != null )                   $this->setDataSource($dataObj);
         if( isset($filtersObj) && $filtersObj != null )             $this->setFilters($filtersObj);
         if( isset($categoriesObj) && $categoriesObj != null )       $this->setCategories($categoriesObj);
         if( isset($layoutObj) && $layoutObj != null )               $this->setLayout($layoutObj);

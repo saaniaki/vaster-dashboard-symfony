@@ -11,16 +11,19 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\Module;
 use AppBundle\Module\ModuleInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class vdpModule
 {
+    /** @var ManagerRegistry */
     private $managerRegistry;
+    /** @var FieldInfoService */
+    public static $fieldInfoService;
 
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry, FieldInfoService $dataSourceValidator)
     {
         $this->managerRegistry = $managerRegistry;
+        $this::$fieldInfoService = $dataSourceValidator;
     }
 
     public function render(Module $module){

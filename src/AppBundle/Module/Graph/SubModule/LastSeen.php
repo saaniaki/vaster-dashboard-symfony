@@ -23,10 +23,16 @@ class LastSeen implements SubModuleInterface
     private $dbRepository;
     private $userRep;
 
+    private $snapRep;
+
     public function __construct(ModuleInterface $vdpModule, ObjectManager $em)
     {
         $this->dbRepository = $em->getRepository("VasterBundle:LastSeen");
         $this->userRep = $em->getRepository("VasterBundle:User");
+
+        //added
+        $this->snapRep = $em->getRepository("VasterBundle:SnapShot");
+
 
         $vdpModule->setTitle('LastSeen Number');
         $vdpModule->yTitle = 'LastSeen';
@@ -48,25 +54,40 @@ class LastSeen implements SubModuleInterface
     }
 
     public function getColumn(Combination $combo = null, Filters $filters = null){
-        $query = $this->dbRepository->createQueryBuilder('lastSeen')
-            ->leftJoin('lastSeen.user', 'user')
-            ->select('lastSeen.seconds as time')
-            ->orderBy('lastSeen.seconds', 'DESC');
+        if($combo->isSnapShot()){
+            $query = $this->snapRep->createQueryBuilder('snapshots')
+                ->leftJoin('snapshots.user', 'user')
+                ->select('snapshots.seconds as time')
+                ->orderBy('snapshots.seconds', 'DESC');
+            $query->andWhere('snapshots.timestamp = :timestamp');
+            $query->setParameter('timestamp', $combo->getSnapShot());
+
+            $query->groupBy('snapshots.user');
+            //$query = $this->userRep->applyFilters($filters, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
+            //dump($query->getQuery()->getArrayResult());die();
+        }else{
+            $query = $this->dbRepository->createQueryBuilder('lastSeen')
+                ->leftJoin('lastSeen.user', 'user')
+                ->select('lastSeen.seconds as time')
+                ->orderBy('lastSeen.seconds', 'DESC');
+            $query->groupBy('lastSeen.user');
+            $query = $this->userRep->applyFilters($filters, $query);
+            $query = $this->userRep->applyCategories($combo, $query);
+        }
+
         $query->leftJoin('user.account', 'account');        //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.profession', 'profession');  //should join dynamically (NOT USEFUL FOR ALL QUERIES)
         $query->leftJoin('user.searches', 'searches');      //should join dynamically (NOT USEFUL FOR ALL QUERIES)
-        $query->groupBy('lastSeen.user');
-        $query = $this->userRep->applyFilters($filters, $query);
-        $query = $this->userRep->applyCategories($combo, $query);
 
+
+        //parsing epoch
         $data = $query->getQuery()->getArrayResult();
-
         foreach ( $data as &$row ){
             $dateObj = new \DateTime();
             $dateObj->setTimestamp($row['time']);
             $row['time'] = $dateObj;
         }
-
         return $data;
     }
 
