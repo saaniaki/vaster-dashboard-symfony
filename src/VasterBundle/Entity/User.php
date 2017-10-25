@@ -163,22 +163,22 @@ class User
     /**
      * @ORM\OneToMany(targetEntity="VasterBundle\Entity\SnapShot", mappedBy="user")
      */
-    private $snapshots;
+    private $snapshot;
 
     /**
      * @return mixed
      */
-    public function getSnapshots()
+    public function getSnapshot()
     {
-        return $this->snapshots;
+        return $this->snapshot;
     }
 
     /**
-     * @param mixed $snapshots
+     * @param mixed $snapshot
      */
-    public function setSnapshots($snapshots)
+    public function setSnapshot($snapshot)
     {
-        $this->snapshots = $snapshots;
+        $this->snapshot = $snapshot;
     }
 
     /**

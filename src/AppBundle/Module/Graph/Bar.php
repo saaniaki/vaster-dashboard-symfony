@@ -40,7 +40,7 @@ class Bar extends AbstractModule
     }
 
 
-    protected function feedData($presentation, $combinations, $filters){
+    protected function processData(){
         $removeZeros = !$presentation->isZero();
 
         /** @var Combination $combo */

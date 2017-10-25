@@ -15,25 +15,57 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 class Pie extends AbstractModule
 {
+    private $processedData;
+
     public function __construct(Module $module, ManagerRegistry $managerRegistry)
     {
         parent::__construct($module, $managerRegistry);
-
         //General Properties
-        $this->type = 'pie';
-        $this->size = 200;
-        $this->tooltip_shared = 0; // false but false is null so 0
-        $this->all_data[] = [
-            'name' => $this->subModule->getUnit(),
+        $this->processedData[] = [
+            'name' => 'name',
             'data' => null,
             'type' => 'pie'
         ];
     }
 
-    protected function feedData($presentation, $combinations, $filters){
+    protected function processData()
+    {
+        foreach ($this->getDataSets() as $name => $set)
+            $this->addData([
+                'y' => count($set),
+                'name' => $name
+            ]);
+
+        $this->getResult()->setAllData($this->getProcessedData());
+        return $this->getResult();
+    }
+
+    private function addData(array $array){
+        $this->processedData[0]['data'][] = $array;
+    }
+
+    private function getProcessedData(){
+        return $this->processedData;
+    }
+
+/*
+        $this->all_data[] = [
+            'name' => $this->subModule->getUnit(),
+            'data' => null,
+            'type' => 'pie'
+        ];
+
+        $this->all_data[] = [
+                'name' => $name,
+                'data' => $data,
+                'type' => 'column',
+                'yAxis' => 0,
+                'color' => $this->color->current()
+            ];
+
         $removeZeros = !$presentation->isZero();
 
-        /** @var Combination $combo */
+        /** @var Combination $combo *
         foreach( $combinations as $combo){
             $name = $combo->getName();
             if( $name == null) $name .= $this->subModule->getGeneralName();
@@ -52,5 +84,7 @@ class Pie extends AbstractModule
             ];
             $this->currentlyShowing += $number;
         }
-    }
+
+*/
+
 }

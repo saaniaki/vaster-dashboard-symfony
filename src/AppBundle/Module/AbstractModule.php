@@ -10,11 +10,14 @@ namespace AppBundle\Module;
 
 
 use AppBundle\Entity\Module;
+use AppBundle\Entity\ModuleInfo;
 use AppBundle\Library\ConditionTree;
+use AppBundle\Library\Node;
 use AppBundle\Library\SearchBinaryTree;
 use AppBundle\Library\Stack;
 use AppBundle\Module\Configuration\Configuration;
 use AppBundle\Module\Configuration\Filters;
+use AppBundle\Module\Configuration\HighChartResult;
 use AppBundle\Module\Configuration\Presentation;
 use AppBundle\Module\Configuration\Settings;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,45 +27,21 @@ abstract class AbstractModule implements ModuleInterface
 {
     /** @var Settings */
     protected $configuration; //needs getter and setter
-    /** @var \AppBundle\Entity\ModuleInfo */
+    /** @var ModuleInfo */
     protected $moduleInfo; //needs getter and setter
-
-
-    protected $title;
-    protected $footer;
-    public $color;
-    protected $type;
-    protected $size;
-
-    protected $tooltip_shared = 1; //true
-    protected $currentlyShowing = 0;
-    protected $all_data = [];
-
-    protected $xTitle;
-    protected $xAxisType; //linear, logarithmic, datetime or category
-    protected $start = [
-        'year' => 2016,
-        'month' => 11,
-        'day' => 9,
-    ];
-
-
-    public $yTitle;
-    protected $yAllowDecimals;
-
-
-    public $y1Title;
-    protected $y1Format;
-    protected $y1AllowDecimals;
-    /** @var  $xInterval integer */
-    protected $xInterval;
-
-    /** @var $subModule SubModuleInterface */
-    protected $subModule;
+    /** @var ArrayCollection */
+    protected $dataSets;
+    /** @var HighChartResult */
+    protected $result;
 
     /**
-     * AbstractModule constructor.
-     * Parsing the database data to a VDP-Module Object
+     * Parsing the database data to a VDP-Module Object.
+     * Upon the creation of any module, the needed data
+     * is being grabbed using the configuration of it
+     * To avoid duplication adn ease of use, Module Entity
+     * is not being stored.
+     * Instead, two useful objects, Configuration and
+     * ModuleInfo are stored inside this object.
      * @param Module $module
      * @param ManagerRegistry $managerRegistry
      */
@@ -70,36 +49,26 @@ abstract class AbstractModule implements ModuleInterface
     {
         //Setting up the main properties of a module
         //Grabbing the configuration JSON from the database, validate it, parse it, and storing the Configuration Object
-        $this->configuration = $module->getConfiguration();
+        $this->setConfiguration($module->getConfiguration());
         //Grabbing the ModuleInfo data from the database and parse it to a ModuleInfo Object
-        $this->moduleInfo = $module->getModuleInfo();
-
-        //Setting up the default values which are the same fore all modules
-        $this->color = new ArrayCollection(['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a']);
-
-        //$em = $managerRegistry->getManager('vaster');
-        //$available_data_sources = $this->graphType->getAvailableConfiguration()["presentation"]["data"];
-
+        $this->setModuleInfo($module->getModuleInfo());
 
         //This is the data source object which would be used to grab the data from the database
-        $data_source = $this->configuration->getDataSource();
-        //dump($data_source->initQuery());
-        //xdebug_var_dump($data_source->initQuery());
-        /*
-            if(  in_array($data_source, $available_data_sources) )
-            {
-                $data_source = "AppBundle\Module\Graph\SubModule\\" . $data_source;
-                $this->subModule = new $data_source($this, $em);
+        $data_source = $this->getConfiguration()->getDataSource();
+        $query = $data_source->initQuery();                                                     // Creating the base query
+        $query = $data_source->applyCondition($query, $this->getConfiguration()->getFilters());      // Applying the filters to the base query
+
+        //Applying each category condition and inserting the result into an array collection
+        $this->setDataSets(new ArrayCollection());
+        $categories = $this->getConfiguration()->getCategories();
+        if(!$categories->isEmpty()){
+            foreach ($categories as $category){
+                $catQuery = $data_source->applyCondition(clone $query, $category);                        // Applying the categories to the base query
+                $this->getDataSets()->set($category->getTitle(), $catQuery->getQuery()->getArrayResult());
             }
-            else die('Data source does not exists!');
-        */
+        }else $this->getDataSets()->set('All', $query->getQuery()->getArrayResult());
 
-
-        dump($this->configuration->getFilters()->makeConditionTree());
-
-
-
-        dump('not ready yet');die();
+        $this->setResult(new HighChartResult($module->getId(),'Get title from presentation'));
     }
 
     /**
@@ -107,100 +76,7 @@ abstract class AbstractModule implements ModuleInterface
      */
     public function render()
     {
-
-
-        $presentation = $configuration->getPresentation();
-        $filters = $configuration->getFilters();
-
-        /*
-         * getting all the possible categories
-         */
-        $categories = [];
-        $singleCategories = $configuration->getCategories()->getSingle();
-        $searchCategories = $configuration->getCategories()->getSearches();
-        $dateCategories = $configuration->getCategories()->getDates();
-
-        $improved_combinations = [];
-
-        foreach ($singleCategories as $cat){
-            $categories[strtolower($cat)] = $this->module->getModuleInfo()->getAvailableConfiguration()['filters'][strtolower($cat)];//get actual values from module info
-        }
-
-        foreach ($searchCategories as $catName => $value){
-            //$categories[$catName][] = $value;
-            //$value = clone $value;
-            //$value->setNegate(!$value->isNegate());
-            //$categories[$catName][] = $value;
-            $temp = $categories;
-            $temp[$catName][] = $value;
-            foreach ($this->combinations($temp) as $combo)
-                $improved_combinations[] = $combo;
-        }
-
-
-        foreach ($dateCategories as $catName => $value){
-            //$categories[$catName][] = $value;
-            //$value = clone $value;
-            //$value->setNegate(!$value->isNegate());
-            //$categories[$catName][] = $value;
-            $temp = $categories;
-            $temp[$catName][] = $value;
-            foreach ($this->combinations($temp) as $combo)
-                $improved_combinations[] = $combo;
-        }
-
-        if( $improved_combinations == null ) $improved_combinations = $this->combinations($categories);
-
-        /*
-                // all categories are created by now
-                // time to check if snapshots are requested, and add them as categories
-                $snapShots = $configuration->getPresentation()->getSnapShots();
-                $snapShotsCombinations = [];
-
-
-                if( $snapShots != null ){
-                    foreach ($snapShots as $name => $date){
-                        foreach($improved_combinations as $combo  ){
-                            /** @var Combination $newCombo *
-                            $newCombo = clone $combo;
-                            $newCombo->setName($name . " " . $newCombo->getName());
-                            $newCombo->setSnapShot($date);
-                            $snapShotsCombinations[] = $newCombo;
-                        }
-                    }
-                }
-                //import all snapshots
-                foreach ($snapShotsCombinations as $combo) $improved_combinations[] = $combo;
-        */
-
-
-
-        $this->feedData($presentation, $improved_combinations, $filters);
-        return get_object_vars($this);
-    }
-
-    protected function combinations($data){
-        $combinations = [[]];
-        $comKeys = array_keys($data);
-
-        for ($count = 0; $count < count($comKeys); $count++) {
-            $tmp = [];
-            foreach ($combinations as $v1) {
-                foreach ($data[$comKeys[$count]] as $v2) {
-                    //clone $v2
-                    $tmp[] = $v1 + [$comKeys[$count] => $v2];
-                }
-            }
-            $combinations = $tmp;
-        }
-
-        // making combination object
-        $combinationsObj = [];
-        foreach($combinations as $combination){
-            $combinationsObj[] = new Combination($combination);
-        }
-
-        return $combinationsObj;
+        return $this->processData()->extract();
     }
 
     public function setTitle($default){
@@ -247,10 +123,71 @@ abstract class AbstractModule implements ModuleInterface
     }
 
     /**
-     * @param Presentation $presentation
-     * @param $combinations
-     * @param $filters Filters
-     * @return mixed
+     * @return HighChartResult
      */
-    abstract protected function feedData($presentation, $combinations, $filters);
+    abstract protected function processData();
+
+    /**
+     * @return Settings
+     */
+    public function getConfiguration(): Settings
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @param Settings $configuration
+     */
+    public function setConfiguration(Settings $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return ModuleInfo
+     */
+    public function getModuleInfo(): ModuleInfo
+    {
+        return $this->moduleInfo;
+    }
+
+    /**
+     * @param ModuleInfo $moduleInfo
+     */
+    public function setModuleInfo(ModuleInfo $moduleInfo)
+    {
+        $this->moduleInfo = $moduleInfo;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDataSets(): ArrayCollection
+    {
+        return $this->dataSets;
+    }
+
+    /**
+     * @param ArrayCollection $dataSets
+     */
+    public function setDataSets(ArrayCollection $dataSets)
+    {
+        $this->dataSets = $dataSets;
+    }
+
+    /**
+     * @return HighChartResult
+     */
+    public function getResult(): HighChartResult
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param HighChartResult $result
+     */
+    public function setResult(HighChartResult $result)
+    {
+        $this->result = $result;
+    }
 }

@@ -17,6 +17,5 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 interface ModuleInterface
 {
     public function __construct(Module $module, ManagerRegistry $managerRegistry);
-
     public function render();
 }

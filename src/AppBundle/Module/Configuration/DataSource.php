@@ -11,6 +11,7 @@ namespace AppBundle\Module\Configuration;
 use AppBundle\Entity\FieldInfo;
 use AppBundle\Service\vdpModule;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 
 class DataSource
@@ -31,10 +32,10 @@ class DataSource
 
     /**
      * This function can be combined with initQuery()
-     * @return EntityRepository
+     * @return QueryBuilder
      */
-    public function getRepository(){
-        return $this->repository;
+    public function getQueryBuilder(){
+        return $this->repository->createQueryBuilder($this->field->getEntityAlias());
     }
 
     /**
@@ -43,14 +44,12 @@ class DataSource
      * @return QueryBuilder
      */
     public function initQuery(){
-        $entityAlias = strtolower(explode(':', $this->field->getEntity())[1]);
-        $fullColumnName = "{$this->field->getTable()}.{$this->field->getColumn()}";
-        $title = str_replace(' ', '_', $this->field->getFieldAlias());
+        $entityAlias = $this->field->getEntityAlias();
+        $fullColumnName = $this->field->getFullColumnName();
 
         // Initialise the query and selects the column
-        $query = $this->getRepository()
-            ->createQueryBuilder($entityAlias)
-            ->select("$fullColumnName $title, user.userid"); // user.userid is added only for testing purposes
+        $query = $this->getQueryBuilder()
+            ->select("$fullColumnName {$this->field->getMachineTitle()}"); // user.userid can be added for testing purposes (, user.userid)
 
         // JOIN a related table if it is necessary
         if($this->field->getTable() != $entityAlias)
@@ -60,16 +59,52 @@ class DataSource
         if($this->field->isSnapshot()) {
             $query->leftJoin("$entityAlias.user", 'user');
             $query->orderBy("$entityAlias.timestamp", 'DESC');
-        }
+        } else $query->groupBy('user.userid'); //important when doing filter on current data but grabbing from snapshots
 
         // JOIN to users table if data source is from snapshot table and sort by the shot date
         if($this->field->isDateType())
             $query->orderBy($fullColumnName, 'DESC');
 
+
+        //dump($query->getQuery());die();
         return $query;
     }
 
+    /**
+     * Applies a Condition on the Query.
+     * First ensures that all needed tables are joined
+     * Next, modifies the Query by using a ConditionTree
+     * NOTE: to bind both expression and parameters, getFullExpr function
+     * in ConditionTree returns an array with indexes 'fullExpr' and 'parameters'
+     * @param QueryBuilder $query
+     * @param Condition $condition
+     * @return QueryBuilder
+     */
     public function applyCondition(QueryBuilder $query, Condition $condition){
+        // JOIN a related table if it is necessary
+        $aliases = $query->getAllAliases();
+        if($this->field->isSnapshot()) $entityAlias = 'user';
+        else $entityAlias = $this->field->getEntityAlias();
+        foreach ($condition->getDependencies() as $dependency)
+            if (!in_array($dependency, $aliases))
+                $query->leftJoin("$entityAlias.$dependency", $dependency);
 
+
+        //Analyse relation and modify the query as needed
+        $tree = $condition->makeConditionTree();
+        $fullExpr = $tree->getFullExpr($this->getQueryBuilder(), $condition->getTitle());
+        $query->andWhere($fullExpr['fullExpr']);
+
+        //Bind all parameters including the old ones
+        $oldParameters = $query->getParameters();
+        while ($oldParameters->current() != false){
+            /** @var Parameter $parameter */
+            $parameter = $oldParameters->current();
+            $fullExpr['parameters'][$parameter->getName()] = $parameter->getValue();
+            $oldParameters->next();
+        }
+        $query->setParameters($fullExpr['parameters']);
+
+        return $query;
     }
 }

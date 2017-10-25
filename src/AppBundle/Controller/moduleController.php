@@ -114,7 +114,7 @@ class moduleController extends Controller
         $availabilities = $conf['filters']['availability'];
         $device_types = $conf['filters']['device_type'];
 
-
+        return new Response("ey ey");
         return $this->render('dashboard/module/edit.html.twig', [
             'module_types' => $module_types,
             'graph_types' => $modules_info,

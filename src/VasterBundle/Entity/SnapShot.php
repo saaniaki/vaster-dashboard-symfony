@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SnapShot
 {
     /**
-     * @ORM\ManyToOne(targetEntity="VasterBundle\Entity\User", inversedBy="snapshots")
+     * @ORM\ManyToOne(targetEntity="VasterBundle\Entity\User", inversedBy="snapshot")
      * @ORM\JoinColumn(nullable=false, name="userid", referencedColumnName="userid")
      * @ORM\Id
      */

@@ -128,5 +128,18 @@ class FieldInfo
         return $this->dateType;
     }
 
+    public function getFullColumnName(){
+        return "{$this->getTable()}.{$this->getColumn()}";
+    }
 
+
+    public function getEntityAlias()
+    {
+        return strtolower(explode(':', $this->getEntity())[1]);
+    }
+
+    public function getMachineTitle()
+    {
+        return str_replace(' ', '_', $this->getFieldAlias());
+    }
 }

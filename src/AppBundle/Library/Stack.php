@@ -15,7 +15,7 @@ class Stack
 
     function __construct(array $array = null)
     {
-        foreach ($array as $element) $this->push($element);
+        if($array != null) foreach ($array as $element) $this->push($element);
     }
 
     public function push($element){

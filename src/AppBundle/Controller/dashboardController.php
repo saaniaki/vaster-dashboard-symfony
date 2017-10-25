@@ -408,7 +408,7 @@ class dashboardController extends Controller
 
             $data['modules'][] = [
                 'id' => $module->getId(),
-                'size' => $module->getSize()
+                'size' => 12
             ];
         }
 
