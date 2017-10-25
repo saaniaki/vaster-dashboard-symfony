@@ -69,9 +69,9 @@ class Settings
     }
 
     /**
-     * @return Condition
+     * @return Condition|null
      */
-    public function getFilters(): Condition
+    public function getFilters(): ?Condition
     {
         return $this->filters;
     }
@@ -93,12 +93,14 @@ class Settings
 
         ////////////////////////////////////////////////////////////////////////// Filters: creating $filtersObj
 
-        $filtersObj = new Condition('filters');
-        foreach ( $filters as $indicator => $expr ){
-            if(isset($expr['field'])) {
-                $expr['field'] = explode(": ", $expr['field']);
-                $filtersObj->addExpressions(new Expression($indicator, $expr['field'][0], $expr['field'][1], $expr['snapShot'], $expr['operator'], $expr['value']));
-            }else $filtersObj->setRelation($expr); // this is the "relation" string
+        if($filters != null){
+            $filtersObj = new Condition('filters');
+            foreach ( $filters as $indicator => $expr ){
+                if(isset($expr['field'])) {
+                    $expr['field'] = explode(": ", $expr['field']);
+                    $filtersObj->addExpressions(new Expression($indicator, $expr['field'][0], $expr['field'][1], $expr['snapShot'], $expr['operator'], $expr['value']));
+                }else $filtersObj->setRelation($expr); // this is the "relation" string
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////// Categories: creating $categoriesObj

@@ -44,6 +44,11 @@ class SnapShot
     private $accountModifiedTime;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $devicetype;
+
+    /**
      * @return mixed
      */
     public function getUser()
@@ -81,6 +86,22 @@ class SnapShot
     public function getAccountModifiedTime()
     {
         return $this->accountModifiedTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDevicetype()
+    {
+        return $this->devicetype;
+    }
+
+    /**
+     * @param mixed $devicetype
+     */
+    public function setDevicetype($devicetype)
+    {
+        $this->devicetype = $devicetype;
     }
 
 }

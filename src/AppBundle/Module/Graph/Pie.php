@@ -37,6 +37,9 @@ class Pie extends AbstractModule
             ]);
 
         $this->getResult()->setAllData($this->getProcessedData());
+
+        //dump($this->getDataSets());die();
+
         return $this->getResult();
     }
 

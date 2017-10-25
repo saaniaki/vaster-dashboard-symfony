@@ -1,6 +1,6 @@
 {# dump(result) #}
 
-<div class="col-sm-3"> {# {{ conf.layout.size }} #}
+<div class="col-sm-12"> {# {{ conf.layout.size }} #}
 
     <div class="panel panel-default" id="module-{{ result.id }}">
         <div class="panel-heading" style="height: 38px;padding-right: 15%;">
@@ -128,16 +128,18 @@
     var all_data = [];
     {% for dataSet in result.allData %}
 
-
-
-    var data_data = [];
-    {% for value in dataSet.data %}
-    data_data.push({
-        {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
-        {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
-        name: '{{ value.name }}'
-    });
-    {% endfor %}
+        var data_data = [];
+        {% for value in dataSet.data %}
+            {% if value.name is defined %}
+                data_data.push({
+                    {% if value.x is defined %} x: '{{ value.x }}' ,{% endif %}
+                    {% if value.y is defined %} y: {{ value.y }} ,{% endif %}
+                    name: '{{ value.name }}'
+                });
+            {% else %}
+                data_data.push({{ value }});
+            {% endif %}
+        {% endfor %}
 
 
 
@@ -170,6 +172,24 @@
     });
 
     {% endfor %}
+
+
+
+    var xAxisCategories = [];
+    {% if result.xAxisCategories is not null %}
+
+        {% for category in result.xAxisCategories %}
+
+            xAxisCategories.push('{{ category }}');
+
+        {% endfor %}
+
+
+
+    {% endif %}
+
+
+
 
 
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
@@ -219,6 +239,11 @@
                 month: '%e %b, %Y',
                 year: '%e %b, %Y'
             }
+            {% endif %}
+
+
+            {% if result.xAxisCategories is not null %}
+            ,categories: xAxisCategories
             {% endif %}
 
         },
@@ -277,9 +302,11 @@
                     }
                 }
             },
+            /*
             column: {
                 stacking: 'normal'
             },
+            */
             series: {
                 turboThreshold: 0 // wtf
             }

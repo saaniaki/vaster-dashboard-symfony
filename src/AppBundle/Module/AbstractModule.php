@@ -55,8 +55,8 @@ abstract class AbstractModule implements ModuleInterface
 
         //This is the data source object which would be used to grab the data from the database
         $data_source = $this->getConfiguration()->getDataSource();
-        $query = $data_source->initQuery();                                                     // Creating the base query
-        $query = $data_source->applyCondition($query, $this->getConfiguration()->getFilters());      // Applying the filters to the base query
+        $query = $data_source->initQuery();                                                                                     // Creating the base query
+        if($filters = $this->getConfiguration()->getFilters()) $query = $data_source->applyCondition($query, $filters);         // Applying the filters to the base query if any exists
 
         //Applying each category condition and inserting the result into an array collection
         $this->setDataSets(new ArrayCollection());

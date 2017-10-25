@@ -34,22 +34,18 @@ class HighChartResult
 
     private $xTitle;
     private $xAxisType; //linear, logarithmic, datetime or category
-    private $start = [
-        'year' => 2016,
-        'month' => 11,
-        'day' => 9,
-    ];
+    private $xAxisCategories;
+    /** @var  $xInterval integer */
+    private $xInterval;
+    private $start = [];
 
 
     private $yTitle;
     private $yAllowDecimals;
-
-
     private $y1Title;
     private $y1Format;
     private $y1AllowDecimals;
-    /** @var  $xInterval integer */
-    private $xInterval;
+
 
     //Setting up the default values which are the same fore all modules using HighCharts
     function __construct(int $id, string $title = null)
@@ -217,6 +213,86 @@ class HighChartResult
     public function setAllData($allData)
     {
         $this->allData = $allData;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getXTitle()
+    {
+        return $this->xTitle;
+    }
+
+    /**
+     * @param mixed $xTitle
+     */
+    public function setXTitle($xTitle)
+    {
+        $this->xTitle = $xTitle;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getXAxisType()
+    {
+        return $this->xAxisType;
+    }
+
+    /**
+     * @param mixed $xAxisType
+     */
+    public function setXAxisType($xAxisType)
+    {
+        $this->xAxisType = $xAxisType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getXAxisCategories()
+    {
+        return $this->xAxisCategories;
+    }
+
+    /**
+     * @param mixed $xAxisCategories
+     */
+    public function setXAxisCategories($xAxisCategories)
+    {
+        $this->xAxisCategories = $xAxisCategories;
+    }
+
+    /**
+     * @return int
+     */
+    public function getXInterval(): int
+    {
+        return $this->xInterval;
+    }
+
+    /**
+     * @param int $xInterval
+     */
+    public function setXInterval(int $xInterval)
+    {
+        $this->xInterval = $xInterval;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStart(): array
+    {
+        return $this->start;
+    }
+
+    /**
+     * @param array $start
+     */
+    public function setStart(array $start)
+    {
+        $this->start = $start;
     }
 
 }

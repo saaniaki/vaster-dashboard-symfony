@@ -60,9 +60,9 @@ class Condition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRelation(): string
+    public function getRelation(): ?string
     {
         return $this->relation;
     }

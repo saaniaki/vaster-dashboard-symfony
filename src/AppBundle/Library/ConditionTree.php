@@ -102,9 +102,6 @@ class ConditionTree
      * @throws \Exception
      */
     private function makePartialExpression(QueryBuilder $builder, Node $node, string $paramName, int $key){
-        /**
-         * TODO: add operator to them
-         */
         $parameter = null;
         if( !$node->getContent() instanceof Andx && !$node->getContent() instanceof Orx ){
             $fullColumnName = $node->getContent()->getField()->getFullColumnName();
@@ -122,7 +119,9 @@ class ConditionTree
                 default: throw new \Exception("Operator '" . $node->getContent()->getOperator() . "' is not a valid operator!");
             }
 
-            $parameter = $node->getContent()->getValue();
+            if($node->getContent()->getValue() == false) $parameter = '0';
+            else $parameter = $node->getContent()->getValue();
+
         } else $part = $node->getContent();
 
         return ['expr' => $part, 'parameter' => $parameter];

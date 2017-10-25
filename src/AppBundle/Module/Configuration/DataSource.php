@@ -57,13 +57,14 @@ class DataSource
 
         // JOIN to users table if data source is from snapshot table and sort by the shot date
         if($this->field->isSnapshot()) {
+            $query->addSelect("$entityAlias.timestamp dateGroup");      //dateGroup is defined here, It's a keyword
             $query->leftJoin("$entityAlias.user", 'user');
-            $query->orderBy("$entityAlias.timestamp", 'DESC');
+            $query->orderBy("$entityAlias.timestamp", 'ASC');
         } else $query->groupBy('user.userid'); //important when doing filter on current data but grabbing from snapshots
 
         // JOIN to users table if data source is from snapshot table and sort by the shot date
         if($this->field->isDateType())
-            $query->orderBy($fullColumnName, 'DESC');
+            $query->orderBy($fullColumnName, 'ASC');
 
 
         //dump($query->getQuery());die();
@@ -107,4 +108,14 @@ class DataSource
 
         return $query;
     }
+
+    /**
+     * @return FieldInfo
+     */
+    public function getField(): FieldInfo
+    {
+        return $this->field;
+    }
+
+
 }
